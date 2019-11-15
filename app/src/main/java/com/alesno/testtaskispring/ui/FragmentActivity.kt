@@ -16,7 +16,6 @@ class FragmentActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_fragment)
-
         tabLayout = findViewById<TabLayout>(R.id.tab_layout)
         viewPager = findViewById<ViewPager>(R.id.view_pager)
         setUpViewPager()
@@ -34,7 +33,6 @@ class FragmentActivity : AppCompatActivity() {
     private fun setupTabs(){
         setupTabs(R.drawable.ic_movie_white_24dp, resources.getString(R.string.library), 0)
         setupTabs(R.drawable.ic_favorite_white_24dp, resources.getString(R.string.favorite), 1)
-
     }
 
     private fun setupTabs(iconResource: Int, text: String, position: Int){

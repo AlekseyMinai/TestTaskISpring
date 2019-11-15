@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:layout_height="@dimen/item_height">
+
+    <LinearLayout
+                  android:orientation="vertical"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content">
+
+        <ImageView android:layout_width="match_parent"
+                   android:layout_height="220dp"
+                   android:background="@color/colorGrey"/>
+
+        <TextView android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:layout_margin="@dimen/item_text_margin"
+                  android:textColor="@color/colorBlack"
+                  android:textSize="@dimen/item_text_size"
+                  android:text="Курс по активным продажам информационных продуктов"/>
+
+        <TextView android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:layout_marginStart="@dimen/item_text_margin"
+                  android:text="В процессе (72%)" />
+    </LinearLayout>
+
+    <CheckBox android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_gravity="end"
+              android:layout_margin="@dimen/item_checkbox_margin"
+              android:button="@drawable/checkbox_selector"/>
+</FrameLayout>
