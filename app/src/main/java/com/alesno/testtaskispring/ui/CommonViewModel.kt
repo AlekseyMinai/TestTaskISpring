@@ -2,27 +2,24 @@ package com.alesno.testtaskispring.ui
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.alesno.testtaskispring.model.repository.Repository
 import com.alesno.testtaskispring.model.response.Response
 import kotlinx.coroutines.*
+import okhttp3.Dispatcher
 import java.lang.Exception
 import kotlin.coroutines.CoroutineContext
 
 class CommonViewModel(val repository: Repository): ViewModel() {
 
-    private val job = Job()
-
-    private val coroutineContext: CoroutineContext
-        get() = job + Dispatchers.Default
-
-    private val scope = CoroutineScope(coroutineContext)
+    /*private val job = SupervisorJob()
+    private val scope = CoroutineScope(job + Dispatchers.Main)*/
 
     fun getResponseAsync(){
 
-        scope.launch {
+        viewModelScope.launch(Dispatchers.Main) {
             try {
-                val deferred: Deferred<Response> = repository.getResponseAsync()
-                val response: Response = deferred.await()
+                val response: Response = repository.getResponseAsync().await()
                 Log.d("log", response.videos[0].id )
             }catch (e: Exception){
                 Log.d("log", e.toString())
@@ -30,5 +27,10 @@ class CommonViewModel(val repository: Repository): ViewModel() {
         }
 
     }
+
+    /*override fun onCleared() {
+        super.onCleared()
+        //scope.coroutineContext.cancelChildren()
+    }*/
 
 }
