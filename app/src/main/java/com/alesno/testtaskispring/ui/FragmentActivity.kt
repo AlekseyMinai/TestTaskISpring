@@ -4,14 +4,20 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProviders
 import androidx.viewpager.widget.ViewPager
 import com.alesno.testtaskispring.R
+import com.alesno.testtaskispring.model.repository.ApiRepository
+import com.alesno.testtaskispring.model.repository.Repository
+import com.alesno.testtaskispring.model.service.ApiService
+import com.alesno.testtaskispring.ui.recyclerview.CommonViewModelFactory
 import com.google.android.material.tabs.TabLayout
 
 class FragmentActivity : AppCompatActivity() {
 
     private lateinit var tabLayout: TabLayout
     private lateinit var viewPager: ViewPager
+    private lateinit var viewModel: CommonViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,6 +27,16 @@ class FragmentActivity : AppCompatActivity() {
         setUpViewPager()
         tabLayout.setupWithViewPager(viewPager)
         setupTabs()
+
+        //refactor it
+        val apiService = ApiService.create()
+        val repository = ApiRepository(apiService)
+        viewModel = ViewModelProviders
+            .of(this, CommonViewModelFactory(repository))
+            .get(CommonViewModel::class.java)
+
+        viewModel.getResponseAsync()
+
     }
 
     private fun setUpViewPager() {
