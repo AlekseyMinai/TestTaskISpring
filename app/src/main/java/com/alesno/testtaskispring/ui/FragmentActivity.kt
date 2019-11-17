@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProviders
 import com.alesno.testtaskispring.R
 import com.alesno.testtaskispring.model.repository.ApiRepository
@@ -21,15 +22,21 @@ class FragmentActivity : AppCompatActivity() {
         tab_layout.setupWithViewPager(view_pager)
         setupTabs()
 
-        //redo it!
-        val apiService = ApiService.create()
-        val repository = ApiRepository(apiService)
+        //viewModel = getCommonViewModel(this)
 
-        viewModel = ViewModelProviders
-            .of(this, CommonViewModelFactory(repository))
-            .get(CommonViewModel::class.java)
 
-        viewModel.getResponseAsync()
+    }
+
+    companion object{
+        fun getCommonViewModel(activity: FragmentActivity): CommonViewModel{
+            //redo it!
+            val apiService = ApiService.create()
+            val repository = ApiRepository(apiService)
+
+            return ViewModelProviders
+                .of(activity, CommonViewModelFactory(repository))
+                .get(CommonViewModel::class.java)
+        }
     }
 
 

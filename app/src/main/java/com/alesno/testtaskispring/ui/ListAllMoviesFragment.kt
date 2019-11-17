@@ -18,9 +18,14 @@ class ListAllMoviesFragment: Fragment() {
         val binding: FragmentListMoviesBinding = FragmentListMoviesBinding.inflate(inflater, container, false)
 
         val recyclerView: RecyclerView = binding.recyclerView
-        recyclerView.layoutManager = LinearLayoutManager(activity)
+        recyclerView.layoutManager = LinearLayoutManager(activity!!)
         recyclerView.setHasFixedSize(true)
         recyclerView.adapter = VideoAdapter()
+
+        val viewModel = FragmentActivity.getCommonViewModel(activity!!)
+        binding.viewModel = viewModel
+
+        viewModel.getResponseAsync()
 
         return binding.root
     }

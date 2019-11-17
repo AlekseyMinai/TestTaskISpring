@@ -8,17 +8,14 @@ import androidx.lifecycle.viewModelScope
 import com.alesno.testtaskispring.model.repository.Repository
 import com.alesno.testtaskispring.model.response.Response
 import com.alesno.testtaskispring.model.response.Video
-import kotlinx.coroutines.*
-import okhttp3.Dispatcher
-import java.lang.Exception
-import kotlin.coroutines.CoroutineContext
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class CommonViewModel(val repository: Repository): ViewModel() {
 
     var videos: ObservableList<Video> = ObservableArrayList<Video>()
 
     fun getResponseAsync(){
-
         viewModelScope.launch(Dispatchers.Main) {
             try {
                 val response: Response = repository.getResponseAsync().await()
