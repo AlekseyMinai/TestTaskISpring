@@ -1,4 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
+<layout>
+    <data>
+        <variable
+                name="video"
+                type="com.alesno.testtaskispring.model.response.Video" />
+    </data>
+
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
              xmlns:tools="http://schemas.android.com/tools"
              android:layout_width="match_parent"
@@ -32,3 +39,4 @@
               android:layout_margin="@dimen/item_checkbox_margin"
               android:button="@drawable/checkbox_selector"/>
 </FrameLayout>
+</layout>

@@ -1,10 +1,13 @@
 package com.alesno.testtaskispring.ui
 
 import android.util.Log
+import androidx.databinding.ObservableArrayList
+import androidx.databinding.ObservableList
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.alesno.testtaskispring.model.repository.Repository
 import com.alesno.testtaskispring.model.response.Response
+import com.alesno.testtaskispring.model.response.Video
 import kotlinx.coroutines.*
 import okhttp3.Dispatcher
 import java.lang.Exception
@@ -12,8 +15,7 @@ import kotlin.coroutines.CoroutineContext
 
 class CommonViewModel(val repository: Repository): ViewModel() {
 
-    /*private val job = SupervisorJob()
-    private val scope = CoroutineScope(job + Dispatchers.Main)*/
+    var videos: ObservableList<Video> = ObservableArrayList<Video>()
 
     fun getResponseAsync(){
 
@@ -28,9 +30,5 @@ class CommonViewModel(val repository: Repository): ViewModel() {
 
     }
 
-    /*override fun onCleared() {
-        super.onCleared()
-        //scope.coroutineContext.cancelChildren()
-    }*/
 
 }

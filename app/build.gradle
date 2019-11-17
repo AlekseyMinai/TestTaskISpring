@@ -23,6 +23,9 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+    dataBinding {
+        enabled = true
+    }
     compileOptions {
         sourceCompatibility = 1.8
         targetCompatibility = 1.8
@@ -55,6 +58,7 @@ dependencies {
 
     //view model
     implementation 'androidx.lifecycle:lifecycle-extensions:2.1.0'
+
     //added viewModelScope in viewModel
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.1.0"
 }

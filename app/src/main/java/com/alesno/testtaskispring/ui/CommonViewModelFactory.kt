@@ -1,9 +1,8 @@
-package com.alesno.testtaskispring.ui.recyclerview
+package com.alesno.testtaskispring.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.alesno.testtaskispring.model.repository.Repository
-import com.alesno.testtaskispring.ui.CommonViewModel
 
 class CommonViewModelFactory(private val repository: Repository): ViewModelProvider.NewInstanceFactory() {
 
