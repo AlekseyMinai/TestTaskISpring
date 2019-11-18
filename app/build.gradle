@@ -67,6 +67,7 @@ dependencies {
     //piccasso//
     implementation 'com.squareup.picasso:picasso:2.71828'
 
+    implementation "io.objectbox:objectbox-android:$objectboxVersion"
     kapt "io.objectbox:objectbox-processor:$objectboxVersion"
 
 

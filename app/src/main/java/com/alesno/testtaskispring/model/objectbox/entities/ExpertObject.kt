@@ -1,10 +1,12 @@
 package com.alesno.testtaskispring.model.objectbox.entities
 
+import io.objectbox.annotation.Entity
 import io.objectbox.annotation.Id
 import io.objectbox.annotation.NameInDb
 import io.objectbox.relation.ToOne
 
-data class ExpertObj(
+@Entity
+data class ExpertObject(
 
     @Id var id: Long = 0,
 
@@ -22,5 +24,5 @@ data class ExpertObj(
     var speciality: String? = null
 ){
 
-    lateinit var video: ToOne<VideoObj>
+    lateinit var video: ToOne<VideoObject>
 }

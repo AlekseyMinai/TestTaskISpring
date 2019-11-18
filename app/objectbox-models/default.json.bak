@@ -1,0 +1,142 @@
+{
+  "_note1": "KEEP THIS FILE! Check it into a version control system (VCS) like git.",
+  "_note2": "ObjectBox manages crucial IDs for your object model. See docs for details.",
+  "_note3": "If you have VCS merge conflicts, you must resolve them according to ObjectBox docs.",
+  "entities": [
+    {
+      "id": "1:6146959353632851294",
+      "lastPropertyId": "7:6939946443913852569",
+      "name": "ExpertObj",
+      "properties": [
+        {
+          "id": "1:6035771645332462655",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:3316131120219718207",
+          "name": "avatar",
+          "type": 9
+        },
+        {
+          "id": "3:892670868104407738",
+          "name": "first_name",
+          "type": 9
+        },
+        {
+          "id": "4:7764834918009792366",
+          "name": "id_response",
+          "type": 5,
+          "flags": 4
+        },
+        {
+          "id": "5:1150435987672692781",
+          "name": "second_name",
+          "type": 9
+        },
+        {
+          "id": "6:8761302145529031112",
+          "name": "speciality",
+          "type": 9
+        },
+        {
+          "id": "7:6939946443913852569",
+          "name": "videoId",
+          "indexId": "1:3898050613835781063",
+          "type": 11,
+          "flags": 1548,
+          "relationTarget": "VideoObj"
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "2:1279146647731329091",
+      "lastPropertyId": "5:7523645181106451185",
+      "name": "MetaObj",
+      "properties": [
+        {
+          "id": "1:712326266343600315",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:2403371685470794090",
+          "name": "title",
+          "type": 9
+        },
+        {
+          "id": "3:9138591605870613940",
+          "name": "topics",
+          "type": 9
+        },
+        {
+          "id": "4:610608083457222888",
+          "name": "url",
+          "type": 9
+        },
+        {
+          "id": "5:7523645181106451185",
+          "name": "videoId",
+          "indexId": "2:3431165650925107399",
+          "type": 11,
+          "flags": 1548,
+          "relationTarget": "VideoObj"
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "3:6438867836870899157",
+      "lastPropertyId": "5:6868772366730446086",
+      "name": "VideoObj",
+      "properties": [
+        {
+          "id": "1:3829348081346856769",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:116856324538003275",
+          "name": "id_response",
+          "type": 9
+        },
+        {
+          "id": "3:8656677593340558859",
+          "name": "favorite",
+          "type": 1,
+          "flags": 2
+        },
+        {
+          "id": "4:7385825054483200479",
+          "name": "progress_time",
+          "type": 6,
+          "flags": 2
+        },
+        {
+          "id": "5:6868772366730446086",
+          "name": "metaId",
+          "indexId": "3:3731096222276410157",
+          "type": 11,
+          "flags": 1548,
+          "relationTarget": "MetaObj"
+        }
+      ],
+      "relations": []
+    }
+  ],
+  "lastEntityId": "3:6438867836870899157",
+  "lastIndexId": "3:3731096222276410157",
+  "lastRelationId": "0:0",
+  "lastSequenceId": "0:0",
+  "modelVersion": 5,
+  "modelVersionParserMinimum": 5,
+  "retiredEntityUids": [],
+  "retiredIndexUids": [],
+  "retiredPropertyUids": [],
+  "retiredRelationUids": [],
+  "version": 1
+}

@@ -1,13 +1,11 @@
 package com.alesno.testtaskispring.model.objectbox.entities
 
 import com.alesno.testtaskispring.model.objectbox.entities.convertor.TopicsConverter
-import io.objectbox.annotation.Backlink
-import io.objectbox.annotation.Convert
-import io.objectbox.annotation.Id
-import io.objectbox.annotation.NameInDb
+import io.objectbox.annotation.*
 import io.objectbox.relation.ToMany
 
-data class VideoObj(
+@Entity
+data class VideoObject(
 
     @Id var id: Long = 0,
 
@@ -29,5 +27,5 @@ data class VideoObj(
 ){
 
     @Backlink(to = "video")
-    lateinit var experts: ToMany<ExpertObj>
+    lateinit var experts: ToMany<ExpertObject>
 }

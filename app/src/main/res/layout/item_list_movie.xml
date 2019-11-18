@@ -3,7 +3,7 @@
     <data>
         <variable
                 name="video"
-                type="com.alesno.testtaskispring.model.objectbox.entity.VideoObj" />
+                type="com.alesno.testtaskispring.model.objectbox.entities.VideoObject" />
     </data>
 
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"

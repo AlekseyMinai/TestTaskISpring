@@ -6,8 +6,8 @@ import com.alesno.testtaskispring.model.response.Video
 
 class Transformator() {
 
-    /*fun transformFromResponseToVideoObj(video: Video): VideoObj {
-        return VideoObj(
+    /*fun transformFromResponseToVideoObj(video: Video): VideoObject {
+        return VideoObject(
             transformFromListExpertToListExpertObj(video.experts),
             video.id,
             transformFromMetaToMetaObj(video.meta)
@@ -22,16 +22,16 @@ class Transformator() {
         )
     }
 
-    private fun transformFromListExpertToListExpertObj(experts: List<Expert>): MutableList<ExpertObj>{
-        val expertsObj: MutableList<ExpertObj> = ArrayList()
+    private fun transformFromListExpertToListExpertObj(experts: List<Expert>): MutableList<ExpertObject>{
+        val expertsObj: MutableList<ExpertObject> = ArrayList()
         for(i in experts.indices){
             expertsObj.add(transformFromExpertToExpertObj(experts[i]))
         }
         return expertsObj
     }
 
-    private fun transformFromExpertToExpertObj(expert: Expert): ExpertObj {
-        return ExpertObj(
+    private fun transformFromExpertToExpertObj(expert: Expert): ExpertObject {
+        return ExpertObject(
             expert.avatar,
             expert.firstName,
             expert.id,

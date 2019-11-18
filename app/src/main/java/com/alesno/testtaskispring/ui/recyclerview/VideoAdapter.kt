@@ -6,17 +6,16 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.alesno.testtaskispring.R
 import com.alesno.testtaskispring.databinding.ItemListMovieBinding
-import com.alesno.testtaskispring.model.objectbox.entity.VideoObj
-import com.alesno.testtaskispring.model.response.Video
+import com.alesno.testtaskispring.model.objectbox.entities.VideoObject
 
 class VideoAdapter: RecyclerView.Adapter<VideoViewHolder>() {
 
 
-    var videos: MutableList<VideoObj> = mutableListOf()
+    var videos: MutableList<VideoObject> = mutableListOf()
 
-    fun replaceVideo(videos: List<VideoObj>){
-        //this.videos.clear()
-        //this.videos.addAll(videos)
+    fun replaceVideo(videos: List<VideoObject>){
+        this.videos.clear()
+        this.videos.addAll(videos)
         //notifyDataSetChanged()
     }
 
