@@ -1,4 +1,4 @@
-package com.alesno.testtaskispring.ui
+package com.alesno.testtaskispring.ui.fragments
 
 import android.os.Bundle
 import android.view.LayoutInflater

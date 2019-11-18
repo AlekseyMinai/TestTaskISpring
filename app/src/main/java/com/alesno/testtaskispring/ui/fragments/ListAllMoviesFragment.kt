@@ -1,18 +1,17 @@
-package com.alesno.testtaskispring.ui
+package com.alesno.testtaskispring.ui.fragments
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.alesno.testtaskispring.R
 import com.alesno.testtaskispring.databinding.FragmentListMoviesBinding
-import com.alesno.testtaskispring.model.repository.ApiRepository
-import com.alesno.testtaskispring.model.service.ApiService
+import com.alesno.testtaskispring.ui.FragmentActivity
 import com.alesno.testtaskispring.ui.recyclerview.VideoAdapter
+import com.alesno.testtaskispring.ui.viewmodel.CommonViewModel
 import kotlinx.android.synthetic.main.fragment_list_movies.*
 
 class ListAllMoviesFragment: Fragment() {
@@ -24,9 +23,12 @@ class ListAllMoviesFragment: Fragment() {
         binding = FragmentListMoviesBinding
             .inflate(inflater, container, false)
 
-        viewModel = FragmentActivity.getCommonViewModel(activity!!)
+        viewModel =
+            FragmentActivity.getCommonViewModel(activity!!)
 
         binding.viewModel = viewModel
+
+        setupRecyclerView()
 
         viewModel.getResponseAsync()
 

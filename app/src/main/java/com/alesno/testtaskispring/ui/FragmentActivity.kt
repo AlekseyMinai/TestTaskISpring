@@ -9,6 +9,10 @@ import androidx.lifecycle.ViewModelProviders
 import com.alesno.testtaskispring.R
 import com.alesno.testtaskispring.model.repository.ApiRepository
 import com.alesno.testtaskispring.model.service.ApiService
+import com.alesno.testtaskispring.ui.fragments.ListAllMoviesFragment
+import com.alesno.testtaskispring.ui.fragments.ListFavoritMoviesFragment
+import com.alesno.testtaskispring.ui.viewmodel.CommonViewModel
+import com.alesno.testtaskispring.ui.viewmodel.CommonViewModelFactory
 import kotlinx.android.synthetic.main.activity_fragment.*
 
 class FragmentActivity : AppCompatActivity() {
@@ -28,13 +32,15 @@ class FragmentActivity : AppCompatActivity() {
     }
 
     companion object{
-        fun getCommonViewModel(activity: FragmentActivity): CommonViewModel{
+        fun getCommonViewModel(activity: FragmentActivity): CommonViewModel {
             //redo it!
             val apiService = ApiService.create()
             val repository = ApiRepository(apiService)
 
             return ViewModelProviders
-                .of(activity, CommonViewModelFactory(repository))
+                .of(activity,
+                    CommonViewModelFactory(repository)
+                )
                 .get(CommonViewModel::class.java)
         }
     }

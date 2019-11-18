@@ -1,4 +1,4 @@
-package com.alesno.testtaskispring.ui
+package com.alesno.testtaskispring.ui.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
