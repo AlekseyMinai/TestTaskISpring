@@ -1,4 +1,4 @@
-package com.alesno.testtaskispring.app
+package com.alesno.testtaskispring.model.objectbox
 
 import android.content.Context
 import com.alesno.testtaskispring.model.objectbox.entities.MyObjectBox

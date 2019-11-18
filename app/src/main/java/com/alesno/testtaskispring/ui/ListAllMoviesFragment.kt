@@ -17,17 +17,14 @@ import kotlinx.android.synthetic.main.fragment_list_movies.*
 
 class ListAllMoviesFragment: Fragment() {
 
+    lateinit var binding: FragmentListMoviesBinding
+    lateinit var viewModel: CommonViewModel
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val binding: FragmentListMoviesBinding
-                = FragmentListMoviesBinding
+        binding = FragmentListMoviesBinding
             .inflate(inflater, container, false)
 
-        val recyclerView: RecyclerView = binding.recyclerView
-        recyclerView.layoutManager = LinearLayoutManager(activity!!)
-        recyclerView.setHasFixedSize(true)
-        recyclerView.adapter = VideoAdapter()
-
-        val viewModel: CommonViewModel = FragmentActivity.getCommonViewModel(activity!!)
+        viewModel = FragmentActivity.getCommonViewModel(activity!!)
 
         binding.viewModel = viewModel
 
@@ -36,10 +33,16 @@ class ListAllMoviesFragment: Fragment() {
         return binding.root
     }
 
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupSwipeToRefreshCallBack()
+    }
+
+    private fun setupRecyclerView(){
+        val recyclerView: RecyclerView = binding.recyclerView
+        recyclerView.layoutManager = LinearLayoutManager(activity!!)
+        recyclerView.setHasFixedSize(true)
+        recyclerView.adapter = VideoAdapter()
     }
 
 

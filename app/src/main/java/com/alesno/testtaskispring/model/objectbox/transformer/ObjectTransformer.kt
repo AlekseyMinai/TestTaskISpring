@@ -1,4 +1,4 @@
-package com.alesno.testtaskispring.model.objectbox
+package com.alesno.testtaskispring.model.objectbox.transformer
 
 import com.alesno.testtaskispring.model.objectbox.entities.VideoObject
 import com.alesno.testtaskispring.model.response.Response
