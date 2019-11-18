@@ -7,12 +7,18 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProviders
 import com.alesno.testtaskispring.R
+import com.alesno.testtaskispring.model.objectbox.ObjectBox
+import com.alesno.testtaskispring.model.objectbox.dao.VideosDao
+import com.alesno.testtaskispring.model.objectbox.dao.VideosDaoImpl
+import com.alesno.testtaskispring.model.objectbox.entities.VideoObject
+import com.alesno.testtaskispring.model.objectbox.transformer.ObjectTransformerImpl
 import com.alesno.testtaskispring.model.repository.ApiRepository
 import com.alesno.testtaskispring.model.service.ApiService
 import com.alesno.testtaskispring.ui.fragments.ListAllMoviesFragment
 import com.alesno.testtaskispring.ui.fragments.ListFavoritMoviesFragment
 import com.alesno.testtaskispring.ui.viewmodel.CommonViewModel
 import com.alesno.testtaskispring.ui.viewmodel.CommonViewModelFactory
+import io.objectbox.Box
 import kotlinx.android.synthetic.main.activity_fragment.*
 
 class FragmentActivity : AppCompatActivity() {
@@ -25,10 +31,6 @@ class FragmentActivity : AppCompatActivity() {
         setUpViewPager()
         tab_layout.setupWithViewPager(view_pager)
         setupTabs()
-
-        //viewModel = getCommonViewModel(this)
-
-
     }
 
     companion object{
@@ -36,10 +38,12 @@ class FragmentActivity : AppCompatActivity() {
             //redo it!
             val apiService = ApiService.create()
             val repository = ApiRepository(apiService)
+            val videosBox: Box<VideoObject> = ObjectBox.boxStore.boxFor(VideoObject::class.java)
+            val videosDao = VideosDaoImpl(videosBox)
 
             return ViewModelProviders
                 .of(activity,
-                    CommonViewModelFactory(repository)
+                    CommonViewModelFactory(repository, videosDao, ObjectTransformerImpl)
                 )
                 .get(CommonViewModel::class.java)
         }

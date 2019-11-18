@@ -20,17 +20,13 @@ class ListAllMoviesFragment: Fragment() {
     lateinit var viewModel: CommonViewModel
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        binding = FragmentListMoviesBinding
-            .inflate(inflater, container, false)
+        binding = FragmentListMoviesBinding.inflate(inflater, container, false)
 
-        viewModel =
-            FragmentActivity.getCommonViewModel(activity!!)
+        viewModel = FragmentActivity.getCommonViewModel(activity!!)
 
         binding.viewModel = viewModel
 
         setupRecyclerView()
-
-        viewModel.getResponseAsync()
 
         return binding.root
     }
@@ -38,6 +34,7 @@ class ListAllMoviesFragment: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupSwipeToRefreshCallBack()
+        viewModel.onViewCreated()
     }
 
     private fun setupRecyclerView(){
