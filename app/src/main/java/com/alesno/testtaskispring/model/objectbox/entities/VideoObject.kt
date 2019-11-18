@@ -7,8 +7,6 @@ import io.objectbox.relation.ToMany
 @Entity
 data class VideoObject(
 
-    @Id var id: Long = 0,
-
     @NameInDb("id_response")
     var idResponse: String? = null,
 
@@ -23,9 +21,10 @@ data class VideoObject(
     var isFavorite: Boolean = false,
 
     @NameInDb("progress_time")
-    var progressTime: Long = 0
-){
+    var progressTime: Long = 0,
 
+    @Id var id: Long = 0
+){
     @Backlink(to = "video")
     lateinit var experts: ToMany<ExpertObject>
 }

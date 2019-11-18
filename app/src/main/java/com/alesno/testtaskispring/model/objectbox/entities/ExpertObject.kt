@@ -8,8 +8,6 @@ import io.objectbox.relation.ToOne
 @Entity
 data class ExpertObject(
 
-    @Id var id: Long = 0,
-
     var avatar: String? = null,
 
     @NameInDb("first_name")
@@ -21,7 +19,9 @@ data class ExpertObject(
     @NameInDb("second_name")
     var secondName: String? = null,
 
-    var speciality: String? = null
+    var speciality: String? = null,
+
+    @Id var id: Long = 0
 ){
 
     lateinit var video: ToOne<VideoObject>
