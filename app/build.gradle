@@ -6,6 +6,8 @@ apply plugin: 'kotlin-android-extensions'
 
 apply plugin: 'io.objectbox'
 
+apply plugin: 'kotlin-kapt'
+
 android {
     compileSdkVersion 29
     buildToolsVersion "29.0.0"
@@ -61,4 +63,12 @@ dependencies {
 
     //added viewModelScope in viewModel
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.1.0"
+
+    //piccasso//
+    implementation 'com.squareup.picasso:picasso:2.71828'
+
+    kapt "io.objectbox:objectbox-processor:$objectboxVersion"
+
+
+
 }

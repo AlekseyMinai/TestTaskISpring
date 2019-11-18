@@ -6,17 +6,18 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.alesno.testtaskispring.R
 import com.alesno.testtaskispring.databinding.ItemListMovieBinding
+import com.alesno.testtaskispring.model.objectbox.entity.VideoObj
 import com.alesno.testtaskispring.model.response.Video
 
 class VideoAdapter: RecyclerView.Adapter<VideoViewHolder>() {
 
 
-    private val videos: MutableList<Video> = mutableListOf()
+    var videos: MutableList<VideoObj> = mutableListOf()
 
-    fun replaceVideo(videos: List<Video>){
-        this.videos.clear()
-        this.videos.addAll(videos)
-        notifyDataSetChanged()
+    fun replaceVideo(videos: List<VideoObj>){
+        //this.videos.clear()
+        //this.videos.addAll(videos)
+        //notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VideoViewHolder {
@@ -26,11 +27,11 @@ class VideoAdapter: RecyclerView.Adapter<VideoViewHolder>() {
     }
 
     override fun getItemCount(): Int {
-        return 3
+        return videos.size
     }
 
     override fun onBindViewHolder(holder: VideoViewHolder, position: Int) {
-        //holder.bind(videos[position])
+        holder.bind(videos[position])
     }
 
 }

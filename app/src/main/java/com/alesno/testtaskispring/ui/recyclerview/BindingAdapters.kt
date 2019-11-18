@@ -2,9 +2,10 @@ package com.alesno.testtaskispring.ui.recyclerview
 
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.alesno.testtaskispring.model.response.Video
+import com.alesno.testtaskispring.model.objectbox.entity.VideoObj
 
-@BindingAdapter("data")
-fun setItems(recyclerView: RecyclerView, videos: List<Video>){
+
+@BindingAdapter("setItems")
+fun setItem(recyclerView: RecyclerView, videos: List<VideoObj>){
     (recyclerView.adapter as VideoAdapter).replaceVideo(videos)
 }
