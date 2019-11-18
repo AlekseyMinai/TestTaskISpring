@@ -1,4 +1,4 @@
-package com.alesno.testtaskispring.model.objectbox.entity.convertor
+package com.alesno.testtaskispring.model.objectbox.entities.convertor
 
 import android.text.TextUtils
 import io.objectbox.converter.PropertyConverter

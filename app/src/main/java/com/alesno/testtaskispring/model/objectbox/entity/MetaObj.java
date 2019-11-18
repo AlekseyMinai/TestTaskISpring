@@ -1,6 +1,6 @@
 package com.alesno.testtaskispring.model.objectbox.entity;
 
-import com.alesno.testtaskispring.model.objectbox.entity.convertor.TopicsConverter;
+import com.alesno.testtaskispring.model.objectbox.entities.convertor.TopicsConverter;
 
 import java.util.List;
 
