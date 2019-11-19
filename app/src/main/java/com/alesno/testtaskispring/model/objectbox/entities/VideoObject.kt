@@ -17,6 +17,8 @@ data class VideoObject(
 
     var url: String? = null,
 
+    val preview: String? = null,
+
     @NameInDb("is_favorite")
     var isFavorite: Boolean = false,
 

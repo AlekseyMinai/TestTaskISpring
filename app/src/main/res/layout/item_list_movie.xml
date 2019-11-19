@@ -6,10 +6,9 @@
                 type="com.alesno.testtaskispring.model.objectbox.entities.VideoObject" />
     </data>
 
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             xmlns:tools="http://schemas.android.com/tools"
-             android:layout_width="match_parent"
-             android:layout_height="wrap_content">
+    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
     <LinearLayout
                   android:orientation="vertical"
@@ -18,8 +17,8 @@
 
         <ImageView android:layout_width="match_parent"
                    android:layout_height="220dp"
-                   app:errorImage="@{@drawable/error}"
-                   app:url="@{video.pr}"/>
+                   app:url="@{video.preview}"
+                   app:errorImage="@{@drawable/error}"/>
 
         <TextView android:layout_width="match_parent"
                   android:layout_height="wrap_content"
@@ -39,6 +38,7 @@
               android:layout_height="wrap_content"
               android:layout_gravity="end"
               android:layout_margin="@dimen/item_checkbox_margin"
-              android:button="@drawable/checkbox_selector"/>
+              android:button="@drawable/checkbox_selector"
+            />
 </FrameLayout>
 </layout>

@@ -15,5 +15,5 @@ fun setItem(recyclerView: RecyclerView, videos: List<VideoObject>){
 
 @BindingAdapter("url", "errorImage")
 fun setPicture(imageView: ImageView, url: String, errorImage: Drawable){
-    Picasso.get().load(url).error(errorImage).into(imageView)
+    Picasso.get().load(url).placeholder(errorImage).error(errorImage).fit().into(imageView)
 }

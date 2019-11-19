@@ -2,6 +2,7 @@ package com.alesno.testtaskispring.ui.viewmodel
 
 import android.util.Log
 import androidx.databinding.ObservableArrayList
+import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableList
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -10,7 +11,6 @@ import com.alesno.testtaskispring.model.objectbox.entities.VideoObject
 import com.alesno.testtaskispring.model.objectbox.transformer.ObjectTransformer
 import com.alesno.testtaskispring.model.repository.Repository
 import com.alesno.testtaskispring.model.response.Response
-import com.alesno.testtaskispring.model.response.Video
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -20,37 +20,36 @@ class CommonViewModel(
             private val objectTransformer: ObjectTransformer
 ): ViewModel() {
 
-    var videos: ObservableList<Video> = ObservableArrayList<Video>()
     var videosObj: ObservableList<VideoObject> = ObservableArrayList<VideoObject>()
+    var isProgressBarVisible: ObservableBoolean = ObservableBoolean(false)
 
     fun onViewCreated() {
-        setDataInViewAsync()
+        if(videosObj.isEmpty()){
+            setDataInViewAsyncForTheFirsTime()
+        }
     }
 
-    private fun setDataInViewAsync(){
-        viewModelScope.launch(Dispatchers.Main) {
-            var listVideoObjects = getVideosAsync()
-            videosObj.addAll(listVideoObjects)
+    private fun setDataInViewAsyncForTheFirsTime(){
+        isProgressBarVisible.set(true)
+        viewModelScope.launch(Dispatchers.IO) {
+            putVideosObjInListFromDb()
 
-            val response = getResponseAsync()
+            val response = getResponseFromServer()
             videosDao.insertAllVideos(objectTransformer.responseTransformer(response))
 
-            listVideoObjects = getVideosAsync()
-            videosObj.addAll(listVideoObjects)
+            putVideosObjInListFromDb()
+
+            isProgressBarVisible.set(false)
         }
     }
 
-    private suspend fun getVideosAsync():List<VideoObject>{
-        var listVideoObjects: List<VideoObject> = listOf()
-        try{
-            listVideoObjects = videosDao.getAllVideos()
-        }catch (e: java.lang.Exception){
-            Log.d("log", e.toString())
-        }
-        return listVideoObjects
+    private fun putVideosObjInListFromDb(){
+        val listVideosObj = videosDao.getAllVideos()
+        videosObj.clear()
+        videosObj.addAll(sortByTitle(listVideosObj))
     }
 
-    private suspend fun getResponseAsync():Response{
+    private suspend fun getResponseFromServer():Response{
         var response: Response? = null
         try {
             response = repository.getResponseAsync().await()
@@ -58,5 +57,13 @@ class CommonViewModel(
             Log.d("log", e.toString())
         }
         return response!!
+    }
+
+    private fun sortByTitle(videosObj: List<VideoObject>): List<VideoObject>{
+        return videosObj.sortedWith(compareBy { it.title })
+    }
+
+    private fun filterAllFavoriteVideos(videosObj: List<VideoObject>): List<VideoObject> {
+        return videosObj.filter { videoObject -> videoObject.isFavorite }
     }
 }

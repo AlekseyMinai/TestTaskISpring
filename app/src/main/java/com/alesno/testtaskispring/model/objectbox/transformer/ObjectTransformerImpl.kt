@@ -36,11 +36,15 @@ object ObjectTransformerImpl:
     }
 
     private fun videoTransformer(video: Video): VideoObject{
+        var preview: String? = video.meta.preview
+        if(preview == null) preview = "no_preview"
+
         val videoObj: VideoObject = VideoObject(
             video.id,
             video.meta.title,
             video.meta.topics,
-            video.meta.url
+            video.meta.url,
+            preview
         )
         videoObj.experts.addAll(
             listExpertsTransformer(

@@ -8,5 +8,8 @@ data class Meta(
     @SerializedName("topics")
     val topics: List<String>,
     @SerializedName("url")
-    val url: String
+    val url: String,
+    @SerializedName("preview")
+    val preview: String
+
 )
