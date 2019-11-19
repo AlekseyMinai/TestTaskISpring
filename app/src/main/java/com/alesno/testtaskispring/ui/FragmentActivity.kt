@@ -8,7 +8,6 @@ import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProviders
 import com.alesno.testtaskispring.R
 import com.alesno.testtaskispring.model.objectbox.ObjectBox
-import com.alesno.testtaskispring.model.objectbox.dao.VideosDao
 import com.alesno.testtaskispring.model.objectbox.dao.VideosDaoImpl
 import com.alesno.testtaskispring.model.objectbox.entities.VideoObject
 import com.alesno.testtaskispring.model.objectbox.transformer.ObjectTransformerImpl

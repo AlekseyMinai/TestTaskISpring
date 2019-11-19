@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
         <variable
                 name="video"
@@ -9,7 +9,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
              xmlns:tools="http://schemas.android.com/tools"
              android:layout_width="match_parent"
-             android:layout_height="@dimen/item_height">
+             android:layout_height="wrap_content">
 
     <LinearLayout
                   android:orientation="vertical"
@@ -18,18 +18,20 @@
 
         <ImageView android:layout_width="match_parent"
                    android:layout_height="220dp"
-                   android:background="@color/colorGrey"/>
+                   app:errorImage="@{@drawable/error}"
+                   app:url="@{video.pr}"/>
 
         <TextView android:layout_width="match_parent"
                   android:layout_height="wrap_content"
                   android:layout_margin="@dimen/item_text_margin"
                   android:textColor="@color/colorBlack"
                   android:textSize="@dimen/item_text_size"
-                  android:text="Курс по активным продажам информационных продуктов"/>
+                  android:text="@{video.title}"/>
 
         <TextView android:layout_width="match_parent"
                   android:layout_height="wrap_content"
                   android:layout_marginStart="@dimen/item_text_margin"
+                  android:layout_marginBottom="@dimen/item_text_margin"
                   android:text="В процессе (72%)" />
     </LinearLayout>
 
