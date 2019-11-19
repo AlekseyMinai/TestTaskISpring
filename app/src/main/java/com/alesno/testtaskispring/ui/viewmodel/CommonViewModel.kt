@@ -34,7 +34,7 @@ class CommonViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             putVideosObjInListFromDb()
 
-            val response = getResponseFromServer()
+            val response = getResponseFromServer() ?: return@launch
             videosDao.insertAllVideos(objectTransformer.responseTransformer(response))
 
             putVideosObjInListFromDb()
@@ -49,21 +49,21 @@ class CommonViewModel(
         videosObj.addAll(sortByTitle(listVideosObj))
     }
 
-    private suspend fun getResponseFromServer():Response{
+    private suspend fun getResponseFromServer(): Response? {
         var response: Response? = null
         try {
             response = repository.getResponseAsync().await()
         } catch (e: Exception) {
             Log.d("log", e.toString())
         }
-        return response!!
+        return response
     }
 
     private fun sortByTitle(videosObj: List<VideoObject>): List<VideoObject>{
         return videosObj.sortedWith(compareBy { it.title })
     }
 
-    private fun filterAllFavoriteVideos(videosObj: List<VideoObject>): List<VideoObject> {
+    private fun filterByFavoriteVideos(videosObj: List<VideoObject>): List<VideoObject> {
         return videosObj.filter { videoObject -> videoObject.isFavorite }
     }
 }

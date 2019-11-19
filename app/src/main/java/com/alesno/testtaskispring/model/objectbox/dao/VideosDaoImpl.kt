@@ -10,6 +10,11 @@ class VideosDaoImpl(private val videosBox: Box<VideoObject>): VideosDao {
     }
 
     override fun insertAllVideos(videos: List<VideoObject>) {
-        videosBox.put(videos)
+        val set: MutableSet<VideoObject> = videosBox.all.toHashSet()
+        for (video in videos){
+            if(set.add(video)){
+                videosBox.put(video)
+            }
+        }
     }
 }

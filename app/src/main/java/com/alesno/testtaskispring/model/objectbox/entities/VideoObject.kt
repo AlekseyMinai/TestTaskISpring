@@ -29,4 +29,21 @@ data class VideoObject(
 ){
     @Backlink(to = "video")
     lateinit var experts: ToMany<ExpertObject>
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as VideoObject
+
+        if (idResponse != other.idResponse) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        return idResponse?.hashCode() ?: 0
+    }
+
+
 }

@@ -25,4 +25,32 @@ data class ExpertObject(
 ){
 
     lateinit var video: ToOne<VideoObject>
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as ExpertObject
+
+        if (avatar != other.avatar) return false
+        if (firstName != other.firstName) return false
+        if (idResponse != other.idResponse) return false
+        if (secondName != other.secondName) return false
+        if (speciality != other.speciality) return false
+        if (video != other.video) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = avatar?.hashCode() ?: 0
+        result = 31 * result + (firstName?.hashCode() ?: 0)
+        result = 31 * result + idResponse
+        result = 31 * result + (secondName?.hashCode() ?: 0)
+        result = 31 * result + (speciality?.hashCode() ?: 0)
+        result = 31 * result + video.hashCode()
+        return result
+    }
+
+
 }
