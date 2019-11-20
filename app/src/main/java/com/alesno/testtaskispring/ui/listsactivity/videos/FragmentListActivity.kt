@@ -57,7 +57,7 @@ class FragmentListActivity : AppCompatActivity() {
         val adapter =
             ViewPagerAdapter(supportFragmentManager)
         adapter.addFragment(ListAllMoviesFragment())
-        adapter.addFragment(ListFavoritMoviesFragment())
+        adapter.addFragment(ListAllMoviesFragment())
         view_pager.adapter = adapter
     }
 

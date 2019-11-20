@@ -1,7 +1,7 @@
 package com.alesno.testtaskispring.model.service
 
-import com.alesno.testtaskispring.constants.REQUEST_PARAM
-import com.alesno.testtaskispring.constants.URL
+import com.alesno.testtaskispring.common.REQUEST_PARAM
+import com.alesno.testtaskispring.common.URL
 import com.alesno.testtaskispring.model.response.Response
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import kotlinx.coroutines.Deferred

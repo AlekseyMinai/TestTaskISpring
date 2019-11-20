@@ -34,12 +34,12 @@ class CommonViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             putVideosObjInListFromDb()
 
+            isProgressBarVisible.set(false)
+
             val response = getResponseFromServer() ?: return@launch
             videosDao.insertAllVideos(objectTransformer.responseTransformer(response))
 
             putVideosObjInListFromDb()
-
-            isProgressBarVisible.set(false)
         }
     }
 

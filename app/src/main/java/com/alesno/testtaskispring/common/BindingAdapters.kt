@@ -1,10 +1,11 @@
-package com.alesno.testtaskispring.ui.listsactivity.videos.recyclerview
+package com.alesno.testtaskispring.common
 
 import android.graphics.drawable.Drawable
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.alesno.testtaskispring.model.objectbox.entities.VideoObject
+import com.alesno.testtaskispring.ui.listsactivity.videos.recyclerview.VideoAdapter
 import com.squareup.picasso.Picasso
 
 
