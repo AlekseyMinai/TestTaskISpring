@@ -4,9 +4,11 @@ import android.graphics.drawable.Drawable
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.alesno.testtaskispring.model.objectbox.entities.ExpertObject
 import com.alesno.testtaskispring.model.objectbox.entities.VideoObject
 import com.alesno.testtaskispring.ui.listsactivity.videos.recyclerview.VideoListAdapter
-import com.alesno.testtaskispring.ui.videoactivity.recyclerview.VideoAdapter
+import com.alesno.testtaskispring.ui.videoactivity.recyclerview.ExpertsAdapter
+import com.alesno.testtaskispring.ui.videoactivity.recyclerview.TopicsAdapter
 import com.squareup.picasso.Picasso
 
 
@@ -17,7 +19,12 @@ fun setItem(recyclerView: RecyclerView, videos: List<VideoObject>){
 
 @BindingAdapter("setTopics")
 fun setTopics(recyclerView: RecyclerView, topics: List<String>){
-    (recyclerView.adapter as VideoAdapter).replaceData(topics)
+    (recyclerView.adapter as TopicsAdapter).replaceData(topics)
+}
+
+@BindingAdapter("setExperts")
+fun setExperts(recyclerView: RecyclerView, experts: List<ExpertObject>){
+    (recyclerView.adapter as ExpertsAdapter).replaceData(experts)
 }
 
 @BindingAdapter("url", "errorImage")

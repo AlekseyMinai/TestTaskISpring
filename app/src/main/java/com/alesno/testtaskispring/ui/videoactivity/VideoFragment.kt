@@ -8,7 +8,8 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.alesno.testtaskispring.databinding.FragmentVideoBinding
-import com.alesno.testtaskispring.ui.videoactivity.recyclerview.VideoAdapter
+import com.alesno.testtaskispring.ui.videoactivity.recyclerview.ExpertsAdapter
+import com.alesno.testtaskispring.ui.videoactivity.recyclerview.TopicsAdapter
 
 class VideoFragment: Fragment() {
 
@@ -24,7 +25,8 @@ class VideoFragment: Fragment() {
 
         binding.viewModel = viewModel
 
-        setupRecyclerView()
+        setupRecyclerViewWithTopics()
+        setupRecyclerViewWithExperts()
 
         return binding.root
     }
@@ -34,10 +36,17 @@ class VideoFragment: Fragment() {
         viewModel.onViewCreated()
     }
 
-    private fun setupRecyclerView(){
+    private fun setupRecyclerViewWithTopics(){
         val recyclerView: RecyclerView = binding.recyclerViewTopics
         recyclerView.layoutManager = LinearLayoutManager(activity!!, LinearLayoutManager.HORIZONTAL, false)
         recyclerView.setHasFixedSize(true)
-        recyclerView.adapter = VideoAdapter()
+        recyclerView.adapter = TopicsAdapter()
+    }
+
+    private fun setupRecyclerViewWithExperts(){
+        val recyclerView: RecyclerView = binding.recyclerViewExperts
+        recyclerView.layoutManager = LinearLayoutManager(activity!!)
+        recyclerView.setHasFixedSize(true)
+        recyclerView.adapter = ExpertsAdapter()
     }
 }

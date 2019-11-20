@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="tab_layout_height">80dp</dimen>
-    <dimen name="item_text_margin">12dp</dimen>
+    <dimen name="item_margin">12dp</dimen>
     <dimen name="item_checkbox_margin">12dp</dimen>
     <dimen name="item_text_size">18sp</dimen>
     <dimen name="item_height">320dp</dimen>

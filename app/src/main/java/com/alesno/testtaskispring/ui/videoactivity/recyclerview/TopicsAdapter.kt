@@ -7,16 +7,16 @@ import com.alesno.testtaskispring.R
 import com.alesno.testtaskispring.base.BaseRWAdapter
 import com.alesno.testtaskispring.databinding.ItemListTopicsBinding
 
-class VideoAdapter: BaseRWAdapter<VideoViewHolder, String>() {
+class TopicsAdapter: BaseRWAdapter<TopicsViewHolder, String>() {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VideoViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TopicsViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val binding: ItemListTopicsBinding
                 = DataBindingUtil.inflate(inflater, R.layout.item_list_topics, parent, false)
-        return VideoViewHolder(binding)
+        return TopicsViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: VideoViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: TopicsViewHolder, position: Int) {
         holder.bind(list[position])
     }
 }

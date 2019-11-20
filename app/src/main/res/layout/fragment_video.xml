@@ -37,20 +37,20 @@
 
     <TextView android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/item_text_margin"
+            android:layout_margin="@dimen/item_margin"
             android:textColor="@color/colorBlack"
             android:textSize="@dimen/item_text_size"
             android:text="Техника пожарной безопасности на предприятии"/>
 
     <TextView android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/item_text_margin"
-            android:layout_marginBottom="@dimen/item_text_margin"
+            android:layout_marginStart="@dimen/item_margin"
+            android:layout_marginBottom="@dimen/item_margin"
             android:text="В процессе (72%)" />
 
     <TextView android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/item_text_margin"
+            android:layout_margin="@dimen/item_margin"
             android:textColor="@color/colorBlack"
             android:textSize="@dimen/item_text_size"
             android:text="@string/topics"/>
@@ -64,15 +64,16 @@
 
     <TextView android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/item_text_margin"
+            android:layout_margin="@dimen/item_margin"
             android:textColor="@color/colorBlack"
             android:textSize="@dimen/item_text_size"
             android:text="@string/eksperts"/>
 
     <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view_experts"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            />
+            app:setExperts="@{viewModel.experts}"/>
 
 </LinearLayout>
 </layout>
