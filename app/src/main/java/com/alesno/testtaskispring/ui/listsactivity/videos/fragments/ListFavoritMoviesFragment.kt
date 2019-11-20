@@ -1,4 +1,4 @@
-package com.alesno.testtaskispring.ui.fragments
+package com.alesno.testtaskispring.ui.listsactivity.videos.fragments
 
 import android.os.Bundle
 import android.view.LayoutInflater

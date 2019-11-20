@@ -1,4 +1,4 @@
-package com.alesno.testtaskispring.ui
+package com.alesno.testtaskispring.ui.listsactivity.videos
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager

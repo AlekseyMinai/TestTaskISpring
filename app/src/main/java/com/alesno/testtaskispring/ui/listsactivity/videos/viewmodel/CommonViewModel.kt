@@ -1,4 +1,4 @@
-package com.alesno.testtaskispring.ui.viewmodel
+package com.alesno.testtaskispring.ui.listsactivity.videos.viewmodel
 
 import android.util.Log
 import androidx.databinding.ObservableArrayList

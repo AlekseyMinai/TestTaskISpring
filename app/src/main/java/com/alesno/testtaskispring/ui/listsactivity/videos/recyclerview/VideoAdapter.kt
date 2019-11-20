@@ -1,4 +1,4 @@
-package com.alesno.testtaskispring.ui.recyclerview
+package com.alesno.testtaskispring.ui.listsactivity.videos.recyclerview
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

@@ -1,4 +1,4 @@
-package com.alesno.testtaskispring.ui.viewmodel
+package com.alesno.testtaskispring.ui.listsactivity.videos.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -14,7 +14,11 @@ class CommonViewModelFactory(
 
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         return if(modelClass == CommonViewModel::class.java){
-            CommonViewModel(repository, videosDao, objectTransformer) as T
+            CommonViewModel(
+                repository,
+                videosDao,
+                objectTransformer
+            ) as T
         }else {
             return throw IllegalArgumentException("ViewModel Not Found")
         }

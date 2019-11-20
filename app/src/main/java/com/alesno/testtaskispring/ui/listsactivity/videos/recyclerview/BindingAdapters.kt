@@ -1,4 +1,4 @@
-package com.alesno.testtaskispring.ui.recyclerview
+package com.alesno.testtaskispring.ui.listsactivity.videos.recyclerview
 
 import android.graphics.drawable.Drawable
 import android.widget.ImageView

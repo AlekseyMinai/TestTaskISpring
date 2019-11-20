@@ -1,4 +1,4 @@
-package com.alesno.testtaskispring.ui
+package com.alesno.testtaskispring.ui.listsactivity.videos
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -13,20 +13,20 @@ import com.alesno.testtaskispring.model.objectbox.entities.VideoObject
 import com.alesno.testtaskispring.model.objectbox.transformer.ObjectTransformerImpl
 import com.alesno.testtaskispring.model.repository.ApiRepository
 import com.alesno.testtaskispring.model.service.ApiService
-import com.alesno.testtaskispring.ui.fragments.ListAllMoviesFragment
-import com.alesno.testtaskispring.ui.fragments.ListFavoritMoviesFragment
-import com.alesno.testtaskispring.ui.viewmodel.CommonViewModel
-import com.alesno.testtaskispring.ui.viewmodel.CommonViewModelFactory
+import com.alesno.testtaskispring.ui.listsactivity.videos.fragments.ListAllMoviesFragment
+import com.alesno.testtaskispring.ui.listsactivity.videos.fragments.ListFavoritMoviesFragment
+import com.alesno.testtaskispring.ui.listsactivity.videos.viewmodel.CommonViewModel
+import com.alesno.testtaskispring.ui.listsactivity.videos.viewmodel.CommonViewModelFactory
 import io.objectbox.Box
-import kotlinx.android.synthetic.main.activity_fragment.*
+import kotlinx.android.synthetic.main.activity_list_videos.*
 
-class FragmentActivity : AppCompatActivity() {
+class FragmentListActivity : AppCompatActivity() {
 
     private lateinit var viewModel: CommonViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_fragment)
+        setContentView(R.layout.activity_list_videos)
         setUpViewPager()
         tab_layout.setupWithViewPager(view_pager)
         setupTabs()
@@ -42,7 +42,11 @@ class FragmentActivity : AppCompatActivity() {
 
             return ViewModelProviders
                 .of(activity,
-                    CommonViewModelFactory(repository, videosDao, ObjectTransformerImpl)
+                    CommonViewModelFactory(
+                        repository,
+                        videosDao,
+                        ObjectTransformerImpl
+                    )
                 )
                 .get(CommonViewModel::class.java)
         }
@@ -50,7 +54,8 @@ class FragmentActivity : AppCompatActivity() {
 
 
     private fun setUpViewPager() {
-        val adapter = ViewPagerAdapter(supportFragmentManager)
+        val adapter =
+            ViewPagerAdapter(supportFragmentManager)
         adapter.addFragment(ListAllMoviesFragment())
         adapter.addFragment(ListFavoritMoviesFragment())
         view_pager.adapter = adapter
