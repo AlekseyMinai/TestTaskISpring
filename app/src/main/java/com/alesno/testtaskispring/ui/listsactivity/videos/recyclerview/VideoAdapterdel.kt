@@ -8,7 +8,7 @@ import com.alesno.testtaskispring.R
 import com.alesno.testtaskispring.databinding.ItemListMovieBinding
 import com.alesno.testtaskispring.model.objectbox.entities.VideoObject
 
-class VideoAdapter: RecyclerView.Adapter<VideoViewHolder>() {
+class VideoAdapterdel: RecyclerView.Adapter<VideoViewHolderdel>() {
 
 
     var videos: MutableList<VideoObject> = mutableListOf()
@@ -19,17 +19,17 @@ class VideoAdapter: RecyclerView.Adapter<VideoViewHolder>() {
         notifyDataSetChanged()
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VideoViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VideoViewHolderdel {
         val inflater: LayoutInflater = LayoutInflater.from(parent.context)
         val binding: ItemListMovieBinding = DataBindingUtil.inflate(inflater, R.layout.item_list_movie, parent, false)
-        return VideoViewHolder(binding)
+        return VideoViewHolderdel(binding)
     }
 
     override fun getItemCount(): Int {
         return videos.size
     }
 
-    override fun onBindViewHolder(holder: VideoViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: VideoViewHolderdel, position: Int) {
         holder.bind(videos[position])
     }
 

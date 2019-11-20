@@ -52,7 +52,6 @@ class FragmentListActivity : AppCompatActivity() {
         }
     }
 
-
     private fun setUpViewPager() {
         val adapter =
             ViewPagerAdapter(supportFragmentManager)

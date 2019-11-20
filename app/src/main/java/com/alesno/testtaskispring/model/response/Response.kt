@@ -3,7 +3,7 @@ import com.google.gson.annotations.SerializedName
 
 
 data class Response(
-   @SerializedName("list")
+   @SerializedName("videos")
     val videos: List<Video>
 )
 
