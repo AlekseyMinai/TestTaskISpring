@@ -31,3 +31,4 @@ fun setExperts(recyclerView: RecyclerView, experts: List<ExpertObject>){
 fun setPicture(imageView: ImageView, url: String, errorImage: Drawable){
     Picasso.get().load(url).placeholder(errorImage).error(errorImage).fit().into(imageView)
 }
+

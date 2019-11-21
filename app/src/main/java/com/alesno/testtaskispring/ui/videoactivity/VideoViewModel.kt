@@ -1,27 +1,50 @@
 package com.alesno.testtaskispring.ui.videoactivity
 
 import androidx.databinding.ObservableArrayList
+import androidx.databinding.ObservableField
 import androidx.databinding.ObservableList
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.alesno.testtaskispring.model.objectbox.dao.VideosDao
 import com.alesno.testtaskispring.model.objectbox.entities.ExpertObject
+import com.alesno.testtaskispring.model.objectbox.entities.VideoObject
 import com.alesno.testtaskispring.model.objectbox.transformer.ObjectTransformer
+import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 
 class VideoViewModel(val videosDao: VideosDao, val objectTransformer: ObjectTransformer): ViewModel() {
 
     var topics: ObservableList<String> = ObservableArrayList<String>()
     var experts: ObservableList<ExpertObject> = ObservableArrayList<ExpertObject>()
+    var observableVideosObject: ObservableField<VideoObject> = ObservableField()
+    var videoId: Long = 0
 
     fun onViewCreated() {
-        val listTopics = mutableListOf<String>()
-        listTopics.add("Здоровье")
-        listTopics.add("Учеба")
-        listTopics.add("Политика")
-        listTopics.add("Безопасность")
-        listTopics.add("Охрана труда")
-        topics.addAll(listTopics)
+        if(observableVideosObject.get() != null){
+            return
+        }
+        getVideo()
 
-        experts.add(ExpertObject())
-        experts.add(ExpertObject())
+    }
+
+    private fun getVideo(){
+        viewModelScope.launch (Dispatchers.IO){
+            val videoObject = getVideoByIdAsync(videoId).await()
+            setDataInField(videoObject)
+        }
+    }
+
+    private fun setDataInField(videoObject: VideoObject) {
+        observableVideosObject.set(videoObject)
+        experts.addAll(videoObject.experts)
+        videoObject.topics?.let { topics.addAll(it) }
+    }
+
+    private fun getVideoByIdAsync(videoId: Long): Deferred<VideoObject>{
+        return viewModelScope.async{
+            videosDao.getVideoById(videoId)
+        }
     }
 }

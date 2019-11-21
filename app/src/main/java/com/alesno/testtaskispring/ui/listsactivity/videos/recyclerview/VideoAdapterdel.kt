@@ -8,6 +8,7 @@ import com.alesno.testtaskispring.R
 import com.alesno.testtaskispring.databinding.ItemListMovieBinding
 import com.alesno.testtaskispring.model.objectbox.entities.VideoObject
 
+
 class VideoAdapterdel: RecyclerView.Adapter<VideoViewHolderdel>() {
 
 

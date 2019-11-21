@@ -37,7 +37,7 @@ class CommonViewModel(
             isProgressBarVisible.set(false)
 
             val response = getResponseFromServer() ?: return@launch
-            Log.d("log", response.videos.size.toString())
+
             videosDao.insertAllVideos(objectTransformer.responseTransformer(response))
 
             putVideosObjInListFromDb()

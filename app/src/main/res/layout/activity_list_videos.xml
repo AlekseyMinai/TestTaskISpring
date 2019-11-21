@@ -8,12 +8,19 @@
         android:orientation="vertical"
         tools:context=".ui.listsactivity.videos.FragmentListActivity">
 
-    <com.google.android.material.tabs.TabLayout
-            android:id="@+id/tab_layout"
+    <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/tab_layout_height"
-            android:background="@color/colorPrimary"
-            app:tabTextColor="@color/colorWhite"/>
+            android:layout_height="wrap_content">
+
+        <com.google.android.material.tabs.TabLayout
+                android:id="@+id/tab_layout"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/tab_layout_height"
+                android:background="@color/colorPrimary"
+                app:tabTextColor="@color/colorWhite"/>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
 
     <androidx.viewpager.widget.ViewPager
             android:id="@+id/view_pager"

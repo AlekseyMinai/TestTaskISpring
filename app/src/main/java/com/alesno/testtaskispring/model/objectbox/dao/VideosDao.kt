@@ -8,4 +8,6 @@ interface VideosDao {
 
     fun insertAllVideos(videos: List<VideoObject>)
 
+    fun getVideoById(idVideo: Long): VideoObject
+
 }

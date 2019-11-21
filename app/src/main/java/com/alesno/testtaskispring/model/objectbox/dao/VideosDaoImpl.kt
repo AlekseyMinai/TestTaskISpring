@@ -5,6 +5,10 @@ import io.objectbox.Box
 
 class VideosDaoImpl(private val videosBox: Box<VideoObject>): VideosDao {
 
+    override fun getVideoById(idVideo: Long): VideoObject {
+        return videosBox.get(idVideo)
+    }
+
     override fun getAllVideos(): List<VideoObject> {
         return videosBox.all
     }

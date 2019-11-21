@@ -1,79 +1,89 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:android="http://schemas.android.com/apk/res/android">
     <data>
         <variable
                 name="viewModel"
                 type="com.alesno.testtaskispring.ui.videoactivity.VideoViewModel" />
     </data>
-    
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent">
-
     <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="230dp">
+            android:layout_height="match_parent">
 
-        <VideoView
-                android:layout_width="match_parent"
-                android:layout_height="230dp"/>
+    <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        <LinearLayout
+                      android:orientation="vertical"
+                      android:layout_width="match_parent"
+                      android:layout_height="match_parent">
 
-        <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:background="@color/transparent"
-                android:src="@drawable/ic_play_arrow_white_24dp"/>
+            <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="230dp">
 
-        <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:background="@color/transparent"
-                android:src="@drawable/ic_pause_white_24dp"
-                android:visibility="invisible"/>
+                <VideoView
+                        android:layout_width="match_parent"
+                        android:layout_height="230dp"/>
+
+                <ImageButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:background="@color/transparent"
+                        android:src="@drawable/ic_play_arrow_white_24dp"/>
+
+                <ImageButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:background="@color/transparent"
+                        android:src="@drawable/ic_pause_white_24dp"
+                        android:visibility="invisible"/>
+            </FrameLayout>
+
+            <TextView android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/item_margin"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="@dimen/item_text_size"
+                    android:text="@{viewModel.observableVideosObject.title}"/>
+
+            <TextView android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/item_margin"
+                    android:layout_marginBottom="@dimen/item_margin"
+                    android:text="В процессе (72%)" />
+
+            <TextView android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/item_margin"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="@dimen/item_text_size"
+                    android:text="@string/topics"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recycler_view_topics"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/item_margin"
+                    app:setTopics="@{viewModel.topics}"/>
+
+
+            <TextView android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/item_margin"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="@dimen/item_text_size"
+                    android:text="@string/eksperts"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recycler_view_experts"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:setExperts="@{viewModel.experts}"/>
+
+        </LinearLayout>
+    </ScrollView>
     </FrameLayout>
-
-    <TextView android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/item_margin"
-            android:textColor="@color/colorBlack"
-            android:textSize="@dimen/item_text_size"
-            android:text="Техника пожарной безопасности на предприятии"/>
-
-    <TextView android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/item_margin"
-            android:layout_marginBottom="@dimen/item_margin"
-            android:text="В процессе (72%)" />
-
-    <TextView android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/item_margin"
-            android:textColor="@color/colorBlack"
-            android:textSize="@dimen/item_text_size"
-            android:text="@string/topics"/>
-
-    <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycler_view_topics"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:setTopics="@{viewModel.topics}"/>
-
-
-    <TextView android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/item_margin"
-            android:textColor="@color/colorBlack"
-            android:textSize="@dimen/item_text_size"
-            android:text="@string/eksperts"/>
-
-    <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycler_view_experts"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:setExperts="@{viewModel.experts}"/>
-
-</LinearLayout>
 </layout>

@@ -18,8 +18,10 @@ object ObjectTransformerImpl:
     }
 
     private fun expertTransformer(expert: Expert): ExpertObject{
+        var avatar: String? = expert.avatar
+        if(avatar == null) avatar = "no_avatar"
         return ExpertObject(
-            expert.avatar,
+            avatar,
             expert.firstName,
             expert.id,
             expert.secondName,
