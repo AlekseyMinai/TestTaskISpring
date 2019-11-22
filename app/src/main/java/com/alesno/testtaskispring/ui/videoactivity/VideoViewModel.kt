@@ -1,5 +1,6 @@
 package com.alesno.testtaskispring.ui.videoactivity
 
+import android.util.Log
 import androidx.databinding.ObservableArrayList
 import androidx.databinding.ObservableField
 import androidx.databinding.ObservableList
@@ -18,10 +19,12 @@ class VideoViewModel(val videosDao: VideosDao, val objectTransformer: ObjectTran
 
     var topics: ObservableList<String> = ObservableArrayList<String>()
     var experts: ObservableList<ExpertObject> = ObservableArrayList<ExpertObject>()
+    var videoUrl: ObservableField<String> = ObservableField()
     var observableVideosObject: ObservableField<VideoObject> = ObservableField()
     var videoId: Long = 0
 
     fun onViewCreated() {
+        videoUrl.set(" ")
         if(observableVideosObject.get() != null){
             return
         }
@@ -39,6 +42,7 @@ class VideoViewModel(val videosDao: VideosDao, val objectTransformer: ObjectTran
     private fun setDataInField(videoObject: VideoObject) {
         observableVideosObject.set(videoObject)
         experts.addAll(videoObject.experts)
+        videoUrl.set(videoObject.url)
         videoObject.topics?.let { topics.addAll(it) }
     }
 

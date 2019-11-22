@@ -23,17 +23,20 @@
                     android:layout_height="230dp">
 
                 <VideoView
+                        android:id="@+id/video_view"
                         android:layout_width="match_parent"
                         android:layout_height="230dp"
-                        android:background="@color/colorBlack"
+                        app:setVideoUrl="@{viewModel.videoUrl}"
                         />
 
                 <ImageButton
+                        android:id="@+id/play_button"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:background="@color/transparent"
-                        android:src="@drawable/ic_play_arrow_white_24dp"/>
+                        android:src="@drawable/ic_play_arrow_white_24dp"
+                        />
 
                 <ImageButton
                         android:layout_width="wrap_content"

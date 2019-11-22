@@ -1,7 +1,10 @@
 package com.alesno.testtaskispring.common
 
 import android.graphics.drawable.Drawable
+import android.net.Uri
+import android.util.Log
 import android.widget.ImageView
+import android.widget.VideoView
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.alesno.testtaskispring.model.objectbox.entities.ExpertObject
@@ -30,5 +33,11 @@ fun setExperts(recyclerView: RecyclerView, experts: List<ExpertObject>){
 @BindingAdapter("url", "errorImage")
 fun setPicture(imageView: ImageView, url: String, errorImage: Drawable){
     Picasso.get().load(url).placeholder(errorImage).error(errorImage).fit().into(imageView)
+}
+
+@BindingAdapter("setVideoUrl")
+fun setVideoUrl(videoView: VideoView, url: String){
+    Log.d("log", url)
+    videoView.setVideoPath(url)
 }
 

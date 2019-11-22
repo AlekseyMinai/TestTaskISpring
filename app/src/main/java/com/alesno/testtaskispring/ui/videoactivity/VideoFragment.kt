@@ -4,17 +4,20 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.VideoView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.alesno.testtaskispring.databinding.FragmentVideoBinding
 import com.alesno.testtaskispring.ui.videoactivity.recyclerview.ExpertsAdapter
 import com.alesno.testtaskispring.ui.videoactivity.recyclerview.TopicsAdapter
+import kotlinx.android.synthetic.main.fragment_video.*
 
 class VideoFragment: Fragment() {
 
     lateinit var binding: FragmentVideoBinding
     lateinit var viewModel: VideoViewModel
+    lateinit var videoView: VideoView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -27,6 +30,10 @@ class VideoFragment: Fragment() {
 
         setupRecyclerViewWithTopics()
         setupRecyclerViewWithExperts()
+
+        videoView = binding.videoView
+        val playButton = binding.playButton
+        playButton.setOnClickListener{ videoView.start() }
 
         return binding.root
     }
@@ -49,4 +56,5 @@ class VideoFragment: Fragment() {
         recyclerView.setHasFixedSize(true)
         recyclerView.adapter = ExpertsAdapter()
     }
+
 }
