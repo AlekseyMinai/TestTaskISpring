@@ -24,12 +24,14 @@ class VideoViewModel(val videosDao: VideosDao, val objectTransformer: ObjectTran
     var videoId: Long = 0
 
     fun onViewCreated() {
-        videoUrl.set(" ")
         if(observableVideosObject.get() != null){
             return
         }
         getVideo()
+    }
 
+    fun setVideoUrl(videoUrl: String){
+        this.videoUrl.set(videoUrl)
     }
 
     private fun getVideo(){
@@ -42,7 +44,6 @@ class VideoViewModel(val videosDao: VideosDao, val objectTransformer: ObjectTran
     private fun setDataInField(videoObject: VideoObject) {
         observableVideosObject.set(videoObject)
         experts.addAll(videoObject.experts)
-        videoUrl.set(videoObject.url)
         videoObject.topics?.let { topics.addAll(it) }
     }
 

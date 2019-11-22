@@ -7,7 +7,7 @@ import com.alesno.testtaskispring.ui.videoactivity.VideoActivity
 
 class VideoListViewHolder(val binding: ItemListMovieBinding): RecyclerView.ViewHolder(binding.root) {
     init {
-        binding.root.setOnClickListener{item -> VideoActivity.startActivity(item.context, videoObject.id) }
+        binding.root.setOnClickListener{item -> VideoActivity.startActivity(item.context, videoObject.id, videoObject.url.toString()) }
     }
 
     lateinit var videoObject: VideoObject

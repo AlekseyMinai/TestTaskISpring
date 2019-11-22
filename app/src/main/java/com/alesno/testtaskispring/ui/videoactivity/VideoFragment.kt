@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.alesno.testtaskispring.databinding.FragmentVideoBinding
 import com.alesno.testtaskispring.ui.videoactivity.recyclerview.ExpertsAdapter
 import com.alesno.testtaskispring.ui.videoactivity.recyclerview.TopicsAdapter
-import kotlinx.android.synthetic.main.fragment_video.*
 
 class VideoFragment: Fragment() {
 
@@ -23,17 +22,11 @@ class VideoFragment: Fragment() {
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         binding = FragmentVideoBinding.inflate(inflater, container, false)
-
         viewModel = VideoActivity.getVideoViewModel(activity!!)
-
         binding.viewModel = viewModel
+        binding.handler = this
 
-        setupRecyclerViewWithTopics()
-        setupRecyclerViewWithExperts()
-
-        videoView = binding.videoView
-        val playButton = binding.playButton
-        playButton.setOnClickListener{ videoView.start() }
+        setupUIElements()
 
         return binding.root
     }
@@ -41,6 +34,23 @@ class VideoFragment: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.onViewCreated()
+    }
+
+    fun onPlayClicked(view: View, progressTime: Long){
+        videoView.seekTo(progressTime.toInt())
+        videoView.start()
+        view.visibility = View.GONE
+    }
+
+    private fun setupUIElements(){
+        setupRecyclerViewWithTopics()
+        setupRecyclerViewWithExperts()
+        setupVideoView()
+    }
+
+    private fun setupVideoView(){
+        videoView = binding.videoView
+        videoView.seekTo(1000)
     }
 
     private fun setupRecyclerViewWithTopics(){

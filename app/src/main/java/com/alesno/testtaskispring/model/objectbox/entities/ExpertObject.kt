@@ -1,9 +1,11 @@
 package com.alesno.testtaskispring.model.objectbox.entities
 
+import android.os.Parcelable
 import io.objectbox.annotation.Entity
 import io.objectbox.annotation.Id
 import io.objectbox.annotation.NameInDb
 import io.objectbox.relation.ToOne
+import java.io.Serializable
 
 @Entity
 data class ExpertObject(
@@ -51,6 +53,18 @@ data class ExpertObject(
         result = 31 * result + video.hashCode()
         return result
     }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 }

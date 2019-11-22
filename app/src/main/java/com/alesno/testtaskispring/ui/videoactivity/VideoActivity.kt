@@ -8,6 +8,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProviders
 import com.alesno.testtaskispring.R
 import com.alesno.testtaskispring.common.VIDEO_ID_EXTRA
+import com.alesno.testtaskispring.common.VIDEO_URL_EXTRA
 import com.alesno.testtaskispring.model.objectbox.ObjectBox
 import com.alesno.testtaskispring.model.objectbox.dao.VideosDaoImpl
 import com.alesno.testtaskispring.model.objectbox.entities.VideoObject
@@ -20,14 +21,11 @@ class VideoActivity: AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_videos)
         startFragment()
-        val videoId = getVideoId()
         val viewModel = getVideoViewModel(this)
-        viewModel.videoId = videoId
+        viewModel.videoId = getVideoId()
+        viewModel.setVideoUrl(getVideoUrl())
     }
 
-    private fun getVideoId(): Long {
-        return intent.getLongExtra(VIDEO_ID_EXTRA, 0)
-    }
 
     private fun startFragment(){
         val transaction = supportFragmentManager.beginTransaction()
@@ -36,9 +34,10 @@ class VideoActivity: AppCompatActivity() {
     }
 
     companion object{
-        fun startActivity(context: Context, idVideo: Long){
+        fun startActivity(context: Context, idVideo: Long, urlVideo: String){
             val intent: Intent = Intent(context, VideoActivity::class.java)
             intent.putExtra(VIDEO_ID_EXTRA, idVideo)
+            intent.putExtra(VIDEO_URL_EXTRA, urlVideo)
             intent.flags = Intent.FLAG_ACTIVITY_NO_ANIMATION
             context.startActivity(intent)
         }
@@ -62,5 +61,13 @@ class VideoActivity: AppCompatActivity() {
     override fun onPause() {
         super.onPause()
         overridePendingTransition(0,0)
+    }
+
+    private fun getVideoId(): Long {
+        return intent.getLongExtra(VIDEO_ID_EXTRA, 0)
+    }
+
+    private fun getVideoUrl(): String {
+        return intent.getStringExtra(VIDEO_URL_EXTRA)!!
     }
 }

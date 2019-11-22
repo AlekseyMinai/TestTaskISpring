@@ -3,6 +3,7 @@ package com.alesno.testtaskispring.model.objectbox.entities
 import com.alesno.testtaskispring.model.objectbox.entities.convertor.TopicsConverter
 import io.objectbox.annotation.*
 import io.objectbox.relation.ToMany
+import java.io.Serializable
 
 @Entity
 data class VideoObject(
