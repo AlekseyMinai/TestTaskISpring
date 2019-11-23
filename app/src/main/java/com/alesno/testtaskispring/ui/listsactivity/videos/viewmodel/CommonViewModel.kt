@@ -11,7 +11,9 @@ import com.alesno.testtaskispring.model.objectbox.entities.VideoObject
 import com.alesno.testtaskispring.model.objectbox.transformer.ObjectTransformer
 import com.alesno.testtaskispring.model.repository.Repository
 import com.alesno.testtaskispring.model.response.Response
+import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 
 class CommonViewModel(
@@ -34,20 +36,30 @@ class CommonViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             putVideosObjInListFromDb()
 
-            isProgressBarVisible.set(false)
+            if(!videosObj.isEmpty()) {
+                isProgressBarVisible.set(false)
+            }
 
             val response = getResponseFromServer() ?: return@launch
 
             videosDao.insertAllVideos(objectTransformer.responseTransformer(response))
 
             putVideosObjInListFromDb()
+
+            isProgressBarVisible.set(false)
         }
     }
 
-    private fun putVideosObjInListFromDb(){
-        val listVideosObj = videosDao.getAllVideos()
+    private suspend fun putVideosObjInListFromDb(){
+        val listVideosObj = getAllVideosAsync().await()
         videosObj.clear()
         videosObj.addAll(sortByTitle(listVideosObj))
+    }
+
+    private fun getAllVideosAsync(): Deferred<List<VideoObject>>{
+        return viewModelScope.async{
+            videosDao.getAllVideos()
+        }
     }
 
     private suspend fun getResponseFromServer(): Response? {

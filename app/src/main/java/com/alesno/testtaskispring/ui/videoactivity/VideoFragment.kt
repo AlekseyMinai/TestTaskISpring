@@ -67,4 +67,9 @@ class VideoFragment: Fragment() {
         recyclerView.adapter = ExpertsAdapter()
     }
 
+    override fun onPause() {
+        super.onPause()
+        videoView.stopPlayback()
+    }
+
 }
