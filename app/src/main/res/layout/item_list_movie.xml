@@ -6,6 +6,11 @@
         <variable
                 name="video"
                 type="com.alesno.testtaskispring.model.objectbox.entities.VideoObject" />
+
+        <variable
+                name="viewModel"
+                type="com.alesno.testtaskispring.ui.listsactivity.videos.viewmodel.CommonViewModel" />
+
     </data>
 
     <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -40,10 +45,12 @@
         </LinearLayout>
 
         <CheckBox
+                android:id="@+id/checkbox_favorite"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
                 android:layout_margin="@dimen/item_checkbox_margin"
+                android:checked="@{video.favorite}"
                 android:button="@drawable/checkbox_selector" />
     </FrameLayout>
 </layout>

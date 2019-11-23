@@ -1,4 +1,4 @@
-package com.alesno.testtaskispring.base
+package com.alesno.testtaskispring.ui.base
 
 import androidx.recyclerview.widget.RecyclerView
 

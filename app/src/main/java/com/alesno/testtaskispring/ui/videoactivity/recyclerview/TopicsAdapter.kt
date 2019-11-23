@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import com.alesno.testtaskispring.R
-import com.alesno.testtaskispring.base.BaseRWAdapter
+import com.alesno.testtaskispring.ui.base.BaseRWAdapter
 import com.alesno.testtaskispring.databinding.ItemListTopicsBinding
 
 class TopicsAdapter: BaseRWAdapter<TopicsViewHolder, String>() {

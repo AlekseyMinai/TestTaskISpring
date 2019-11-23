@@ -38,7 +38,6 @@
                             android:layout_gravity="center"
                             app:setVideoUrl="@{viewModel.videoUrl}" />
 
-
                     <ImageButton
                             android:id="@+id/play_button"
                             android:layout_width="wrap_content"
@@ -47,7 +46,6 @@
                             android:background="@color/transparent"
                             android:onClick="@{(view) -> handler.onPlayClicked(view, viewModel.observableVideosObject.progressTime)}"
                             android:src="@drawable/ic_play_arrow_white_24dp" />
-
 
                 </FrameLayout>
 
@@ -80,7 +78,6 @@
                         android:layout_height="wrap_content"
                         android:layout_margin="@dimen/item_margin"
                         app:setTopics="@{viewModel.topics}" />
-
 
                 <TextView
                         android:layout_width="match_parent"

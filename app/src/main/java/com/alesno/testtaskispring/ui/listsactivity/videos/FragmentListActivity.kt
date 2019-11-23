@@ -2,7 +2,6 @@ package com.alesno.testtaskispring.ui.listsactivity.videos
 
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -16,7 +15,7 @@ import com.alesno.testtaskispring.model.objectbox.transformer.ObjectTransformerI
 import com.alesno.testtaskispring.model.repository.ApiRepository
 import com.alesno.testtaskispring.model.service.ApiService
 import com.alesno.testtaskispring.ui.listsactivity.videos.fragments.ListAllMoviesFragment
-import com.alesno.testtaskispring.ui.listsactivity.videos.fragments.ListFavoritMoviesFragment
+import com.alesno.testtaskispring.ui.listsactivity.videos.fragments.ListFavoriteMoviesFragment
 import com.alesno.testtaskispring.ui.listsactivity.videos.viewmodel.CommonViewModel
 import com.alesno.testtaskispring.ui.listsactivity.videos.viewmodel.CommonViewModelFactory
 import com.google.android.material.tabs.TabLayout
@@ -60,7 +59,7 @@ class FragmentListActivity : AppCompatActivity() {
         val adapter =
             ViewPagerAdapter(supportFragmentManager)
         adapter.addFragment(ListAllMoviesFragment())
-        adapter.addFragment(ListFavoritMoviesFragment())
+        adapter.addFragment(ListFavoriteMoviesFragment())
         view_pager.adapter = adapter
     }
 

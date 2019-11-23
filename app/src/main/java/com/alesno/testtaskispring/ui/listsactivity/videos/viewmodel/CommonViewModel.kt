@@ -17,26 +17,26 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 
 class CommonViewModel(
-            private val repository: Repository,
-            private val videosDao: VideosDao,
-            private val objectTransformer: ObjectTransformer
-): ViewModel() {
+    private val repository: Repository,
+    private val videosDao: VideosDao,
+    private val objectTransformer: ObjectTransformer
+) : ViewModel() {
 
     var videosObj: ObservableList<VideoObject> = ObservableArrayList<VideoObject>()
     var isProgressBarVisible: ObservableBoolean = ObservableBoolean(false)
 
-    fun onViewCreated() {
-        if(videosObj.isEmpty()){
+    fun onViewListAllMoviesCreated() {
+        if (videosObj.isEmpty()) {
             setDataInViewAsyncForTheFirsTime()
         }
     }
 
-    private fun setDataInViewAsyncForTheFirsTime(){
+    private fun setDataInViewAsyncForTheFirsTime() {
         isProgressBarVisible.set(true)
         viewModelScope.launch(Dispatchers.IO) {
             putVideosObjInListFromDb()
 
-            if(!videosObj.isEmpty()) {
+            if (!videosObj.isEmpty()) {
                 isProgressBarVisible.set(false)
             }
 
@@ -50,14 +50,14 @@ class CommonViewModel(
         }
     }
 
-    private suspend fun putVideosObjInListFromDb(){
+    private suspend fun putVideosObjInListFromDb() {
         val listVideosObj = getAllVideosAsync().await()
         videosObj.clear()
         videosObj.addAll(sortByTitle(listVideosObj))
     }
 
-    private fun getAllVideosAsync(): Deferred<List<VideoObject>>{
-        return viewModelScope.async{
+    private fun getAllVideosAsync(): Deferred<List<VideoObject>> {
+        return viewModelScope.async {
             videosDao.getAllVideos()
         }
     }
@@ -72,7 +72,22 @@ class CommonViewModel(
         return response
     }
 
-    private fun sortByTitle(videosObj: List<VideoObject>): List<VideoObject>{
+    fun onCheckboxClicked(idVideo: Long, isFavorite: Boolean) {
+        changeFavoriteStatus(idVideo, isFavorite)
+        //redo it!!!
+        val list: ObservableList<VideoObject> = ObservableArrayList<VideoObject>()
+        list.addAll(videosObj)
+        videosObj.clear()
+        videosObj.addAll(list)
+    }
+
+    private fun changeFavoriteStatus(idVideo: Long, isFavorite: Boolean) {
+        videosObj.map { videoObject ->
+            if (videoObject.id == idVideo) videoObject.isFavorite = isFavorite
+        }
+    }
+
+    private fun sortByTitle(videosObj: List<VideoObject>): List<VideoObject> {
         return videosObj.sortedWith(compareBy { it.title })
     }
 

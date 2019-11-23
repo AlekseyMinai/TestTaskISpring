@@ -2,7 +2,7 @@ package com.alesno.testtaskispring.ui.videoactivity.recyclerview
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import com.alesno.testtaskispring.base.BaseRWAdapter
+import com.alesno.testtaskispring.ui.base.BaseRWAdapter
 import com.alesno.testtaskispring.databinding.ItemListExpertsBinding
 import com.alesno.testtaskispring.model.objectbox.entities.ExpertObject
 
