@@ -23,6 +23,7 @@
                       android:layout_height="match_parent">
 
             <FrameLayout
+                    android:background="@color/colorBlack"
                     android:layout_width="match_parent"
                     android:layout_height="220dp">
 
@@ -30,25 +31,20 @@
                         android:id="@+id/video_view"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_centerInParent="true"
+                        android:layout_gravity="center"
                         app:setVideoUrl="@{viewModel.videoUrl}"/>
 
-                <ImageButton
-                        android:id="@+id/play_button"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:background="@color/transparent"
-                        android:src="@drawable/ic_play_arrow_white_24dp"
-                        android:onClick="@{(view) -> handler.onPlayClicked(view, viewModel.observableVideosObject.progressTime)}"/>
 
-                <ImageButton
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:background="@color/transparent"
-                        android:src="@drawable/ic_pause_white_24dp"
-                        android:visibility="invisible"/>
+                    <ImageButton
+                            android:id="@+id/play_button"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:background="@color/transparent"
+                            android:src="@drawable/ic_play_arrow_white_24dp"
+                            android:onClick="@{(view) -> handler.onPlayClicked(view, viewModel.observableVideosObject.progressTime)}"/>
+
+
             </FrameLayout>
 
             <TextView android:layout_width="match_parent"

@@ -1,11 +1,13 @@
 package com.alesno.testtaskispring.ui.videoactivity
 
-import android.util.Log
 import androidx.databinding.ObservableArrayList
 import androidx.databinding.ObservableField
 import androidx.databinding.ObservableList
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.alesno.testtaskispring.common.PlayerStartInfo
 import com.alesno.testtaskispring.model.objectbox.dao.VideosDao
 import com.alesno.testtaskispring.model.objectbox.entities.ExpertObject
 import com.alesno.testtaskispring.model.objectbox.entities.VideoObject
@@ -22,8 +24,11 @@ class VideoViewModel(val videosDao: VideosDao, val objectTransformer: ObjectTran
     var videoUrl: ObservableField<String> = ObservableField()
     var observableVideosObject: ObservableField<VideoObject> = ObservableField()
     var videoId: Long = 0
+    private var playerStartInfo: PlayerStartInfo = PlayerStartInfo(false, 0)
+    val playVideoLiveData: MutableLiveData<PlayerStartInfo> = MutableLiveData()
 
     fun onViewCreated() {
+        playVideoLiveData.value = playerStartInfo
         if(observableVideosObject.get() != null){
             return
         }
@@ -51,5 +56,14 @@ class VideoViewModel(val videosDao: VideosDao, val objectTransformer: ObjectTran
         return viewModelScope.async{
             videosDao.getVideoById(videoId)
         }
+    }
+
+    fun onPausePlaybackVideo(progressTime: Long){
+        playerStartInfo.isVideoStarted = true
+        playerStartInfo.progressTime = progressTime
+
+        val videoObject = observableVideosObject.get()
+        videoObject!!.progressTime = progressTime
+        observableVideosObject.set(videoObject)
     }
 }

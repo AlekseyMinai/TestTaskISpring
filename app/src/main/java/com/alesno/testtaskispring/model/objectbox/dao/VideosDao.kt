@@ -10,4 +10,6 @@ interface VideosDao {
 
     fun getVideoById(idVideo: Long): VideoObject
 
+    fun updateVideo(videoObject: VideoObject)
+
 }
