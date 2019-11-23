@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+
     <data>
+
         <variable
                 name="viewModel"
                 type="com.alesno.testtaskispring.ui.videoactivity.VideoViewModel" />
@@ -10,29 +12,31 @@
                 name="handler"
                 type="com.alesno.testtaskispring.ui.videoactivity.VideoFragment" />
     </data>
+
     <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-    <androidx.core.widget.NestedScrollView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-        <LinearLayout
-                      android:orientation="vertical"
-                      android:layout_width="match_parent"
-                      android:layout_height="match_parent">
+        <androidx.core.widget.NestedScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-            <FrameLayout
-                    android:background="@color/colorBlack"
+            <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="220dp">
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
 
-                <VideoView
-                        android:id="@+id/video_view"
+                <FrameLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="center"
-                        app:setVideoUrl="@{viewModel.videoUrl}"/>
+                        android:layout_height="220dp"
+                        android:background="@color/colorBlack">
+
+                    <VideoView
+                            android:id="@+id/video_view"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center"
+                            app:setVideoUrl="@{viewModel.videoUrl}" />
 
 
                     <ImageButton
@@ -41,54 +45,58 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:background="@color/transparent"
-                            android:src="@drawable/ic_play_arrow_white_24dp"
-                            android:onClick="@{(view) -> handler.onPlayClicked(view, viewModel.observableVideosObject.progressTime)}"/>
+                            android:onClick="@{(view) -> handler.onPlayClicked(view, viewModel.observableVideosObject.progressTime)}"
+                            android:src="@drawable/ic_play_arrow_white_24dp" />
 
 
-            </FrameLayout>
+                </FrameLayout>
 
-            <TextView android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/item_margin"
-                    android:textColor="@color/colorBlack"
-                    android:textSize="@dimen/item_text_size"
-                    android:text="@{viewModel.observableVideosObject.title}"/>
+                <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/item_margin"
+                        android:text="@{viewModel.observableVideosObject.title}"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="@dimen/item_text_size" />
 
-            <TextView android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/item_margin"
-                    android:layout_marginBottom="@dimen/item_margin"
-                    android:text="В процессе (72%)" />
+                <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/item_margin"
+                        android:layout_marginBottom="@dimen/item_margin"
+                        android:text="В процессе (72%)" />
 
-            <TextView android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/item_margin"
-                    android:textColor="@color/colorBlack"
-                    android:textSize="@dimen/item_text_size"
-                    android:text="@string/topics"/>
+                <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/item_margin"
+                        android:text="@string/topics"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="@dimen/item_text_size" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recycler_view_topics"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/item_margin"
-                    app:setTopics="@{viewModel.topics}"/>
+                <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recycler_view_topics"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/item_margin"
+                        app:setTopics="@{viewModel.topics}" />
 
 
-            <TextView android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/item_margin"
-                    android:textColor="@color/colorBlack"
-                    android:textSize="@dimen/item_text_size"
-                    android:text="@string/eksperts"/>
+                <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/item_margin"
+                        android:text="@string/eksperts"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="@dimen/item_text_size" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recycler_view_experts"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    app:setExperts="@{viewModel.experts}"/>
+                <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recycler_view_experts"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        app:setExperts="@{viewModel.experts}" />
 
-        </LinearLayout>
-    </androidx.core.widget.NestedScrollView>
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
     </FrameLayout>
 </layout>

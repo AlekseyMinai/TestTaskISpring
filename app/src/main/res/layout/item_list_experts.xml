@@ -1,46 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:app="http://schemas.android.com/apk/res-auto">
+
     <data>
+
         <variable
                 name="expert"
                 type="com.alesno.testtaskispring.model.objectbox.entities.ExpertObject" />
     </data>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:orientation="horizontal" android:layout_width="match_parent"
-        android:layout_height="60dp">
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:orientation="horizontal">
 
-    <com.google.android.material.circularreveal.cardview.CircularRevealCardView
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_margin="@dimen/item_margin"
-            android:layout_gravity="center_vertical"
-            app:cardCornerRadius="25dp">
+        <com.google.android.material.circularreveal.cardview.CircularRevealCardView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center_vertical"
+                android:layout_margin="@dimen/item_margin"
+                app:cardCornerRadius="25dp">
 
 
-    <ImageView
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_gravity="center_vertical"
-            app:url="@{expert.avatar}"
-            app:errorImage="@{@drawable/error}"/>
+            <ImageView
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_gravity="center_vertical"
+                    app:errorImage="@{@drawable/error}"
+                    app:url="@{expert.avatar}" />
 
-    </com.google.android.material.circularreveal.cardview.CircularRevealCardView>
+        </com.google.android.material.circularreveal.cardview.CircularRevealCardView>
 
-    <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-        <TextView
+        <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/colorBlack"
-                android:text='@{expert.firstName + " " + expert.secondName}'/>
-        <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@{expert.speciality}"/>
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text='@{expert.firstName + " " + expert.secondName}'
+                    android:textColor="@color/colorBlack" />
+
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{expert.speciality}" />
+        </LinearLayout>
+
     </LinearLayout>
-
-</LinearLayout>
 </layout>

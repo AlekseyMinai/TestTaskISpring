@@ -1,6 +1,6 @@
 package com.alesno.testtaskispring.common
 
-class PlayerStartInfo (
+class PlayerStartInfo(
     var isVideoStarted: Boolean,
     var progressTime: Long
 )

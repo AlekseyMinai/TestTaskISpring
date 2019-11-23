@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:app="http://schemas.android.com/apk/res-auto">
+
     <data>
+
         <variable
                 name="video"
                 type="com.alesno.testtaskispring.model.objectbox.entities.VideoObject" />
@@ -10,35 +12,38 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-    <LinearLayout
-                  android:orientation="vertical"
-                  android:layout_width="match_parent"
-                  android:layout_height="wrap_content">
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
-        <ImageView android:layout_width="match_parent"
-                   android:layout_height="220dp"
-                   app:url="@{video.preview}"
-                   app:errorImage="@{@drawable/shape_background}"/>
+            <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="220dp"
+                    app:errorImage="@{@drawable/shape_background}"
+                    app:url="@{video.preview}" />
 
-        <TextView android:layout_width="match_parent"
-                  android:layout_height="wrap_content"
-                  android:layout_margin="@dimen/item_margin"
-                  android:textColor="@color/colorBlack"
-                  android:textSize="@dimen/item_text_size"
-                  android:text="@{video.title}"/>
+            <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/item_margin"
+                    android:text="@{video.title}"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="@dimen/item_text_size" />
 
-        <TextView android:layout_width="match_parent"
-                  android:layout_height="wrap_content"
-                  android:layout_marginStart="@dimen/item_margin"
-                  android:layout_marginBottom="@dimen/item_margin"
-                  android:text="В процессе (72%)" />
-    </LinearLayout>
+            <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/item_margin"
+                    android:layout_marginBottom="@dimen/item_margin"
+                    android:text="В процессе (72%)" />
+        </LinearLayout>
 
-    <CheckBox android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:layout_gravity="end"
-              android:layout_margin="@dimen/item_checkbox_margin"
-              android:button="@drawable/checkbox_selector"
-            />
-</FrameLayout>
+        <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_margin="@dimen/item_checkbox_margin"
+                android:button="@drawable/checkbox_selector" />
+    </FrameLayout>
 </layout>

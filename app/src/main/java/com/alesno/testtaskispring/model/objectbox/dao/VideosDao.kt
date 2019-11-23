@@ -4,7 +4,7 @@ import com.alesno.testtaskispring.model.objectbox.entities.VideoObject
 
 interface VideosDao {
 
-    fun getAllVideos():List<VideoObject>
+    fun getAllVideos(): List<VideoObject>
 
     fun insertAllVideos(videos: List<VideoObject>)
 

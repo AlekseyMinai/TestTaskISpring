@@ -6,20 +6,20 @@ import com.alesno.testtaskispring.model.response.Expert
 import com.alesno.testtaskispring.model.response.Response
 import com.alesno.testtaskispring.model.response.Video
 
-object ObjectTransformerImpl:
+object ObjectTransformerImpl :
     ObjectTransformer {
 
-    override fun responseTransformer(response: Response): List<VideoObject>{
-        return response.videos.map{ video ->
+    override fun responseTransformer(response: Response): List<VideoObject> {
+        return response.videos.map { video ->
             videoTransformer(
                 video
             )
         }
     }
 
-    private fun expertTransformer(expert: Expert): ExpertObject{
+    private fun expertTransformer(expert: Expert): ExpertObject {
         var avatar: String? = expert.avatar
-        if(avatar == null) avatar = "no_avatar"
+        if (avatar == null) avatar = "no_avatar"
         return ExpertObject(
             avatar,
             expert.firstName,
@@ -29,7 +29,7 @@ object ObjectTransformerImpl:
         )
     }
 
-    private fun listExpertsTransformer(listExperts: List<Expert>): List<ExpertObject>{
+    private fun listExpertsTransformer(listExperts: List<Expert>): List<ExpertObject> {
         return listExperts.map { expert ->
             expertTransformer(
                 expert
@@ -37,9 +37,9 @@ object ObjectTransformerImpl:
         }
     }
 
-    private fun videoTransformer(video: Video): VideoObject{
+    private fun videoTransformer(video: Video): VideoObject {
         var preview: String? = video.meta.preview
-        if(preview == null) preview = "no_preview"
+        if (preview == null) preview = "no_preview"
 
         val videoObj: VideoObject = VideoObject(
             video.id,

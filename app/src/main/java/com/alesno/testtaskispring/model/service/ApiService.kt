@@ -14,8 +14,8 @@ interface ApiService {
     @GET(REQUEST_PARAM)
     fun getResponseAsync(): Deferred<Response>
 
-    companion object Factory{
-        fun create(): ApiService{
+    companion object Factory {
+        fun create(): ApiService {
             val retrofit = Retrofit.Builder()
                 .addCallAdapterFactory(CoroutineCallAdapterFactory())
                 .addConverterFactory(GsonConverterFactory.create())

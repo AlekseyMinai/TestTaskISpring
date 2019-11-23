@@ -35,7 +35,7 @@ class FragmentListActivity : AppCompatActivity() {
         setupTabs()
     }
 
-    companion object{
+    companion object {
         fun getCommonViewModel(activity: FragmentActivity): CommonViewModel {
             //redo it!
             val apiService = ApiService.create()
@@ -44,7 +44,8 @@ class FragmentListActivity : AppCompatActivity() {
             val videosDao = VideosDaoImpl(videosBox)
 
             return ViewModelProviders
-                .of(activity,
+                .of(
+                    activity,
                     CommonViewModelFactory(
                         repository,
                         videosDao,
@@ -63,10 +64,10 @@ class FragmentListActivity : AppCompatActivity() {
         view_pager.adapter = adapter
     }
 
-    private fun setupTabs(){
+    private fun setupTabs() {
         setupTab(R.drawable.ic_movie_white_24dp, resources.getString(R.string.library), 0)
         setupTab(R.drawable.ic_favorite_grey_24dp, resources.getString(R.string.favorite), 1)
-        tab_layout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener{
+        tab_layout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabReselected(p0: TabLayout.Tab?) {
 
             }
@@ -74,7 +75,7 @@ class FragmentListActivity : AppCompatActivity() {
             override fun onTabUnselected(p0: TabLayout.Tab?) {
                 val tabPosition = p0!!.position
                 val tab: TextView = tab_layout.getTabAt(tabPosition)!!.customView as TextView
-                when(tabPosition){
+                when (tabPosition) {
                     0 -> changeIconInTab(tab, R.drawable.ic_movie_grey_24dp)
                     1 -> changeIconInTab(tab, R.drawable.ic_favorite_grey_24dp)
                 }
@@ -84,7 +85,7 @@ class FragmentListActivity : AppCompatActivity() {
             override fun onTabSelected(p0: TabLayout.Tab?) {
                 val tabPosition = p0!!.position
                 val tab: TextView = tab_layout.getTabAt(tabPosition)!!.customView as TextView
-                when(tabPosition){
+                when (tabPosition) {
                     0 -> changeIconInTab(tab, R.drawable.ic_movie_white_24dp)
                     1 -> changeIconInTab(tab, R.drawable.ic_favorite_white_24dp)
                 }
@@ -93,16 +94,18 @@ class FragmentListActivity : AppCompatActivity() {
         })
     }
 
-    private fun changeIconInTab(tab: TextView, iconResource: Int){
-        tab.setCompoundDrawablesWithIntrinsicBounds(0,
-            iconResource, 0,0)
+    private fun changeIconInTab(tab: TextView, iconResource: Int) {
+        tab.setCompoundDrawablesWithIntrinsicBounds(
+            0,
+            iconResource, 0, 0
+        )
     }
 
-    private fun setupTab(iconResource: Int, text: String, position: Int){
+    private fun setupTab(iconResource: Int, text: String, position: Int) {
         val tab: TextView = LayoutInflater.from(this).inflate(R.layout.custom_tab, null) as TextView
         tab.text = text
-        tab.setCompoundDrawablesWithIntrinsicBounds(0, iconResource, 0,0)
-        when(position){
+        tab.setCompoundDrawablesWithIntrinsicBounds(0, iconResource, 0, 0)
+        when (position) {
             1 -> tab.setTextColor(ContextCompat.getColor(applicationContext, R.color.colorGrey))
         }
         tab_layout.getTabAt(position)?.customView = tab

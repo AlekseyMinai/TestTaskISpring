@@ -14,7 +14,7 @@ import com.alesno.testtaskispring.databinding.FragmentVideoBinding
 import com.alesno.testtaskispring.ui.videoactivity.recyclerview.ExpertsAdapter
 import com.alesno.testtaskispring.ui.videoactivity.recyclerview.TopicsAdapter
 
-class VideoFragment: Fragment() {
+class VideoFragment : Fragment() {
 
     lateinit var binding: FragmentVideoBinding
     lateinit var viewModel: VideoViewModel
@@ -42,13 +42,12 @@ class VideoFragment: Fragment() {
     private fun getPlayVideoLiveData() {
         viewModel.playVideoLiveData.observe(this, Observer {
 
-            if(it.isVideoStarted) {
+            if (it.isVideoStarted) {
                 val playButton = binding.playButton
                 playButton.visibility = View.GONE
-                videoView.setOnPreparedListener {
-                        mediaPlayer ->
-                        mediaPlayer.seekTo(it.progressTime.toInt())
-                        mediaPlayer.start()
+                videoView.setOnPreparedListener { mediaPlayer ->
+                    mediaPlayer.seekTo(it.progressTime.toInt())
+                    mediaPlayer.start()
                 }
             }
         })
@@ -59,32 +58,33 @@ class VideoFragment: Fragment() {
         viewModel.onViewCreated()
     }
 
-    fun onPlayClicked(view: View, progressTime: Long){
+    fun onPlayClicked(view: View, progressTime: Long) {
         //videoView.seekTo(progressTime.toInt())
         videoView.start()
         view.visibility = View.GONE
     }
 
-    private fun setupUIElements(){
+    private fun setupUIElements() {
         setupRecyclerViewWithTopics()
         setupRecyclerViewWithExperts()
         setupVideoView()
     }
 
-    private fun setupVideoView(){
+    private fun setupVideoView() {
         videoView = binding.videoView
         videoView.setMediaController(MediaController(activity))
         //videoView.seekTo(1000)
     }
 
-    private fun setupRecyclerViewWithTopics(){
+    private fun setupRecyclerViewWithTopics() {
         val recyclerView: RecyclerView = binding.recyclerViewTopics
-        recyclerView.layoutManager = LinearLayoutManager(activity!!, LinearLayoutManager.HORIZONTAL, false)
+        recyclerView.layoutManager =
+            LinearLayoutManager(activity!!, LinearLayoutManager.HORIZONTAL, false)
         recyclerView.setHasFixedSize(true)
         recyclerView.adapter = TopicsAdapter()
     }
 
-    private fun setupRecyclerViewWithExperts(){
+    private fun setupRecyclerViewWithExperts() {
         val recyclerView: RecyclerView = binding.recyclerViewExperts
         recyclerView.layoutManager = LinearLayoutManager(activity!!)
         recyclerView.setHasFixedSize(true)

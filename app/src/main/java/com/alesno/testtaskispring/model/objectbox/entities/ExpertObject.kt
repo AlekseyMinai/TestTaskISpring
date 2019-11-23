@@ -24,7 +24,7 @@ data class ExpertObject(
     var speciality: String? = null,
 
     @Id var id: Long = 0
-){
+) {
 
     lateinit var video: ToOne<VideoObject>
 
@@ -53,18 +53,6 @@ data class ExpertObject(
         result = 31 * result + video.hashCode()
         return result
     }
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 }

@@ -27,7 +27,7 @@ data class VideoObject(
     var progressTime: Long = 0,
 
     @Id var id: Long = 0
-){
+) {
     @Backlink(to = "video")
     lateinit var experts: ToMany<ExpertObject>
 
