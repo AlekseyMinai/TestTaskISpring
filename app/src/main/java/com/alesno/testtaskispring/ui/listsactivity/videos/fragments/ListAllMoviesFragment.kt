@@ -19,4 +19,8 @@ class ListAllMoviesFragment : BaseListVideosFragment() {
         swipe_to_refresh.setOnRefreshListener { swipe_to_refresh.isRefreshing = false }
     }
 
+    override fun isListFavorite(): Boolean {
+        return false
+    }
+
 }

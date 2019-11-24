@@ -10,4 +10,8 @@ class ListFavoriteMoviesFragment : BaseListVideosFragment() {
         super.onViewCreated(view, savedInstanceState)
         viewModel.onListFavoriteVideosCreated()
     }
+
+    override fun isListFavorite(): Boolean {
+        return true
+    }
 }

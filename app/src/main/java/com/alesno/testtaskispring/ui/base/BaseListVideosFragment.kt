@@ -29,10 +29,11 @@ abstract class BaseListVideosFragment : Fragment() {
         return binding.root
     }
 
-    private fun setupDataBinding(inflater: LayoutInflater, container: ViewGroup?){
+    private fun setupDataBinding(inflater: LayoutInflater, container: ViewGroup?) {
         binding = FragmentListMoviesBinding.inflate(inflater, container, false)
         viewModel = FragmentListActivity.getCommonViewModel(activity!!)
         binding.viewModel = viewModel
+        binding.isFavorite = isListFavorite()
     }
 
     private fun setupRecyclerView() {
@@ -41,5 +42,7 @@ abstract class BaseListVideosFragment : Fragment() {
         recyclerView.setHasFixedSize(true)
         recyclerView.adapter = VideoListAdapter(viewModel)
     }
+
+    protected abstract fun isListFavorite(): Boolean
 
 }

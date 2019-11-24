@@ -38,7 +38,8 @@ class CommonViewModel(
     }
 
     private fun setDataInFavoriteListFragment() {
-        videosObj.forEach { videoObj -> favoriteVideosObj.add(videoObj) }
+        favoriteVideosObj.clear()
+        filterByFavoriteVideos(videosObj).forEach { videoObj -> favoriteVideosObj.add(videoObj) }
     }
 
     private fun setDataInViewAsyncForTheFirsTime() {
@@ -89,6 +90,7 @@ class CommonViewModel(
         list.addAll(videosObj)
         videosObj.clear()
         videosObj.addAll(list)
+        setDataInFavoriteListFragment()
     }
 
     private fun changeFavoriteStatus(idVideo: Long, isFavorite: Boolean) {

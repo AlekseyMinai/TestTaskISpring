@@ -8,6 +8,11 @@
         <variable
                 name="viewModel"
                 type="com.alesno.testtaskispring.ui.listsactivity.videos.viewmodel.CommonViewModel" />
+
+        <variable
+                name="isFavorite"
+                type="java.lang.Boolean" />
+
     </data>
 
     <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -28,7 +33,7 @@
                         android:id="@+id/recycler_view"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        app:setItems="@{viewModel.videosObj}" />
+                        app:setItems="@{isFavorite ? viewModel.favoriteVideosObj : viewModel.videosObj}" />
 
                 <ProgressBar
                         android:layout_width="wrap_content"
