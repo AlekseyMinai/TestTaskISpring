@@ -12,7 +12,7 @@ import com.alesno.testtaskispring.model.objectbox.ObjectBox
 import com.alesno.testtaskispring.model.objectbox.dao.VideosDaoImpl
 import com.alesno.testtaskispring.model.objectbox.entities.VideoObject
 import com.alesno.testtaskispring.model.objectbox.transformer.ObjectTransformerImpl
-import com.alesno.testtaskispring.model.repository.ApiRepository
+import com.alesno.testtaskispring.model.repository.RepositoryImpl
 import com.alesno.testtaskispring.model.service.ApiService
 import com.alesno.testtaskispring.ui.listsactivity.videos.fragments.ListAllMoviesFragment
 import com.alesno.testtaskispring.ui.listsactivity.videos.fragments.ListFavoriteMoviesFragment
@@ -38,17 +38,14 @@ class FragmentListActivity : AppCompatActivity() {
         fun getCommonViewModel(activity: FragmentActivity): CommonViewModel {
             //redo it!
             val apiService = ApiService.create()
-            val repository = ApiRepository(apiService)
             val videosBox: Box<VideoObject> = ObjectBox.boxStore.boxFor(VideoObject::class.java)
             val videosDao = VideosDaoImpl(videosBox)
-
+            val repository = RepositoryImpl(apiService, videosDao, ObjectTransformerImpl)
             return ViewModelProviders
                 .of(
                     activity,
                     CommonViewModelFactory(
-                        repository,
-                        videosDao,
-                        ObjectTransformerImpl
+                        repository
                     )
                 )
                 .get(CommonViewModel::class.java)

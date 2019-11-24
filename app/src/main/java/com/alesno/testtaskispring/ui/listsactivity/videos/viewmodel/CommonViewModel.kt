@@ -1,26 +1,16 @@
 package com.alesno.testtaskispring.ui.listsactivity.videos.viewmodel
 
-import android.util.Log
 import androidx.databinding.ObservableArrayList
 import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableList
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.alesno.testtaskispring.common.LOG
-import com.alesno.testtaskispring.model.objectbox.dao.VideosDao
 import com.alesno.testtaskispring.model.objectbox.entities.VideoObject
-import com.alesno.testtaskispring.model.objectbox.transformer.ObjectTransformer
 import com.alesno.testtaskispring.model.repository.Repository
-import com.alesno.testtaskispring.model.response.Response
-import kotlinx.coroutines.Deferred
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 
 class CommonViewModel(
-    private val repository: Repository,
-    private val videosDao: VideosDao,
-    private val objectTransformer: ObjectTransformer
+    private val repository: Repository
 ) : ViewModel() {
 
     var videosObj: ObservableList<VideoObject> = ObservableArrayList<VideoObject>()
@@ -29,12 +19,17 @@ class CommonViewModel(
 
     fun onViewListAllMoviesCreated() {
         if (videosObj.isEmpty())
-            setDataInViewAsyncForTheFirsTime()
+            viewModelScope.launch { setDataInViewAsyncForTheFirsTime() }
     }
-
 
     fun onListFavoriteVideosCreated() {
         setDataInFavoriteListFragment()
+    }
+
+    fun onRefreshedListAllVideos() {
+        val videosObj = repository.updateListFromServer(viewModelScope)
+        this.videosObj.clear()
+        this.videosObj.addAll(videosObj)
     }
 
     private fun setDataInFavoriteListFragment() {
@@ -42,45 +37,11 @@ class CommonViewModel(
         filterByFavoriteVideos(videosObj).forEach { videoObj -> favoriteVideosObj.add(videoObj) }
     }
 
-    private fun setDataInViewAsyncForTheFirsTime() {
+    private suspend fun setDataInViewAsyncForTheFirsTime() {
         isProgressBarVisible.set(true)
-        viewModelScope.launch(Dispatchers.IO) {
-            putVideosObjInListFromDb()
-
-            if (!videosObj.isEmpty()) {
-                isProgressBarVisible.set(false)
-            }
-
-            val response = getResponseFromServer() ?: return@launch
-
-            videosDao.insertAllVideos(objectTransformer.responseTransformer(response))
-
-            putVideosObjInListFromDb()
-
-            isProgressBarVisible.set(false)
-        }
-    }
-
-    private suspend fun putVideosObjInListFromDb() {
-        val listVideosObj = getAllVideosAsync().await()
-        videosObj.clear()
-        videosObj.addAll(sortByTitle(listVideosObj))
-    }
-
-    private fun getAllVideosAsync(): Deferred<List<VideoObject>> {
-        return viewModelScope.async {
-            videosDao.getAllVideos()
-        }
-    }
-
-    private suspend fun getResponseFromServer(): Response? {
-        var response: Response? = null
-        try {
-            response = repository.getResponseAsync().await()
-        } catch (e: Exception) {
-            Log.d(LOG, e.toString())
-        }
-        return response
+        val videosObj = repository.getListVideosObject(viewModelScope)
+        this.videosObj.addAll(videosObj)
+        isProgressBarVisible.set(false)
     }
 
     fun onCheckboxClicked(idVideo: Long, isFavorite: Boolean) {
@@ -97,10 +58,6 @@ class CommonViewModel(
         videosObj.map { videoObject ->
             if (videoObject.id == idVideo) videoObject.isFavorite = isFavorite
         }
-    }
-
-    private fun sortByTitle(videosObj: List<VideoObject>): List<VideoObject> {
-        return videosObj.sortedWith(compareBy { it.title })
     }
 
     private fun filterByFavoriteVideos(videosObj: List<VideoObject>): List<VideoObject> {

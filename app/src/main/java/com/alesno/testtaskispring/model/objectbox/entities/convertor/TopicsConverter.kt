@@ -13,13 +13,13 @@ class TopicsConverter : PropertyConverter<List<String>, String> {
                 stringBuilder.append(topics[i])
             }
             stringBuilder.toString()
-        } else null!!
+        } else ""
     }
 
     override fun convertToEntityProperty(databaseValue: String?): List<String> {
         return if (!TextUtils.isEmpty(databaseValue)) {
             databaseValue!!.split(",")
-        } else null!!
+        } else listOf("")
     }
 
 

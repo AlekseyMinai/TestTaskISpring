@@ -16,7 +16,10 @@ class ListAllMoviesFragment : BaseListVideosFragment() {
 
     private fun setupSwipeToRefreshCallBack() {
         swipe_to_refresh.setColorSchemeResources(R.color.colorPrimary)
-        swipe_to_refresh.setOnRefreshListener { swipe_to_refresh.isRefreshing = false }
+        swipe_to_refresh.setOnRefreshListener {
+            viewModel.onRefreshedListAllVideos()
+            swipe_to_refresh.isRefreshing = false
+        }
     }
 
     override fun isListFavorite(): Boolean {
