@@ -12,4 +12,6 @@ interface Repository {
     fun changeFavoriteStatus(idVideo: Long, isFavorite: Boolean): MutableList<VideoObject>
 
     fun filterByFavoriteVideos(): List<VideoObject>
+
+    fun getVideoById(videoId: Long): VideoObject
 }

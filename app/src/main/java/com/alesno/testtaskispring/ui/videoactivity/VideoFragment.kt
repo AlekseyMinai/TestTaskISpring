@@ -1,5 +1,6 @@
 package com.alesno.testtaskispring.ui.videoactivity
 
+import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -13,17 +14,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.alesno.testtaskispring.databinding.FragmentVideoBinding
 import com.alesno.testtaskispring.ui.videoactivity.recyclerview.ExpertsAdapter
 import com.alesno.testtaskispring.ui.videoactivity.recyclerview.TopicsAdapter
+import kotlinx.android.synthetic.main.fragment_video.*
 
 class VideoFragment : Fragment() {
 
     lateinit var binding: FragmentVideoBinding
     lateinit var viewModel: VideoViewModel
     lateinit var videoView: VideoView
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        retainInstance = true
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -32,6 +29,8 @@ class VideoFragment : Fragment() {
         viewModel = VideoActivity.getVideoViewModel(activity!!)
         binding.viewModel = viewModel
         binding.handler = this
+
+        //activity!!.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
 
         setupUIElements()
         getPlayVideoLiveData()
@@ -53,13 +52,17 @@ class VideoFragment : Fragment() {
         })
     }
 
+    override fun onResume() {
+        super.onResume()
+        videoView.start()
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.onViewCreated()
     }
 
     fun onPlayClicked(view: View, progressTime: Long) {
-        //videoView.seekTo(progressTime.toInt())
         videoView.start()
         view.visibility = View.GONE
     }

@@ -12,12 +12,13 @@ import com.alesno.testtaskispring.model.objectbox.dao.VideosDao
 import com.alesno.testtaskispring.model.objectbox.entities.ExpertObject
 import com.alesno.testtaskispring.model.objectbox.entities.VideoObject
 import com.alesno.testtaskispring.model.objectbox.transformer.ObjectTransformer
+import com.alesno.testtaskispring.model.repository.Repository
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 
-class VideoViewModel(val videosDao: VideosDao, val objectTransformer: ObjectTransformer): ViewModel() {
+class VideoViewModel(val repository: Repository): ViewModel() {
 
     var topics: ObservableList<String> = ObservableArrayList<String>()
     var experts: ObservableList<ExpertObject> = ObservableArrayList<ExpertObject>()
@@ -54,7 +55,7 @@ class VideoViewModel(val videosDao: VideosDao, val objectTransformer: ObjectTran
 
     private fun getVideoByIdAsync(videoId: Long): Deferred<VideoObject>{
         return viewModelScope.async{
-            videosDao.getVideoById(videoId)
+            repository.getVideoById(videoId)
         }
     }
 
@@ -62,8 +63,8 @@ class VideoViewModel(val videosDao: VideosDao, val objectTransformer: ObjectTran
         playerStartInfo.isVideoStarted = true
         playerStartInfo.progressTime = progressTime
 
-        val videoObject = observableVideosObject.get()
-        videoObject!!.progressTime = progressTime
-        observableVideosObject.set(videoObject)
+        //val videoObject = observableVideosObject[0]
+        //videoObject!!.progressTime = progressTime
+        //observableVideosObject.set(videoObject)
     }
 }

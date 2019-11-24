@@ -13,9 +13,11 @@ import com.alesno.testtaskispring.model.objectbox.ObjectBox
 import com.alesno.testtaskispring.model.objectbox.dao.VideosDaoImpl
 import com.alesno.testtaskispring.model.objectbox.entities.VideoObject
 import com.alesno.testtaskispring.model.objectbox.transformer.ObjectTransformerImpl
+import com.alesno.testtaskispring.model.repository.RepositoryImpl
+import com.alesno.testtaskispring.model.service.ApiService
 import io.objectbox.Box
 
-class VideoActivity: AppCompatActivity() {
+class VideoActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,14 +29,14 @@ class VideoActivity: AppCompatActivity() {
     }
 
 
-    private fun startFragment(){
+    private fun startFragment() {
         val transaction = supportFragmentManager.beginTransaction()
         transaction.replace(R.id.videos_container, VideoFragment())
         transaction.commit()
     }
 
-    companion object{
-        fun startActivity(context: Context, idVideo: Long, urlVideo: String){
+    companion object {
+        fun startActivity(context: Context, idVideo: Long, urlVideo: String) {
             val intent: Intent = Intent(context, VideoActivity::class.java)
             intent.putExtra(VIDEO_ID_EXTRA, idVideo)
             intent.putExtra(VIDEO_URL_EXTRA, urlVideo)
@@ -45,22 +47,20 @@ class VideoActivity: AppCompatActivity() {
         fun getVideoViewModel(activity: FragmentActivity): VideoViewModel {
             //redo it!
 
+            val apiService = ApiService.create()
             val videosBox: Box<VideoObject> = ObjectBox.boxStore.boxFor(VideoObject::class.java)
             val videosDao = VideosDaoImpl(videosBox)
+            val repository = RepositoryImpl(apiService, videosDao, ObjectTransformerImpl)
 
             return ViewModelProviders.of(
-                    activity,
-                    VideoViewModelFactory(
-                        videosDao,
-                        ObjectTransformerImpl
-                    )
-                ).get(VideoViewModel::class.java)
+                activity, VideoViewModelFactory(repository)
+            ).get(VideoViewModel::class.java)
         }
     }
 
     override fun onPause() {
         super.onPause()
-        overridePendingTransition(0,0)
+        overridePendingTransition(0, 0)
     }
 
     private fun getVideoId(): Long {

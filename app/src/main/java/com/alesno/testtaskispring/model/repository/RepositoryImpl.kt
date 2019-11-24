@@ -18,12 +18,10 @@ class RepositoryImpl(
     private val videosObj: MutableList<VideoObject> = mutableListOf()
     private val scope = CoroutineScope(Dispatchers.Default + SupervisorJob())
 
-
     override suspend fun getListVideosObject(scope: CoroutineScope): List<VideoObject> {
         if (videosObj.isNotEmpty()) {
             return videosObj
         }
-
         val job = scope.launch(Dispatchers.IO) {
             putVideosObjFromDbInList()
             if (videosObj.isNotEmpty()) {
@@ -31,9 +29,7 @@ class RepositoryImpl(
             }
             updateDataInDB()
         }
-
         job.join()
-
         return videosObj
     }
 
@@ -42,6 +38,10 @@ class RepositoryImpl(
             updateDataInDB()
         }
         return videosObj
+    }
+
+    override fun getVideoById(videoId: Long): VideoObject {
+        return videosDao.getVideoById(videoId)
     }
 
     private suspend fun getResponseAsync(): Response {
