@@ -6,6 +6,7 @@ import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableList
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.alesno.testtaskispring.common.LOG
 import com.alesno.testtaskispring.model.objectbox.dao.VideosDao
 import com.alesno.testtaskispring.model.objectbox.entities.VideoObject
 import com.alesno.testtaskispring.model.objectbox.transformer.ObjectTransformer
@@ -23,12 +24,21 @@ class CommonViewModel(
 ) : ViewModel() {
 
     var videosObj: ObservableList<VideoObject> = ObservableArrayList<VideoObject>()
+    var favoriteVideosObj: ObservableList<VideoObject> = ObservableArrayList<VideoObject>()
     var isProgressBarVisible: ObservableBoolean = ObservableBoolean(false)
 
     fun onViewListAllMoviesCreated() {
-        if (videosObj.isEmpty()) {
+        if (videosObj.isEmpty())
             setDataInViewAsyncForTheFirsTime()
-        }
+    }
+
+
+    fun onListFavoriteVideosCreated() {
+        setDataInFavoriteListFragment()
+    }
+
+    private fun setDataInFavoriteListFragment() {
+        videosObj.forEach { videoObj -> favoriteVideosObj.add(videoObj) }
     }
 
     private fun setDataInViewAsyncForTheFirsTime() {
@@ -67,7 +77,7 @@ class CommonViewModel(
         try {
             response = repository.getResponseAsync().await()
         } catch (e: Exception) {
-            Log.d("log", e.toString())
+            Log.d(LOG, e.toString())
         }
         return response
     }
@@ -94,4 +104,5 @@ class CommonViewModel(
     private fun filterByFavoriteVideos(videosObj: List<VideoObject>): List<VideoObject> {
         return videosObj.filter { videoObject -> videoObject.isFavorite }
     }
+
 }
