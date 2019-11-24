@@ -26,6 +26,7 @@ abstract class BaseListVideosFragment : Fragment() {
     ): View? {
         setupDataBinding(inflater, container)
         setupRecyclerView()
+        setupSwipeToRefreshCallBack()
         return binding.root
     }
 
@@ -43,6 +44,15 @@ abstract class BaseListVideosFragment : Fragment() {
         recyclerView.adapter = VideoListAdapter(viewModel)
     }
 
+    private fun setupSwipeToRefreshCallBack() {
+        binding.swipeToRefresh.setColorSchemeResources(R.color.colorPrimary)
+        binding.swipeToRefresh.setOnRefreshListener {
+            refreshData()
+        }
+    }
+
     protected abstract fun isListFavorite(): Boolean
+
+    protected abstract fun refreshData()
 
 }

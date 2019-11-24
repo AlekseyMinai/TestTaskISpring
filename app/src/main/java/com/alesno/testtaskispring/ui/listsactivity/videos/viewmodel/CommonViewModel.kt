@@ -18,12 +18,12 @@ class CommonViewModel(
     var isProgressBarVisible: ObservableBoolean = ObservableBoolean(false)
 
     fun onViewListAllMoviesCreated() {
-        if (videosObj.isEmpty())
-            viewModelScope.launch { setDataInViewAsyncForTheFirsTime() }
-    }
-
-    fun onListFavoriteVideosCreated() {
-        setDataInFavoriteListFragment()
+        if (videosObj.isEmpty()) {
+            viewModelScope.launch {
+                setDataInListAllVideosFragment()
+                setDataInFavoriteListFragment()
+            }
+        }
     }
 
     fun onRefreshedListAllVideos() {
@@ -32,12 +32,7 @@ class CommonViewModel(
         this.videosObj.addAll(videosObj)
     }
 
-    private fun setDataInFavoriteListFragment() {
-        favoriteVideosObj.clear()
-        filterByFavoriteVideos(videosObj).forEach { videoObj -> favoriteVideosObj.add(videoObj) }
-    }
-
-    private suspend fun setDataInViewAsyncForTheFirsTime() {
+    private suspend fun setDataInListAllVideosFragment() {
         isProgressBarVisible.set(true)
         val videosObj = repository.getListVideosObject(viewModelScope)
         this.videosObj.addAll(videosObj)
@@ -45,23 +40,16 @@ class CommonViewModel(
     }
 
     fun onCheckboxClicked(idVideo: Long, isFavorite: Boolean) {
-        changeFavoriteStatus(idVideo, isFavorite)
-        //redo it!!!
-        val list: ObservableList<VideoObject> = ObservableArrayList<VideoObject>()
-        list.addAll(videosObj)
+        val updatedVideosObj = repository.changeFavoriteStatus(idVideo, isFavorite)
         videosObj.clear()
-        videosObj.addAll(list)
+        videosObj.addAll(updatedVideosObj)
         setDataInFavoriteListFragment()
     }
 
-    private fun changeFavoriteStatus(idVideo: Long, isFavorite: Boolean) {
-        videosObj.map { videoObject ->
-            if (videoObject.id == idVideo) videoObject.isFavorite = isFavorite
-        }
-    }
-
-    private fun filterByFavoriteVideos(videosObj: List<VideoObject>): List<VideoObject> {
-        return videosObj.filter { videoObject -> videoObject.isFavorite }
+    private fun setDataInFavoriteListFragment() {
+        favoriteVideosObj.clear()
+        repository.filterByFavoriteVideos()
+            .forEach { videoObj -> favoriteVideosObj.add(videoObj) }
     }
 
 }

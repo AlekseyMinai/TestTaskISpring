@@ -77,4 +77,26 @@ class RepositoryImpl(
         return videosObj.sortedWith(compareBy { it.title })
     }
 
+    override fun changeFavoriteStatus(
+        idVideo: Long,
+        isFavorite: Boolean
+    ): MutableList<VideoObject> {
+        var videoObj: VideoObject? = null
+        videosObj.forEach { videoObject -> if (videoObject.id == idVideo) videoObj = videoObject }
+        videoObj!!.isFavorite = isFavorite
+        return updateVideoObjInDB(videoObj!!)
+    }
+
+    private fun updateVideoObjInDB(videoObj: VideoObject): MutableList<VideoObject> {
+        scope.launch {
+            withContext(Dispatchers.Default) { videosDao.updateVideo(videoObj) }
+            putVideosObjFromDbInList()
+        }
+        return videosObj
+    }
+
+    override fun filterByFavoriteVideos(): List<VideoObject> {
+        return videosObj.filter { videoObject -> videoObject.isFavorite }
+    }
+
 }

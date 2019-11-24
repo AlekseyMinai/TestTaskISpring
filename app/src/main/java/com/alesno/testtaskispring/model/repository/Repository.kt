@@ -9,4 +9,7 @@ interface Repository {
 
     fun updateListFromServer(scope: CoroutineScope): List<VideoObject>
 
+    fun changeFavoriteStatus(idVideo: Long, isFavorite: Boolean): MutableList<VideoObject>
+
+    fun filterByFavoriteVideos(): List<VideoObject>
 }
