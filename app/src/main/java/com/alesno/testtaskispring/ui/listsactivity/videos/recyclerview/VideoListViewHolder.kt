@@ -23,11 +23,13 @@ class VideoListViewHolder(val binding: ItemListMovieBinding, val viewModel: Comm
     fun bind(video: VideoObject) {
         videoObject = video
         binding.video = video
+        binding.checkboxFavorite.isChecked = video.isFavorite
         binding.executePendingBindings()
-        binding.checkboxFavorite.setOnCheckedChangeListener { _, isChecked ->
+        val checkBox = binding.checkboxFavorite
+        checkBox.setOnClickListener {
             viewModel.onCheckboxClicked(
                 video.id,
-                isChecked
+                checkBox.isChecked
             )
         }
     }

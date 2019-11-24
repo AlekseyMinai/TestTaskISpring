@@ -50,7 +50,6 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
                 android:layout_margin="@dimen/item_checkbox_margin"
-                android:checked="@{video.favorite}"
                 android:button="@drawable/checkbox_selector" />
     </FrameLayout>
 </layout>
