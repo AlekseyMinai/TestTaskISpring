@@ -58,7 +58,7 @@ class VideoViewModel(val repository: Repository): ViewModel() {
         }
     }
 
-    fun onPausePlaybackVideo(progressTime: Long){
+    fun onPausePlaybackVideo(progressTime: Int){
         playerStartInfo.isVideoStarted = true
         playerStartInfo.progressTime = progressTime
 

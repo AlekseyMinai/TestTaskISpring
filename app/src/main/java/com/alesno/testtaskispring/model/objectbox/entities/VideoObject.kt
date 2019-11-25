@@ -24,7 +24,7 @@ data class VideoObject(
     var isFavorite: Boolean = false,
 
     @NameInDb("progress_time")
-    var progressTime: Long = 0,
+    var progressTime: Int = 0,
 
     @Id var id: Long = 0
 ) {
