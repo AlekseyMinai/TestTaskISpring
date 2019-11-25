@@ -21,34 +21,14 @@
 
         <androidx.core.widget.NestedScrollView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:layout_marginTop="220dp">
 
             <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical">
 
-                <FrameLayout
-                        android:id="@+id/frame_video_layout"
-                        android:layout_width="match_parent"
-                        android:layout_height="220dp"
-                        android:background="@color/colorBlack">
-
-                    <VideoView
-                            android:id="@+id/video_view"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_gravity="center"
-                            app:setVideoUrl="@{viewModel.videoUrl}" />
-
-
-                    <ProgressBar
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:visibility="@{viewModel.isShowingProgressBar ? View.VISIBLE : View.GONE}" />
-
-                </FrameLayout>
 
                 <TextView
                         android:layout_width="match_parent"
@@ -96,6 +76,28 @@
 
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>
+
+        <FrameLayout
+                android:id="@+id/frame_video_layout"
+                android:layout_width="match_parent"
+                android:layout_height="220dp"
+                android:background="@color/colorBlack">
+
+            <VideoView
+                    android:id="@+id/video_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    app:setVideoUrl="@{viewModel.videoUrl}" />
+
+
+            <ProgressBar
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:visibility="@{viewModel.isShowingProgressBar ? View.VISIBLE : View.GONE}" />
+
+        </FrameLayout>
 
     </FrameLayout>
 </layout>

@@ -1,6 +1,9 @@
 package com.alesno.testtaskispring.ui.videoactivity
 
+import android.content.res.Configuration
+import android.graphics.Point
 import android.os.Bundle
+import android.view.Display
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,12 +16,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.alesno.testtaskispring.databinding.FragmentVideoBinding
 import com.alesno.testtaskispring.ui.videoactivity.recyclerview.ExpertsAdapter
 import com.alesno.testtaskispring.ui.videoactivity.recyclerview.TopicsAdapter
+import kotlinx.android.synthetic.main.fragment_video.*
 
 class VideoFragment : Fragment() {
 
     lateinit var binding: FragmentVideoBinding
     lateinit var viewModel: VideoViewModel
     lateinit var videoView: VideoView
+    private var portraitSize = 0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -55,6 +60,7 @@ class VideoFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.onViewCreated()
+        portraitSize = getDefaultVideoSize()
     }
 
     private fun setupUIElements() {
@@ -89,6 +95,33 @@ class VideoFragment : Fragment() {
         super.onPause()
         viewModel.onPausePlaybackVideo(videoView.currentPosition)
         videoView.stopPlayback()
+    }
+
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            changeVideoSize(getDisplayHeight())
+        } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
+            changeVideoSize(portraitSize)
+        }
+    }
+
+    private fun getDefaultVideoSize(): Int{
+        val params: ViewGroup.LayoutParams? = frame_video_layout.layoutParams
+        return params!!.height
+    }
+
+    private fun changeVideoSize(newSize: Int) {
+        val params: ViewGroup.LayoutParams? = frame_video_layout.layoutParams
+        params!!.height = newSize
+        frame_video_layout.layoutParams = params
+    }
+
+    private fun getDisplayHeight(): Int {
+        val display: Display = activity!!.windowManager.defaultDisplay
+        val size = Point()
+        display.getSize(size)
+        return size.y
     }
 
 }
