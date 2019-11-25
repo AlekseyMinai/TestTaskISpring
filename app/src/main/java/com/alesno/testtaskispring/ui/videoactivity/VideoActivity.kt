@@ -30,9 +30,13 @@ class VideoActivity : AppCompatActivity() {
 
 
     private fun startFragment() {
-        val transaction = supportFragmentManager.beginTransaction()
-        transaction.replace(R.id.videos_container, VideoFragment())
-        transaction.commit()
+        var fragment = supportFragmentManager.findFragmentById(R.id.videos_container)
+        if (fragment == null) {
+            fragment = VideoFragment()
+            val transaction = supportFragmentManager.beginTransaction()
+            transaction.add(R.id.videos_container, fragment)
+            transaction.commit()
+        }
     }
 
     companion object {

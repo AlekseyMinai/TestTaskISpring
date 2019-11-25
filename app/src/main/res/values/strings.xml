@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">TestTaskISpring</string>
+    <string name="app_name">My Test Task</string>
     <string name="library">БИБЛИОТЕКА</string>
     <string name="favorite">ЛЮБИМЫЕ</string>
     <string name="topics">Темы</string>

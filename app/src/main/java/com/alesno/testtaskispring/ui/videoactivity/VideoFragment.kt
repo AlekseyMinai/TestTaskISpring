@@ -1,6 +1,5 @@
 package com.alesno.testtaskispring.ui.videoactivity
 
-import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -14,7 +13,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.alesno.testtaskispring.databinding.FragmentVideoBinding
 import com.alesno.testtaskispring.ui.videoactivity.recyclerview.ExpertsAdapter
 import com.alesno.testtaskispring.ui.videoactivity.recyclerview.TopicsAdapter
-import kotlinx.android.synthetic.main.fragment_video.*
 
 class VideoFragment : Fragment() {
 
@@ -30,8 +28,6 @@ class VideoFragment : Fragment() {
         binding.viewModel = viewModel
         binding.handler = this
 
-        //activity!!.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
-
         setupUIElements()
         getPlayVideoLiveData()
 
@@ -40,13 +36,12 @@ class VideoFragment : Fragment() {
 
     private fun getPlayVideoLiveData() {
         viewModel.playVideoLiveData.observe(this, Observer {
-
+            viewModel.setVideoStat(true)
             if (it.isVideoStarted) {
-                val playButton = binding.playButton
-                playButton.visibility = View.GONE
                 videoView.setOnPreparedListener { mediaPlayer ->
                     mediaPlayer.seekTo(it.progressTime.toInt())
                     mediaPlayer.start()
+                    viewModel.setVideoStat(false)
                 }
             }
         })
@@ -62,11 +57,6 @@ class VideoFragment : Fragment() {
         viewModel.onViewCreated()
     }
 
-    fun onPlayClicked(view: View, progressTime: Long) {
-        videoView.start()
-        view.visibility = View.GONE
-    }
-
     private fun setupUIElements() {
         setupRecyclerViewWithTopics()
         setupRecyclerViewWithExperts()
@@ -75,8 +65,9 @@ class VideoFragment : Fragment() {
 
     private fun setupVideoView() {
         videoView = binding.videoView
-        videoView.setMediaController(MediaController(activity))
-        //videoView.seekTo(1000)
+        val mediaController = MediaController(activity)
+        videoView.setMediaController(mediaController)
+        videoView.setOnPreparedListener { viewModel.setVideoStat(false) }
     }
 
     private fun setupRecyclerViewWithTopics() {

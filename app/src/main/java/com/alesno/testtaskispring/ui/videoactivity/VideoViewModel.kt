@@ -1,17 +1,15 @@
 package com.alesno.testtaskispring.ui.videoactivity
 
 import androidx.databinding.ObservableArrayList
+import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableField
 import androidx.databinding.ObservableList
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.alesno.testtaskispring.common.PlayerStartInfo
-import com.alesno.testtaskispring.model.objectbox.dao.VideosDao
 import com.alesno.testtaskispring.model.objectbox.entities.ExpertObject
 import com.alesno.testtaskispring.model.objectbox.entities.VideoObject
-import com.alesno.testtaskispring.model.objectbox.transformer.ObjectTransformer
 import com.alesno.testtaskispring.model.repository.Repository
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
@@ -20,6 +18,7 @@ import kotlinx.coroutines.launch
 
 class VideoViewModel(val repository: Repository): ViewModel() {
 
+    var isShowingProgressBar: ObservableBoolean = ObservableBoolean(true)
     var topics: ObservableList<String> = ObservableArrayList<String>()
     var experts: ObservableList<ExpertObject> = ObservableArrayList<ExpertObject>()
     var videoUrl: ObservableField<String> = ObservableField()
@@ -66,5 +65,9 @@ class VideoViewModel(val repository: Repository): ViewModel() {
         //val videoObject = observableVideosObject[0]
         //videoObject!!.progressTime = progressTime
         //observableVideosObject.set(videoObject)
+    }
+
+    fun setVideoStat(isShowingProgressBar: Boolean) {
+        this.isShowingProgressBar.set(isShowingProgressBar)
     }
 }

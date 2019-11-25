@@ -4,6 +4,8 @@
 
     <data>
 
+        <import type="android.view.View" />
+
         <variable
                 name="viewModel"
                 type="com.alesno.testtaskispring.ui.videoactivity.VideoViewModel" />
@@ -27,6 +29,7 @@
                     android:orientation="vertical">
 
                 <FrameLayout
+                        android:id="@+id/frame_video_layout"
                         android:layout_width="match_parent"
                         android:layout_height="220dp"
                         android:background="@color/colorBlack">
@@ -39,15 +42,11 @@
                             app:setVideoUrl="@{viewModel.videoUrl}" />
 
 
-                    <ImageButton
-                            android:id="@+id/play_button"
+                    <ProgressBar
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            android:background="@color/transparent"
-                            android:visibility="gone"
-                            android:onClick="@{(view) -> handler.onPlayClicked(view, viewModel.observableVideosObject.progressTime)}"
-                            android:src="@drawable/ic_play_arrow_white_24dp" />
+                            android:visibility="@{viewModel.isShowingProgressBar ? View.VISIBLE : View.GONE}" />
 
                 </FrameLayout>
 
@@ -92,7 +91,7 @@
                 <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/recycler_view_experts"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         app:setExperts="@{viewModel.experts}" />
 
             </LinearLayout>
