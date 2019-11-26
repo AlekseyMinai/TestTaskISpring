@@ -40,14 +40,8 @@ class RepositoryImpl(
         return videosObj
     }
 
-    override fun getVideoById(videoId: Long): VideoObject {
-        return videosDao.getVideoById(videoId)
-    }
-
     private suspend fun getResponseAsync(): Response {
         //redo it!! with sealed classes??
-
-        var response: Response? = null
         try {
             return mService.getResponseAsync().await()
         } catch (e: Exception) {
@@ -81,22 +75,35 @@ class RepositoryImpl(
         idVideo: Long,
         isFavorite: Boolean
     ): MutableList<VideoObject> {
-        var videoObj: VideoObject? = null
-        videosObj.forEach { videoObject -> if (videoObject.id == idVideo) videoObj = videoObject }
-        videoObj!!.isFavorite = isFavorite
-        return updateVideoObjInDB(videoObj!!)
-    }
-
-    private fun updateVideoObjInDB(videoObj: VideoObject): MutableList<VideoObject> {
-        scope.launch {
-            withContext(Dispatchers.Default) { videosDao.updateVideo(videoObj) }
+        scope.launch(Dispatchers.IO) {
+            putVideosObjFromDbInList()
+            val videoObj: VideoObject = getVideoByIdFromCache(idVideo) ?: return@launch
+            videoObj.isFavorite = isFavorite
+            videosDao.updateVideo(videoObj)
             putVideosObjFromDbInList()
         }
+
         return videosObj
+    }
+
+    private fun getVideoByIdFromCache(idVideo: Long): VideoObject? {
+        var videoObj: VideoObject? = null
+        videosObj.forEach { videoObject ->
+            if (videoObject.id == idVideo) videoObj = videoObject
+        }
+        return videoObj
     }
 
     override fun filterByFavoriteVideos(): List<VideoObject> {
         return videosObj.filter { videoObject -> videoObject.isFavorite }
+    }
+
+    override fun getVideoById(videoId: Long): VideoObject {
+        return videosDao.getVideoById(videoId)
+    }
+
+    override fun updateVideo(videoObj: VideoObject) {
+        videosDao.updateVideo(videoObj)
     }
 
 }

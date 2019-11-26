@@ -7,16 +7,12 @@ import androidx.databinding.ObservableList
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.alesno.testtaskispring.common.PlayerStartInfo
 import com.alesno.testtaskispring.model.objectbox.entities.ExpertObject
 import com.alesno.testtaskispring.model.objectbox.entities.VideoObject
 import com.alesno.testtaskispring.model.repository.Repository
-import kotlinx.coroutines.Deferred
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 
-class VideoViewModel(val repository: Repository): ViewModel() {
+class VideoViewModel(private val mRepository: Repository) : ViewModel() {
 
     var isShowingProgressBar: ObservableBoolean = ObservableBoolean(true)
     var topics: ObservableList<String> = ObservableArrayList<String>()
@@ -24,25 +20,29 @@ class VideoViewModel(val repository: Repository): ViewModel() {
     var videoUrl: ObservableField<String> = ObservableField()
     var observableVideosObject: ObservableField<VideoObject> = ObservableField()
     var videoId: Long = 0
-    private var playerStartInfo: PlayerStartInfo = PlayerStartInfo(false, 0)
-    val playVideoLiveData: MutableLiveData<PlayerStartInfo> = MutableLiveData()
+    val mPlayVideoLiveData: MutableLiveData<Int> = MutableLiveData()
 
     fun onViewCreated() {
-        playVideoLiveData.value = playerStartInfo
-        if(observableVideosObject.get() != null){
-            return
-        }
         getVideo()
     }
 
-    fun setVideoUrl(videoUrl: String){
+    fun setVideoUrl(videoUrl: String) {
         this.videoUrl.set(videoUrl)
     }
 
-    private fun getVideo(){
-        viewModelScope.launch (Dispatchers.IO){
+    private fun getVideo() {
+        viewModelScope.launch(Dispatchers.IO) {
             val videoObject = getVideoByIdAsync(videoId).await()
             setDataInField(videoObject)
+            withContext(Dispatchers.Main) {
+                mPlayVideoLiveData.value = videoObject.progressTime
+            }
+        }
+    }
+
+    private fun getVideoByIdAsync(videoId: Long): Deferred<VideoObject> {
+        return viewModelScope.async {
+            mRepository.getVideoById(videoId)
         }
     }
 
@@ -52,19 +52,18 @@ class VideoViewModel(val repository: Repository): ViewModel() {
         videoObject.topics?.let { topics.addAll(it) }
     }
 
-    private fun getVideoByIdAsync(videoId: Long): Deferred<VideoObject>{
-        return viewModelScope.async{
-            repository.getVideoById(videoId)
-        }
+    fun onStopPlaybackVideo(progressTime: Int) {
+        val videoObject = observableVideosObject.get() ?: return
+        videoObject.progressTime = progressTime
+        saveVideoInDb(videoObject)
     }
 
-    fun onPausePlaybackVideo(progressTime: Int){
-        playerStartInfo.isVideoStarted = true
-        playerStartInfo.progressTime = progressTime
-
-        //val videoObject = observableVideosObject[0]
-        //videoObject!!.progressTime = progressTime
-        //observableVideosObject.set(videoObject)
+    private fun saveVideoInDb(videoObject: VideoObject) {
+        viewModelScope.launch {
+            withContext(Dispatchers.Default) {
+                mRepository.updateVideo(videoObject)
+            }
+        }
     }
 
     fun setVideoStat(isShowingProgressBar: Boolean) {

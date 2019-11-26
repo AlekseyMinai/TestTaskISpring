@@ -18,6 +18,8 @@
                 android:layout_height="@dimen/tab_layout_height"
                 android:background="@color/colorPrimary"
                 app:tabGravity="fill"
+                app:tabIndicatorColor="@color/colorWhite"
+                app:tabIndicatorHeight="@dimen/indicator_height"
                 app:tabMaxWidth="0dp"
                 app:tabMode="fixed"
                 app:tabTextColor="@color/colorWhite" />

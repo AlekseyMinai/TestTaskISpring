@@ -1,4 +1,4 @@
-package com.alesno.testtaskispring.common
+package com.alesno.testtaskispring.model.dto
 
 class PlayerStartInfo(
     var isVideoStarted: Boolean,

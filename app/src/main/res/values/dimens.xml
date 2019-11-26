@@ -7,4 +7,5 @@
     <dimen name="item_height">320dp</dimen>
     <dimen name="padding_item_expert">8dp</dimen>
     <dimen name="margin_item_expert">2dp</dimen>
+    <dimen name="indicator_height">3dp</dimen>
 </resources>

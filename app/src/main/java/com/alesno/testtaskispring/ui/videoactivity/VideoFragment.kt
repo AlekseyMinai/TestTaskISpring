@@ -2,6 +2,7 @@ package com.alesno.testtaskispring.ui.videoactivity
 
 import android.content.res.Configuration
 import android.graphics.Point
+import android.media.MediaPlayer
 import android.os.Bundle
 import android.view.Display
 import android.view.LayoutInflater
@@ -28,39 +29,48 @@ class VideoFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentVideoBinding.inflate(inflater, container, false)
-        viewModel = VideoActivity.getVideoViewModel(activity!!)
-        binding.viewModel = viewModel
-        binding.handler = this
-
+        setupDataBinding(inflater, container)
         setupUIElements()
         getPlayVideoLiveData()
-
         return binding.root
-    }
-
-    private fun getPlayVideoLiveData() {
-        viewModel.playVideoLiveData.observe(this, Observer {
-            viewModel.setVideoStat(true)
-            if (it.isVideoStarted) {
-                videoView.setOnPreparedListener { mediaPlayer ->
-                    mediaPlayer.seekTo(it.progressTime.toInt())
-                    mediaPlayer.start()
-                    viewModel.setVideoStat(false)
-                }
-            }
-        })
-    }
-
-    override fun onResume() {
-        super.onResume()
-        videoView.start()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.onViewCreated()
         portraitSize = getDefaultVideoSize()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        viewModel.onStopPlaybackVideo(videoView.currentPosition)
+        videoView.stopPlayback()
+    }
+
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            changeVideoSize(getDisplayHeight())
+        } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
+            changeVideoSize(portraitSize)
+        }
+    }
+
+    private fun getPlayVideoLiveData() {
+        viewModel.mPlayVideoLiveData.observe(this, Observer {time ->
+            videoView.setOnPreparedListener {
+                videoView.seekTo(time)
+                videoView.start()
+                viewModel.setVideoStat(false)
+            }
+        })
+    }
+
+    private fun setupDataBinding(inflater: LayoutInflater, container: ViewGroup?) {
+        binding = FragmentVideoBinding.inflate(inflater, container, false)
+        viewModel = VideoActivity.getVideoViewModel(activity!!)
+        binding.viewModel = viewModel
+        binding.handler = this
     }
 
     private fun setupUIElements() {
@@ -73,7 +83,6 @@ class VideoFragment : Fragment() {
         videoView = binding.videoView
         val mediaController = MediaController(activity)
         videoView.setMediaController(mediaController)
-        videoView.setOnPreparedListener { viewModel.setVideoStat(false) }
     }
 
     private fun setupRecyclerViewWithTopics() {
@@ -91,22 +100,7 @@ class VideoFragment : Fragment() {
         recyclerView.adapter = ExpertsAdapter()
     }
 
-    override fun onPause() {
-        super.onPause()
-        viewModel.onPausePlaybackVideo(videoView.currentPosition)
-        videoView.stopPlayback()
-    }
-
-    override fun onConfigurationChanged(newConfig: Configuration) {
-        super.onConfigurationChanged(newConfig)
-        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            changeVideoSize(getDisplayHeight())
-        } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
-            changeVideoSize(portraitSize)
-        }
-    }
-
-    private fun getDefaultVideoSize(): Int{
+    private fun getDefaultVideoSize(): Int {
         val params: ViewGroup.LayoutParams? = frame_video_layout.layoutParams
         return params!!.height
     }

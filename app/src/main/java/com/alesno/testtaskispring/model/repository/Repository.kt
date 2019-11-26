@@ -14,4 +14,6 @@ interface Repository {
     fun filterByFavoriteVideos(): List<VideoObject>
 
     fun getVideoById(videoId: Long): VideoObject
+
+    fun updateVideo(videoObj: VideoObject)
 }
