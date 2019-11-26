@@ -33,13 +33,15 @@ class RepositoryImpl(
         return videosObj
     }
 
-    override suspend fun updateListFromServer(): List<VideoObject> {
-        updateDataInDB()
+    override suspend fun getListVideosObjFromDb(scope: CoroutineScope): MutableList<VideoObject> {
+        val job = scope.launch { putVideosObjFromDbInList() }
+        job.join()
         return videosObj
     }
 
-    override fun filterByFavoriteVideos(): List<VideoObject> {
-        return videosObj.filter { videoObject -> videoObject.isFavorite }
+    override suspend fun updateListFromServer(): List<VideoObject> {
+        updateDataInDB()
+        return videosObj
     }
 
     override fun getVideoById(videoId: Long): VideoObject {
@@ -48,6 +50,21 @@ class RepositoryImpl(
 
     override fun updateVideo(videoObj: VideoObject) {
         videosDao.updateVideo(videoObj)
+    }
+
+    override fun changeFavoriteStatus(
+        idVideo: Long,
+        isFavorite: Boolean
+    ): MutableList<VideoObject> {
+        scope.launch(Dispatchers.IO) {
+            putVideosObjFromDbInList()
+            val videoObj: VideoObject = getVideoByIdFromCache(idVideo) ?: return@launch
+            videoObj.isFavorite = isFavorite
+            videosDao.updateVideo(videoObj)
+            putVideosObjFromDbInList()
+        }
+
+        return videosObj
     }
 
     private suspend fun getResponseAsync(): Response {
@@ -71,31 +88,10 @@ class RepositoryImpl(
         videosObj.addAll(sortByTitle(listVideosObj))
     }
 
-    override suspend fun getListVideosObjFromDb(scope: CoroutineScope): MutableList<VideoObject> {
-        val job = scope.launch { putVideosObjFromDbInList() }
-        job.join()
-        return videosObj
-    }
-
     private suspend fun updateDataInDB() {
         val response = getResponseAsync()
         videosDao.insertAllVideos(objectTransformer.responseTransformer(response))
         putVideosObjFromDbInList()
-    }
-
-    override fun changeFavoriteStatus(
-        idVideo: Long,
-        isFavorite: Boolean
-    ): MutableList<VideoObject> {
-        scope.launch(Dispatchers.IO) {
-            putVideosObjFromDbInList()
-            val videoObj: VideoObject = getVideoByIdFromCache(idVideo) ?: return@launch
-            videoObj.isFavorite = isFavorite
-            videosDao.updateVideo(videoObj)
-            putVideosObjFromDbInList()
-        }
-
-        return videosObj
     }
 
     private fun getVideoByIdFromCache(idVideo: Long): VideoObject? {
@@ -108,6 +104,10 @@ class RepositoryImpl(
 
     private fun sortByTitle(videosObj: List<VideoObject>): List<VideoObject> {
         return videosObj.sortedWith(compareBy { it.title })
+    }
+
+    override fun filterByFavoriteVideos(): List<VideoObject> {
+        return videosObj.filter { videoObject -> videoObject.isFavorite }
     }
 
 }

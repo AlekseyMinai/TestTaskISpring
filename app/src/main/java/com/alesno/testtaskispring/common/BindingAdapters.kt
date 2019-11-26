@@ -2,15 +2,14 @@ package com.alesno.testtaskispring.common
 
 import android.graphics.Color
 import android.graphics.drawable.Drawable
-import android.util.Log
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.VideoView
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.alesno.testtaskispring.R
 import com.alesno.testtaskispring.model.objectbox.entities.ExpertObject
 import com.alesno.testtaskispring.model.objectbox.entities.VideoObject
-import com.alesno.testtaskispring.model.objectbox.entities.VideoObject_.progress
 import com.alesno.testtaskispring.ui.listsactivity.videos.recyclerview.VideoListAdapter
 import com.alesno.testtaskispring.ui.videoactivity.recyclerview.ExpertsAdapter
 import com.alesno.testtaskispring.ui.videoactivity.recyclerview.TopicsAdapter
@@ -39,7 +38,6 @@ fun setPicture(imageView: ImageView, url: String, errorImage: Drawable) {
 
 @BindingAdapter("setVideoUrl")
 fun setVideoUrl(videoView: VideoView, url: String) {
-    Log.d("log", url)
     videoView.setVideoPath(url)
 }
 
@@ -61,5 +59,24 @@ fun setTextProgressByProgress(textView: TextView, progress: Int) {
         in 98..100 -> textView.text = "Просмотренно"
     }
 }
+
+@BindingAdapter("isFavorite", "isDataBeOut", "isFavoriteBeOut")
+fun setTextWhenDataIsOut(
+    textView: TextView,
+    isFavoriteList: Boolean,
+    isDataBeOut: Boolean,
+    isFavoriteBeOut: Boolean
+) {
+    val videoIsOut = textView.context.getString(R.string.video_is_out)
+    val favoriteVideoIsOut = textView.context.getString(R.string.you_do_not_have_favorite_videos)
+    when {
+        !isFavoriteList && isDataBeOut -> textView.text = videoIsOut
+        !isFavoriteList && !isDataBeOut -> textView.text = ""
+        isFavoriteList && isFavoriteBeOut -> textView.text = favoriteVideoIsOut
+        isFavoriteList && !isFavoriteBeOut -> textView.text = ""
+    }
+}
+
+
 
 

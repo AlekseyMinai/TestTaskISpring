@@ -5,4 +5,6 @@
     <string name="topics">Темы</string>
     <string name="eksperts">Эксперты</string>
     <string name="update">обновить</string>
+    <string name="video_is_out">Видео отсутствует</string>
+    <string name="you_do_not_have_favorite_videos">У вас нет любимых видео</string>
 </resources>

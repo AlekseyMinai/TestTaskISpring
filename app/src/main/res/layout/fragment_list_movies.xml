@@ -39,23 +39,29 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
+                        android:layout_marginTop="25dp"
                         android:visibility="@{viewModel.isProgressBarVisible ? View.VISIBLE : View.GONE}" />
 
                 <TextView
+                        isFavoriteBeOut="@{viewModel.favoriteVideosObj.size == 0}"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text=""/>
+                        android:layout_gravity="center"
+                        android:layout_marginBottom="30dp"
+                        app:isDataBeOut="@{viewModel.videosObj.size == 0}"
+                        app:isFavorite="@{isFavorite}" />
 
                 <Button
                         android:id="@+id/button_update"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
+                        android:layout_marginTop="25dp"
                         android:background="@color/colorBlue"
-                        android:text="@string/update"
                         android:onClick="@{() -> viewModel.onRefreshedListAllVideos()}"
+                        android:text="@string/update"
                         android:textColor="@color/colorWhite"
-                        android:visibility="@{(!isFavorite &amp;&amp; viewModel.videosObj.size == 0 &amp;&amp; !viewModel.isProgressBarVisible) ? View.VISIBLE : View.GONE}"/>
+                        android:visibility="@{(!isFavorite &amp;&amp; viewModel.videosObj.size == 0 &amp;&amp; !viewModel.isProgressBarVisible) ? View.VISIBLE : View.GONE}" />
 
             </FrameLayout>
 
