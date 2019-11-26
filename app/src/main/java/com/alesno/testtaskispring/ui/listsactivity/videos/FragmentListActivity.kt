@@ -8,18 +8,12 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProviders
 import com.alesno.testtaskispring.R
-import com.alesno.testtaskispring.model.objectbox.ObjectBox
-import com.alesno.testtaskispring.model.objectbox.dao.VideosDaoImpl
-import com.alesno.testtaskispring.model.objectbox.entities.VideoObject
-import com.alesno.testtaskispring.model.objectbox.transformer.ObjectTransformerImpl
 import com.alesno.testtaskispring.model.repository.RepositoryImpl
-import com.alesno.testtaskispring.model.service.ApiService
 import com.alesno.testtaskispring.ui.listsactivity.videos.fragments.ListAllMoviesFragment
 import com.alesno.testtaskispring.ui.listsactivity.videos.fragments.ListFavoriteMoviesFragment
 import com.alesno.testtaskispring.ui.listsactivity.videos.viewmodel.CommonViewModel
 import com.alesno.testtaskispring.ui.listsactivity.videos.viewmodel.CommonViewModelFactory
 import com.google.android.material.tabs.TabLayout
-import io.objectbox.Box
 import kotlinx.android.synthetic.main.activity_list_videos.*
 
 class FragmentListActivity : AppCompatActivity() {
@@ -36,20 +30,17 @@ class FragmentListActivity : AppCompatActivity() {
 
     companion object {
         fun getCommonViewModel(activity: FragmentActivity): CommonViewModel {
-            //redo it!
-            val apiService = ApiService.create()
-            val videosBox: Box<VideoObject> = ObjectBox.boxStore.boxFor(VideoObject::class.java)
-            val videosDao = VideosDaoImpl(videosBox)
-            val repository = RepositoryImpl(apiService, videosDao, ObjectTransformerImpl)
             return ViewModelProviders
-                .of(activity, CommonViewModelFactory(repository))
+                .of(
+                    activity,
+                    CommonViewModelFactory(RepositoryImpl.RepositoryProvider.getRepositoryIml())
+                )
                 .get(CommonViewModel::class.java)
         }
     }
 
     private fun setUpViewPager() {
-        val adapter =
-            ViewPagerAdapter(supportFragmentManager)
+        val adapter = ViewPagerAdapter(supportFragmentManager)
         adapter.addFragment(ListAllMoviesFragment())
         adapter.addFragment(ListFavoriteMoviesFragment())
         view_pager.adapter = adapter

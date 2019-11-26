@@ -24,8 +24,10 @@ class CommonViewModel(
     fun onViewListAllMoviesCreated() {
         if (videosObj.isEmpty()) {
             viewModelScope.launch {
+                isProgressBarVisible.set(true)
                 setDataInListAllVideosFragment()
                 setDataInFavoriteListFragment()
+                isProgressBarVisible.set(false)
             }
         }
     }

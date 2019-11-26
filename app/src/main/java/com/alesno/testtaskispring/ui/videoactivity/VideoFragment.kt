@@ -82,6 +82,7 @@ class VideoFragment : Fragment() {
         videoView = binding.videoView
         val mediaController = MediaController(activity)
         videoView.setMediaController(mediaController)
+        mediaController.setAnchorView(videoView)
     }
 
     private fun setupRecyclerViewWithTopics() {
