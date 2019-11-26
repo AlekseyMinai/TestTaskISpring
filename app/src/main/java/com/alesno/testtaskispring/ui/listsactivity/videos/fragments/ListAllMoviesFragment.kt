@@ -19,7 +19,6 @@ class ListAllMoviesFragment : BaseListVideosFragment() {
 
     override fun refreshData() {
         viewModel.onRefreshedListAllVideos()
-        swipe_to_refresh.isRefreshing = false
     }
 
     override fun isListFavorite(): Boolean {

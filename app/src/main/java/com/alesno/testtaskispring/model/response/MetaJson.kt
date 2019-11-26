@@ -2,7 +2,7 @@ package com.alesno.testtaskispring.model.response
 
 import com.google.gson.annotations.SerializedName
 
-data class Meta(
+data class MetaJson(
     @SerializedName("title")
     val title: String,
     @SerializedName("topics")

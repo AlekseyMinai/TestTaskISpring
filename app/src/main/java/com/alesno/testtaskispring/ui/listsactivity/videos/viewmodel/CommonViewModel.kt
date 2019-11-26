@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.alesno.testtaskispring.model.objectbox.entities.VideoObject
 import com.alesno.testtaskispring.model.repository.Repository
+import com.alesno.testtaskispring.model.repository.filterByFavoriteVideos
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -48,24 +49,24 @@ class CommonViewModel(
         }
     }
 
+    fun onCheckboxClicked(idVideo: Long, isFavorite: Boolean) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val updatedVideosObj = repository.changeFavoriteStatus(idVideo, isFavorite)
+            videosObj.clear()
+            videosObj.addAll(updatedVideosObj)
+            setDataInFavoriteListFragment()
+        }
+    }
+
+    fun setDataInFavoriteListFragment() {
+        favoriteVideosObj.clear()
+        favoriteVideosObj.addAll(filterByFavoriteVideos(videosObj))
+    }
+
+
     private suspend fun setDataInListAllVideosFragment() {
-        isProgressBarVisible.set(true)
         val videosObj = repository.getListVideosObject(viewModelScope)
         this.videosObj.addAll(videosObj)
-        isProgressBarVisible.set(false)
-    }
-
-    fun onCheckboxClicked(idVideo: Long, isFavorite: Boolean) {
-        val updatedVideosObj = repository.changeFavoriteStatus(idVideo, isFavorite)
-        videosObj.clear()
-        videosObj.addAll(updatedVideosObj)
-        setDataInFavoriteListFragment()
-    }
-
-    private fun setDataInFavoriteListFragment() {
-        favoriteVideosObj.clear()
-        repository.filterByFavoriteVideos()
-            .forEach { videoObj -> favoriteVideosObj.add(videoObj) }
     }
 
 }

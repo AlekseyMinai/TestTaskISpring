@@ -5,7 +5,7 @@
   "entities": [
     {
       "id": "4:5697149740461671917",
-      "lastPropertyId": "8:8561355196940094424",
+      "lastPropertyId": "9:9198517551249346233",
       "name": "VideoObject",
       "properties": [
         {
@@ -50,6 +50,12 @@
           "id": "8:8561355196940094424",
           "name": "preview",
           "type": 9
+        },
+        {
+          "id": "9:9198517551249346233",
+          "name": "progress",
+          "type": 5,
+          "flags": 4
         }
       ],
       "relations": []

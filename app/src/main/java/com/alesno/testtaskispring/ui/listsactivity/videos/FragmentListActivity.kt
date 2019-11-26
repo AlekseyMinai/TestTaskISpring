@@ -42,12 +42,7 @@ class FragmentListActivity : AppCompatActivity() {
             val videosDao = VideosDaoImpl(videosBox)
             val repository = RepositoryImpl(apiService, videosDao, ObjectTransformerImpl)
             return ViewModelProviders
-                .of(
-                    activity,
-                    CommonViewModelFactory(
-                        repository
-                    )
-                )
+                .of(activity, CommonViewModelFactory(repository))
                 .get(CommonViewModel::class.java)
         }
     }

@@ -2,14 +2,14 @@ package com.alesno.testtaskispring.model.objectbox.transformer
 
 import com.alesno.testtaskispring.model.objectbox.entities.ExpertObject
 import com.alesno.testtaskispring.model.objectbox.entities.VideoObject
-import com.alesno.testtaskispring.model.response.Expert
-import com.alesno.testtaskispring.model.response.Response
-import com.alesno.testtaskispring.model.response.Video
+import com.alesno.testtaskispring.model.response.ExpertJson
+import com.alesno.testtaskispring.model.response.ResponseJson
+import com.alesno.testtaskispring.model.response.VideoJson
 
 object ObjectTransformerImpl :
     ObjectTransformer {
 
-    override fun responseTransformer(response: Response): List<VideoObject> {
+    override fun responseTransformer(response: ResponseJson): List<VideoObject> {
         return response.videos.map { video ->
             videoTransformer(
                 video
@@ -17,7 +17,7 @@ object ObjectTransformerImpl :
         }
     }
 
-    private fun expertTransformer(expert: Expert): ExpertObject {
+    private fun expertTransformer(expert: ExpertJson): ExpertObject {
         var avatar: String? = expert.avatar
         if (avatar == null) avatar = "no_avatar"
         return ExpertObject(
@@ -29,7 +29,7 @@ object ObjectTransformerImpl :
         )
     }
 
-    private fun listExpertsTransformer(listExperts: List<Expert>): List<ExpertObject> {
+    private fun listExpertsTransformer(listExperts: List<ExpertJson>): List<ExpertObject> {
         return listExperts.map { expert ->
             expertTransformer(
                 expert
@@ -37,7 +37,7 @@ object ObjectTransformerImpl :
         }
     }
 
-    private fun videoTransformer(video: Video): VideoObject {
+    private fun videoTransformer(video: VideoJson): VideoObject {
         var preview: String? = video.meta.preview
         if (preview == null) preview = "no_preview"
 

@@ -2,7 +2,7 @@ package com.alesno.testtaskispring.model.response
 
 import com.google.gson.annotations.SerializedName
 
-data class Expert(
+data class ExpertJson(
     @SerializedName("avatar")
     val avatar: String,
     @SerializedName("first_name")

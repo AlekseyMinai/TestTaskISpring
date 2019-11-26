@@ -36,7 +36,7 @@ class VideoViewModel(private val mRepository: Repository) : ViewModel() {
         saveVideoInDb(videoObject)
     }
 
-    fun setProgressInVideoObject(progressTime: Int, duration: Int) {
+    private fun setProgressInVideoObject(progressTime: Int, duration: Int) {
         val videoObject = observableVideosObject.get() ?: return
         videoObject.progressTime = progressTime
         videoObject.progress = calculateProgress(progressTime, duration)

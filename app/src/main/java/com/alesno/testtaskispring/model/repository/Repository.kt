@@ -9,9 +9,7 @@ interface Repository {
 
     suspend fun updateListFromServer(): List<VideoObject>
 
-    fun changeFavoriteStatus(idVideo: Long, isFavorite: Boolean): MutableList<VideoObject>
-
-    fun filterByFavoriteVideos(): List<VideoObject>
+    suspend fun changeFavoriteStatus(idVideo: Long, isFavorite: Boolean): MutableList<VideoObject>
 
     fun getVideoById(videoId: Long): VideoObject
 
