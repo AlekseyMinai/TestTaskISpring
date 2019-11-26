@@ -1,10 +1,14 @@
 package com.alesno.testtaskispring.model.repository
 
+import com.alesno.testtaskispring.model.objectbox.ObjectBox
 import com.alesno.testtaskispring.model.objectbox.dao.VideosDao
+import com.alesno.testtaskispring.model.objectbox.dao.VideosDaoImpl
 import com.alesno.testtaskispring.model.objectbox.entities.VideoObject
 import com.alesno.testtaskispring.model.objectbox.transformer.ObjectTransformer
+import com.alesno.testtaskispring.model.objectbox.transformer.ObjectTransformerImpl
 import com.alesno.testtaskispring.model.response.ResponseJson
 import com.alesno.testtaskispring.model.service.ApiService
+import io.objectbox.Box
 import kotlinx.coroutines.*
 
 class RepositoryImpl(
@@ -83,5 +87,21 @@ class RepositoryImpl(
     private fun getAllVideosFromDbAsync(): Deferred<List<VideoObject>> {
         return scope.async { videosDao.getAllVideos() }
     }
+
+    /*object RepositoryProvider {
+
+        private lateinit var repository: Repository
+
+        fun init(apiService:ApiService, videosBox: Box<VideoObject>, videosDao: VideosDao) {
+            val apiService = ApiService.create()
+            val videosBox: Box<VideoObject> = ObjectBox.boxStore.boxFor(VideoObject::class.java)
+            val videosDao = VideosDaoImpl(videosBox)
+            repository = RepositoryImpl(apiService, videosDao, ObjectTransformerImpl)
+        }
+
+        fun getRepositoryIml(): Repository {
+            return repository
+        }
+    }*/
 
 }

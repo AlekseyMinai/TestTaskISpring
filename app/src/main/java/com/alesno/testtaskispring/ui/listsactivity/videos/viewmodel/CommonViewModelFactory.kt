@@ -10,9 +10,7 @@ class CommonViewModelFactory(
 
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         return if (modelClass == CommonViewModel::class.java) {
-            CommonViewModel(
-                repository
-            ) as T
+            CommonViewModel(repository) as T
         } else {
             return throw IllegalArgumentException("ViewModel Not Found")
         }
