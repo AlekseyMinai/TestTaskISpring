@@ -41,7 +41,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/item_margin"
                     android:layout_marginBottom="@dimen/item_margin"
-                    android:text="В процессе (72%)" />
+                    app:setTextColorByProgress="@{video.progress}"
+                    app:setTextProgressByProgress="@{video.progress}"/>
         </LinearLayout>
 
         <CheckBox

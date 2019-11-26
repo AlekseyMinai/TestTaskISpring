@@ -33,11 +33,21 @@ class RepositoryImpl(
         return videosObj
     }
 
-    override fun updateListFromServer(scope: CoroutineScope): List<VideoObject> {
-        scope.launch {
-            updateDataInDB()
-        }
+    override suspend fun updateListFromServer(): List<VideoObject> {
+        updateDataInDB()
         return videosObj
+    }
+
+    override fun filterByFavoriteVideos(): List<VideoObject> {
+        return videosObj.filter { videoObject -> videoObject.isFavorite }
+    }
+
+    override fun getVideoById(videoId: Long): VideoObject {
+        return videosDao.getVideoById(videoId)
+    }
+
+    override fun updateVideo(videoObj: VideoObject) {
+        videosDao.updateVideo(videoObj)
     }
 
     private suspend fun getResponseAsync(): Response {
@@ -61,14 +71,16 @@ class RepositoryImpl(
         videosObj.addAll(sortByTitle(listVideosObj))
     }
 
+    override suspend fun getListVideosObjFromDb(scope: CoroutineScope): MutableList<VideoObject> {
+        val job = scope.launch { putVideosObjFromDbInList() }
+        job.join()
+        return videosObj
+    }
+
     private suspend fun updateDataInDB() {
         val response = getResponseAsync()
         videosDao.insertAllVideos(objectTransformer.responseTransformer(response))
         putVideosObjFromDbInList()
-    }
-
-    private fun sortByTitle(videosObj: List<VideoObject>): List<VideoObject> {
-        return videosObj.sortedWith(compareBy { it.title })
     }
 
     override fun changeFavoriteStatus(
@@ -94,16 +106,8 @@ class RepositoryImpl(
         return videoObj
     }
 
-    override fun filterByFavoriteVideos(): List<VideoObject> {
-        return videosObj.filter { videoObject -> videoObject.isFavorite }
-    }
-
-    override fun getVideoById(videoId: Long): VideoObject {
-        return videosDao.getVideoById(videoId)
-    }
-
-    override fun updateVideo(videoObj: VideoObject) {
-        videosDao.updateVideo(videoObj)
+    private fun sortByTitle(videosObj: List<VideoObject>): List<VideoObject> {
+        return videosObj.sortedWith(compareBy { it.title })
     }
 
 }

@@ -2,7 +2,6 @@ package com.alesno.testtaskispring.ui.videoactivity
 
 import android.content.res.Configuration
 import android.graphics.Point
-import android.media.MediaPlayer
 import android.os.Bundle
 import android.view.Display
 import android.view.LayoutInflater
@@ -31,7 +30,7 @@ class VideoFragment : Fragment() {
     ): View? {
         setupDataBinding(inflater, container)
         setupUIElements()
-        getPlayVideoLiveData()
+        setVideoReadyLiveData()
         return binding.root
     }
 
@@ -43,7 +42,7 @@ class VideoFragment : Fragment() {
 
     override fun onPause() {
         super.onPause()
-        viewModel.onStopPlaybackVideo(videoView.currentPosition)
+        viewModel.onStopPlaybackVideo(videoView.currentPosition, videoView.duration)
         videoView.stopPlayback()
     }
 
@@ -56,8 +55,8 @@ class VideoFragment : Fragment() {
         }
     }
 
-    private fun getPlayVideoLiveData() {
-        viewModel.mPlayVideoLiveData.observe(this, Observer {time ->
+    private fun setVideoReadyLiveData() {
+        viewModel.mPlayVideoLiveData.observe(this, Observer { time ->
             videoView.setOnPreparedListener {
                 videoView.seekTo(time)
                 videoView.start()

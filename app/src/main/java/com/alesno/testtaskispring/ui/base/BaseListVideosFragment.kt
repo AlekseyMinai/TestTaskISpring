@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.alesno.testtaskispring.R
@@ -49,6 +50,7 @@ abstract class BaseListVideosFragment : Fragment() {
         binding.swipeToRefresh.setOnRefreshListener {
             refreshData()
         }
+        viewModel.isRefreshedLiveData.observe(this, Observer { swipe_to_refresh.isRefreshing = it })
     }
 
     protected abstract fun isListFavorite(): Boolean

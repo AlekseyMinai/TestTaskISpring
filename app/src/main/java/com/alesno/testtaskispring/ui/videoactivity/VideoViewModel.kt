@@ -30,6 +30,23 @@ class VideoViewModel(private val mRepository: Repository) : ViewModel() {
         this.videoUrl.set(videoUrl)
     }
 
+    fun onStopPlaybackVideo(progressTime: Int, duration: Int) {
+        setProgressInVideoObject(progressTime, duration)
+        val videoObject = observableVideosObject.get() ?: return
+        saveVideoInDb(videoObject)
+    }
+
+    fun setProgressInVideoObject(progressTime: Int, duration: Int) {
+        val videoObject = observableVideosObject.get() ?: return
+        videoObject.progressTime = progressTime
+        videoObject.progress = calculateProgress(progressTime, duration)
+        observableVideosObject.set(videoObject)
+    }
+
+    fun setVideoStat(isShowingProgressBar: Boolean) {
+        this.isShowingProgressBar.set(isShowingProgressBar)
+    }
+
     private fun getVideo() {
         viewModelScope.launch(Dispatchers.IO) {
             val videoObject = getVideoByIdAsync(videoId).await()
@@ -52,10 +69,8 @@ class VideoViewModel(private val mRepository: Repository) : ViewModel() {
         videoObject.topics?.let { topics.addAll(it) }
     }
 
-    fun onStopPlaybackVideo(progressTime: Int) {
-        val videoObject = observableVideosObject.get() ?: return
-        videoObject.progressTime = progressTime
-        saveVideoInDb(videoObject)
+    private fun calculateProgress(progressTime: Int, duration: Int): Int {
+        return (progressTime * 100) / duration
     }
 
     private fun saveVideoInDb(videoObject: VideoObject) {
@@ -66,7 +81,4 @@ class VideoViewModel(private val mRepository: Repository) : ViewModel() {
         }
     }
 
-    fun setVideoStat(isShowingProgressBar: Boolean) {
-        this.isShowingProgressBar.set(isShowingProgressBar)
-    }
 }

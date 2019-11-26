@@ -26,6 +26,8 @@ data class VideoObject(
     @NameInDb("progress_time")
     var progressTime: Int = 0,
 
+    var progress: Int = 0,
+
     @Id var id: Long = 0
 ) {
     @Backlink(to = "video")

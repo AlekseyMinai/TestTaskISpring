@@ -7,7 +7,7 @@ interface Repository {
 
     suspend fun getListVideosObject(scope: CoroutineScope): List<VideoObject>
 
-    fun updateListFromServer(scope: CoroutineScope): List<VideoObject>
+    suspend fun updateListFromServer(): List<VideoObject>
 
     fun changeFavoriteStatus(idVideo: Long, isFavorite: Boolean): MutableList<VideoObject>
 
@@ -16,4 +16,6 @@ interface Repository {
     fun getVideoById(videoId: Long): VideoObject
 
     fun updateVideo(videoObj: VideoObject)
+
+    suspend fun getListVideosObjFromDb(scope: CoroutineScope): MutableList<VideoObject>
 }

@@ -12,6 +12,11 @@ class ListAllMoviesFragment : BaseListVideosFragment() {
         viewModel.onViewListAllMoviesCreated()
     }
 
+    override fun onResume() {
+        super.onResume()
+        viewModel.onViewResumed()
+    }
+
     override fun refreshData() {
         viewModel.onRefreshedListAllVideos()
         swipe_to_refresh.isRefreshing = false
