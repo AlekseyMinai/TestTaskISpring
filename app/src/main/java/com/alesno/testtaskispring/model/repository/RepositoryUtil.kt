@@ -10,13 +10,6 @@ fun filterByFavoriteVideos(videosObj: List<VideoObject>): List<VideoObject> {
     return videosObj.filter { videoObject -> videoObject.isFavorite }
 }
 
-fun findVideoById(videosObj: List<VideoObject>, idVideo: Long): VideoObject {
-    var videoObj: VideoObject? = null
-    videosObj.forEach { videoObject ->
-        if (videoObject.id == idVideo) {
-            videoObj = videoObject
-            return@forEach
-        }
-    }
-    return videoObj!!
+fun findVideoById(videosObj: List<VideoObject>, idVideo: Long): VideoObject? {
+    return videosObj.firstOrNull { videoObject -> videoObject.id == idVideo }
 }

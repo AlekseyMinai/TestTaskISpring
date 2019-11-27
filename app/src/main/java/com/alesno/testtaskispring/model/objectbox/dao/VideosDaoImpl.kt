@@ -4,8 +4,8 @@ import com.alesno.testtaskispring.model.objectbox.entities.VideoObject
 import io.objectbox.Box
 
 class VideosDaoImpl(private val videosBox: Box<VideoObject>) : VideosDao {
-    override fun updateVideo(videoObject: VideoObject) {
-        videosBox.put(videoObject)
+    override fun updateVideo(videoObject: VideoObject?) {
+        videoObject?.let { videosBox.put(videoObject) }
     }
 
     override fun getVideoById(idVideo: Long): VideoObject {

@@ -40,7 +40,7 @@ class RepositoryImpl(
     }
 
     override suspend fun updateListFromServer(): List<VideoObject> {
-        //redo it with seated class!!
+        //redo it with sealed class!!
         try {
             val response = getResponseAsync().await()
             videosDao.insertAllVideos(objectTransformer.responseTransformer(response))
@@ -71,8 +71,8 @@ class RepositoryImpl(
     ): MutableList<VideoObject> {
 
         updateCacheVideoObjectFromDb()
-        val videoObj: VideoObject = findVideoById(videosObj, idVideo)
-        videoObj.isFavorite = isFavorite
+        val videoObj: VideoObject? = findVideoById(videosObj, idVideo)
+        videoObj?.isFavorite = isFavorite
         videosDao.updateVideo(videoObj)
         updateCacheVideoObjectFromDb()
         return videosObj
