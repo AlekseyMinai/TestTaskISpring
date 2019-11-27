@@ -90,7 +90,7 @@ class RepositoryImpl(
 
         private lateinit var repository: Repository
 
-        fun init(apiService: ApiService, videosBox: Box<VideoObject>, videosDao: VideosDao) {
+        fun init(apiService: ApiService, videosDao: VideosDao) {
             repository = RepositoryImpl(apiService, videosDao, ObjectTransformerImpl)
         }
 

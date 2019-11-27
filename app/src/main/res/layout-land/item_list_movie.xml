@@ -7,10 +7,6 @@
                 name="video"
                 type="com.alesno.testtaskispring.model.objectbox.entities.VideoObject" />
 
-        <variable
-                name="viewModel"
-                type="com.alesno.testtaskispring.ui.listsactivity.videos.viewmodel.CommonViewModel" />
-
     </data>
 
     <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"

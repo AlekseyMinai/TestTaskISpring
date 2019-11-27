@@ -3,10 +3,12 @@ package com.alesno.testtaskispring.ui.listsactivity.videos.recyclerview
 import androidx.recyclerview.widget.RecyclerView
 import com.alesno.testtaskispring.databinding.ItemListMovieBinding
 import com.alesno.testtaskispring.model.objectbox.entities.VideoObject
-import com.alesno.testtaskispring.ui.listsactivity.videos.viewmodel.CommonViewModel
 import com.alesno.testtaskispring.ui.videoactivity.VideoActivity
 
-class VideoListViewHolder(val binding: ItemListMovieBinding, val viewModel: CommonViewModel) :
+class VideoListViewHolder(
+    val binding: ItemListMovieBinding,
+    private val mCheckedCallBack: (idVideo: Long, isFavorite: Boolean) -> Unit
+) :
     RecyclerView.ViewHolder(binding.root) {
     init {
         binding.root.setOnClickListener { item ->
@@ -27,10 +29,7 @@ class VideoListViewHolder(val binding: ItemListMovieBinding, val viewModel: Comm
         binding.executePendingBindings()
         val checkBox = binding.checkboxFavorite
         checkBox.setOnClickListener {
-            viewModel.onCheckboxClicked(
-                video.id,
-                checkBox.isChecked
-            )
+            mCheckedCallBack(video.id, checkBox.isChecked)
         }
     }
 

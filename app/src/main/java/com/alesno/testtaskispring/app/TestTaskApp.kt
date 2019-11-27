@@ -20,7 +20,7 @@ class TestTaskApp : Application() {
         val apiService = ApiService.create()
         val videosBox: Box<VideoObject> = ObjectBox.boxStore.boxFor(VideoObject::class.java)
         val videosDao = VideosDaoImpl(videosBox)
-        RepositoryImpl.RepositoryProvider.init(apiService, videosBox, videosDao)
+        RepositoryImpl.RepositoryProvider.init(apiService, videosDao)
     }
 
 }

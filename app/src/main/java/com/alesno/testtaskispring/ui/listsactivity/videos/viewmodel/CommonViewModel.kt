@@ -65,7 +65,6 @@ class CommonViewModel(
         favoriteVideosObj.addAll(filterByFavoriteVideos(videosObj))
     }
 
-
     private suspend fun setDataInListAllVideosFragment() {
         val videosObj = repository.getListVideosObject(viewModelScope)
         this.videosObj.addAll(videosObj)

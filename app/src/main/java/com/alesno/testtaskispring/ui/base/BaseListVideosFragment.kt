@@ -42,7 +42,12 @@ abstract class BaseListVideosFragment : Fragment() {
         val recyclerView: RecyclerView = binding.recyclerView
         recyclerView.layoutManager = LinearLayoutManager(activity!!)
         recyclerView.setHasFixedSize(true)
-        recyclerView.adapter = VideoListAdapter(viewModel)
+        recyclerView.adapter = VideoListAdapter { idVideo, isChecked ->
+            viewModel.onCheckboxClicked(
+                idVideo,
+                isChecked
+            )
+        }
     }
 
     private fun setupSwipeToRefreshCallBack() {
@@ -58,3 +63,4 @@ abstract class BaseListVideosFragment : Fragment() {
     protected abstract fun refreshData()
 
 }
+
