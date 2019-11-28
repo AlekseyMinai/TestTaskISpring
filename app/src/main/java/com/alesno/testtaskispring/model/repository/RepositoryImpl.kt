@@ -50,9 +50,12 @@ class RepositoryImpl(
         return mVideosObj
     }
 
-    override fun getVideoById(videoId: Long): VideoObject {
-        return videosDao.getVideoById(videoId)
-    }
+    override suspend fun getVideoById(videoId: Long): VideoObject =
+        withContext(mCoroutineContext){
+            val videoObj = videosDao.getVideoById(videoId)
+            videoObj
+        }
+
 
 
     override suspend fun updateVideo(videoObj: VideoObject) {

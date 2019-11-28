@@ -17,7 +17,7 @@ class VideoViewModel(private val mRepository: Repository) : ViewModel() {
     var isShowingProgressBar: ObservableBoolean = ObservableBoolean(true)
     var topics: ObservableList<String> = ObservableArrayList<String>()
     var experts: ObservableList<ExpertObject> = ObservableArrayList<ExpertObject>()
-    var videoUrl: ObservableField<String> = ObservableField()
+    var videoUrl: ObservableField<String> = ObservableField("")
     var observableVideosObject: ObservableField<VideoObject> = ObservableField()
     var videoId: Long = 0
     val mPlayVideoLiveData: MutableLiveData<Int> = MutableLiveData()
@@ -48,18 +48,11 @@ class VideoViewModel(private val mRepository: Repository) : ViewModel() {
     }
 
     private fun getVideo() {
-        viewModelScope.launch(Dispatchers.IO) {
-            val videoObject = getVideoByIdAsync(videoId).await()
+        viewModelScope.launch {
+            val videoObject = mRepository.getVideoById(videoId)
             setDataInField(videoObject)
-            withContext(Dispatchers.Main) {
-                mPlayVideoLiveData.value = videoObject.progressTime
-            }
-        }
-    }
-
-    private fun getVideoByIdAsync(videoId: Long): Deferred<VideoObject> {
-        return viewModelScope.async {
-            mRepository.getVideoById(videoId)
+            videoUrl.set(videoObject.url)
+            mPlayVideoLiveData.value = videoObject.progressTime
         }
     }
 
@@ -75,9 +68,7 @@ class VideoViewModel(private val mRepository: Repository) : ViewModel() {
 
     private fun saveVideoInDb(videoObject: VideoObject) {
         viewModelScope.launch {
-            withContext(Dispatchers.Default) {
-                mRepository.updateVideo(videoObject)
-            }
+            mRepository.updateVideo(videoObject)
         }
     }
 

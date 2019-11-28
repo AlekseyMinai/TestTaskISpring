@@ -10,7 +10,7 @@ interface Repository {
 
     suspend fun changeFavoriteStatus(idVideo: Long, isFavorite: Boolean): List<VideoObject>
 
-    fun getVideoById(videoId: Long): VideoObject
+    suspend fun getVideoById(videoId: Long): VideoObject
 
     suspend fun updateVideo(videoObj: VideoObject)
 
