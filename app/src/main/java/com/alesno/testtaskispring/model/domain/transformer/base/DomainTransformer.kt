@@ -6,5 +6,12 @@ import com.alesno.testtaskispring.model.objectbox.entities.VideoObject
 interface DomainTransformer<V : VideoDomain> {
     fun fromDataToDomain(videoObject: VideoObject): V
     fun fromDomainToData(videoDomain: V, videoObject: VideoObject): VideoObject
-    fun fromListDataToDomain(videosObject: List<VideoObject>): List<V>
+    //fun <V> List<VideoObject>.fromListDataToDomain(fromDataToDomain: (VideoObject) -> V): List<V>
+}
+
+inline fun <V> List<VideoObject>.fromListDataToDomain(fromDataToDomain: (VideoObject) -> V): List<V> {
+    val videosDomain: MutableList<V> = mutableListOf()
+    for (item in this)
+        videosDomain.add(fromDataToDomain(item))
+    return videosDomain
 }
