@@ -9,7 +9,6 @@ import androidx.lifecycle.viewModelScope
 import com.alesno.testtaskispring.model.objectbox.entities.VideoObject
 import com.alesno.testtaskispring.model.repository.Repository
 import com.alesno.testtaskispring.model.repository.filterByFavoriteVideos
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class CommonViewModel(
@@ -34,7 +33,7 @@ class CommonViewModel(
 
     fun onViewResumed() {
         viewModelScope.launch {
-            val videosObjFromDb = repository.getListVideosObjFromDb(viewModelScope)
+            val videosObjFromDb = repository.getListVideosObjFromDb()
             videosObj.clear()
             videosObj.addAll(videosObjFromDb)
         }
@@ -42,7 +41,7 @@ class CommonViewModel(
 
     fun onRefreshedListAllVideos() {
         isProgressBarVisible.set(true)
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             val videosObject = repository.updateListFromServer()
             videosObj.clear()
             videosObj.addAll(videosObject)
@@ -52,7 +51,7 @@ class CommonViewModel(
     }
 
     fun onCheckboxClicked(idVideo: Long, isFavorite: Boolean) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             val updatedVideosObj = repository.changeFavoriteStatus(idVideo, isFavorite)
             videosObj.clear()
             videosObj.addAll(updatedVideosObj)
@@ -66,7 +65,7 @@ class CommonViewModel(
     }
 
     private suspend fun setDataInListAllVideosFragment() {
-        val videosObj = repository.getListVideosObject(viewModelScope)
+        val videosObj = repository.getListVideosObject()
         this.videosObj.addAll(videosObj)
     }
 

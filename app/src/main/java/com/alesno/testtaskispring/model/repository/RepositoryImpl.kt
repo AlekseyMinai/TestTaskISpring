@@ -6,84 +6,91 @@ import com.alesno.testtaskispring.model.objectbox.transformer.ObjectTransformer
 import com.alesno.testtaskispring.model.objectbox.transformer.ObjectTransformerImpl
 import com.alesno.testtaskispring.model.response.ResponseJson
 import com.alesno.testtaskispring.model.service.ApiService
-import io.objectbox.Box
 import kotlinx.coroutines.*
+import java.util.concurrent.Executors
 
 class RepositoryImpl(
     private val mService: ApiService,
     private val videosDao: VideosDao,
-    private val objectTransformer: ObjectTransformer
+    private val objectTransformer: ObjectTransformer,
+    private val mScope: CoroutineScope = CoroutineScope(Dispatchers.Default + SupervisorJob()),
+    private val mCoroutineContext: ExecutorCoroutineDispatcher = Executors.newSingleThreadExecutor().asCoroutineDispatcher(),
+    private val mVideosObj: MutableList<VideoObject> = mutableListOf()
 ) : Repository {
 
-    private val videosObj: MutableList<VideoObject> = mutableListOf()
-    private val scope = CoroutineScope(Dispatchers.Default + SupervisorJob())
-
-    override suspend fun getListVideosObject(scope: CoroutineScope): List<VideoObject> {
-        if (videosObj.isNotEmpty()) {
-            return videosObj
-        }
-        val job = scope.launch(Dispatchers.IO) {
+    override suspend fun getListVideosObject(): List<VideoObject> =
+        withContext(mCoroutineContext) {
+            if (mVideosObj.isNotEmpty()) {
+                return@withContext mVideosObj
+            }
             updateCacheVideoObjectFromDb()
-            if (videosObj.isNotEmpty()) {
-                return@launch
+            if (mVideosObj.isNotEmpty()) {
+                return@withContext mVideosObj
             }
             updateListFromServer()
+            return@withContext mVideosObj
         }
-        job.join()
-        return videosObj
-    }
 
-    override suspend fun getListVideosObjFromDb(scope: CoroutineScope): MutableList<VideoObject> {
-        val job = scope.launch { updateCacheVideoObjectFromDb() }
-        job.join()
-        return videosObj
-    }
+
+    override suspend fun getListVideosObjFromDb(): List<VideoObject> =
+        withContext(mCoroutineContext) {
+            updateCacheVideoObjectFromDb()
+            return@withContext mVideosObj
+        }
 
     override suspend fun updateListFromServer(): List<VideoObject> {
         //redo it with sealed class!!
         try {
             val response = getResponseAsync().await()
-            videosDao.insertAllVideos(objectTransformer.responseTransformer(response))
+            insertAllVideosInDb(response)
             updateCacheVideoObjectFromDb()
         } catch (e: Exception) {
 
         }
-        return videosObj
+        return mVideosObj
     }
 
     override fun getVideoById(videoId: Long): VideoObject {
         return videosDao.getVideoById(videoId)
     }
 
-    override fun updateVideo(videoObj: VideoObject) {
-        videosDao.updateVideo(videoObj)
-    }
 
-    private suspend fun updateCacheVideoObjectFromDb() {
-        val listVideosObj = getAllVideosFromDbAsync().await()
-        videosObj.clear()
-        videosObj.addAll(sortByTitle(listVideosObj))
+    override suspend fun updateVideo(videoObj: VideoObject) {
+        withContext(mCoroutineContext) {
+            videosDao.updateVideo(videoObj)
+        }
     }
 
     override suspend fun changeFavoriteStatus(
         idVideo: Long,
         isFavorite: Boolean
-    ): MutableList<VideoObject> {
-
+    ): List<VideoObject> = withContext(mCoroutineContext) {
         updateCacheVideoObjectFromDb()
-        val videoObj: VideoObject? = findVideoById(videosObj, idVideo)
+        val videoObj: VideoObject? = findVideoById(mVideosObj, idVideo)
         videoObj?.isFavorite = isFavorite
-        videosDao.updateVideo(videoObj)
+        videoObj?.let { updateVideo(it) }
         updateCacheVideoObjectFromDb()
-        return videosObj
+        return@withContext mVideosObj
+    }
+
+    private suspend fun insertAllVideosInDb(response: ResponseJson) {
+        withContext(mCoroutineContext) {
+            videosDao.insertAllVideos(objectTransformer.responseTransformer(response))
+        }
+    }
+
+    private suspend fun updateCacheVideoObjectFromDb() {
+        val listVideosObj = getAllVideosFromDbAsync().await()
+        mVideosObj.clear()
+        mVideosObj.addAll(sortByTitle(listVideosObj))
+    }
+
+    private fun getAllVideosFromDbAsync(): Deferred<List<VideoObject>> {
+        return mScope.async { videosDao.getAllVideos() }
     }
 
     private fun getResponseAsync(): Deferred<ResponseJson> {
         return mService.getResponseAsync()
-    }
-
-    private fun getAllVideosFromDbAsync(): Deferred<List<VideoObject>> {
-        return scope.async { videosDao.getAllVideos() }
     }
 
     object RepositoryProvider {
