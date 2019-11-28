@@ -9,9 +9,11 @@ interface DomainTransformer<V : VideoDomain> {
     //fun <V> List<VideoObject>.fromListDataToDomain(fromDataToDomain: (VideoObject) -> V): List<V>
 }
 
-inline fun <V> List<VideoObject>.fromListDataToDomain(fromDataToDomain: (VideoObject) -> V): List<V> {
+fun <V : VideoDomain, T : DomainTransformer<V>> List<VideoObject>.fromListDataToDomain(
+    transformer: T
+): List<V> {
     val videosDomain: MutableList<V> = mutableListOf()
     for (item in this)
-        videosDomain.add(fromDataToDomain(item))
+        videosDomain.add(transformer.fromDataToDomain(item))
     return videosDomain
 }

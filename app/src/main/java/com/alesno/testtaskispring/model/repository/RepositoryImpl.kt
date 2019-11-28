@@ -1,5 +1,9 @@
 package com.alesno.testtaskispring.model.repository
 
+import com.alesno.testtaskispring.model.domain.VideoCommonDomain
+import com.alesno.testtaskispring.model.domain.VideoDomain
+import com.alesno.testtaskispring.model.domain.transformer.DomainTransformerCommon
+import com.alesno.testtaskispring.model.domain.transformer.base.fromListDataToDomain
 import com.alesno.testtaskispring.model.objectbox.dao.VideosDao
 import com.alesno.testtaskispring.model.objectbox.entities.VideoObject
 import com.alesno.testtaskispring.model.objectbox.transformer.ObjectTransformer
