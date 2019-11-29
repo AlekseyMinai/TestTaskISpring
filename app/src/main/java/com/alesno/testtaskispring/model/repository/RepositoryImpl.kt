@@ -94,7 +94,7 @@ class RepositoryImpl(
 
         //redo it with sealed class!!
         try {
-            val response = getResponseAsync().await()
+            val response = mService.getResponseAsync()
             insertAllVideosInDb(response)
             updateCacheVideoObjectFromDb()
         } catch (e: Exception) {
@@ -104,17 +104,11 @@ class RepositoryImpl(
     }
 
     private suspend fun updateCacheVideoObjectFromDb() {
-        val listVideosObj = getAllVideosFromDbAsync().await()
-        mVideosObj.clear()
-        mVideosObj.addAll(sortByTitle(listVideosObj))
-    }
-
-    private fun getAllVideosFromDbAsync(): Deferred<List<VideoObject>> {
-        return mScope.async { videosDao.getAllVideos() }
-    }
-
-    private fun getResponseAsync(): Deferred<ResponseJson> {
-        return mService.getResponseAsync()
+        withContext(mCoroutineContext) {
+            val listVideosObj = videosDao.getAllVideos()
+            mVideosObj.clear()
+            mVideosObj.addAll(sortByTitle(listVideosObj))
+        }
     }
 
 
@@ -130,5 +124,4 @@ class RepositoryImpl(
             return repository
         }
     }
-
 }
