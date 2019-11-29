@@ -2,11 +2,11 @@ package com.alesno.testtaskispring.ui.videoactivity.recyclerview
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import com.alesno.testtaskispring.ui.base.BaseRWAdapter
 import com.alesno.testtaskispring.databinding.ItemListExpertsBinding
-import com.alesno.testtaskispring.model.objectbox.entities.ExpertObject
+import com.alesno.testtaskispring.model.domain.VideoDetailVMDomain.ExpertDetailDomain
+import com.alesno.testtaskispring.ui.base.BaseRWAdapter
 
-class ExpertsAdapter: BaseRWAdapter<ExpertsViewHolder, ExpertObject>() {
+class ExpertsAdapter : BaseRWAdapter<ExpertsViewHolder, ExpertDetailDomain>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ExpertsViewHolder {
         val inflater = LayoutInflater.from(parent.context)

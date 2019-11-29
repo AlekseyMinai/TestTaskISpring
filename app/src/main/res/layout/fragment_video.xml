@@ -10,9 +10,6 @@
                 name="viewModel"
                 type="com.alesno.testtaskispring.ui.videoactivity.VideoViewModel" />
 
-        <variable
-                name="handler"
-                type="com.alesno.testtaskispring.ui.videoactivity.VideoFragment" />
     </data>
 
     <FrameLayout
@@ -34,7 +31,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="@dimen/item_margin"
-                        android:text="@{viewModel.observableVideosObject.title}"
+                        android:text="@{viewModel.observableVideos.title}"
                         android:textColor="@color/colorBlack"
                         android:textSize="@dimen/item_text_size" />
 
@@ -43,8 +40,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/item_margin"
                         android:layout_marginBottom="@dimen/item_margin"
-                        app:setTextColorByProgress="@{viewModel.observableVideosObject != null ? viewModel.observableVideosObject.progress : 0}"
-                        app:setTextProgressByProgress="@{viewModel.observableVideosObject != null ? viewModel.observableVideosObject.progress : 0}}" />
+                        app:setTextColorByProgress="@{viewModel.observableVideos != null ? viewModel.observableVideos.progress : 0}"
+                        app:setTextProgressByProgress="@{viewModel.observableVideos != null ? viewModel.observableVideos.progress : 0}}" />
 
                 <TextView
                         android:layout_width="match_parent"

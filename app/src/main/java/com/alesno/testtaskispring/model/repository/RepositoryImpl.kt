@@ -1,6 +1,9 @@
 package com.alesno.testtaskispring.model.repository
 
 import com.alesno.testtaskispring.model.domain.VideoCommonDomain
+import com.alesno.testtaskispring.model.domain.VideoDetailVMDomain
+import com.alesno.testtaskispring.model.domain.transformer.fromDataToDomainDetail
+import com.alesno.testtaskispring.model.domain.transformer.fromDomainToDataDetail
 import com.alesno.testtaskispring.model.domain.transformer.transformToListVideosCommonDomain
 import com.alesno.testtaskispring.model.objectbox.dao.VideosDao
 import com.alesno.testtaskispring.model.objectbox.entities.VideoObject
@@ -61,16 +64,23 @@ class RepositoryImpl(
         return@withContext mVideosObj
     }.transformToListVideosCommonDomain()
 
-    override suspend fun getVideoById(videoId: Long): VideoObject =
+    override suspend fun getVideoById(videoId: Long): VideoDetailVMDomain =
         withContext(mCoroutineContext) {
             val videoObj = videosDao.getVideoById(videoId)
-            videoObj
+            fromDataToDomainDetail(videoObj)
         }
 
 
-    override suspend fun updateVideo(videoObj: VideoObject) {
+    override suspend fun updateVideo(videoDomain: VideoDetailVMDomain) {
+        val changingVideoObj = findVideoById(mVideosObj, videoDomain.id)
+        changingVideoObj?.let {
+            updateVideo(fromDomainToDataDetail(videoDomain, changingVideoObj))
+        }
+    }
+
+    private suspend fun updateVideo(videoObject: VideoObject) {
         withContext(mCoroutineContext) {
-            videosDao.updateVideo(videoObj)
+            videosDao.updateVideo(videoObject)
         }
     }
 
@@ -106,6 +116,7 @@ class RepositoryImpl(
     private fun getResponseAsync(): Deferred<ResponseJson> {
         return mService.getResponseAsync()
     }
+
 
     object RepositoryProvider {
 

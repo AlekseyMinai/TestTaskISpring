@@ -5,7 +5,7 @@
 
         <variable
                 name="expert"
-                type="com.alesno.testtaskispring.model.objectbox.entities.ExpertObject" />
+                type="com.alesno.testtaskispring.model.domain.VideoDetailVMDomain.ExpertDetailDomain" />
     </data>
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"

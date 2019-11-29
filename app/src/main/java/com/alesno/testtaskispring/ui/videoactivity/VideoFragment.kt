@@ -69,7 +69,6 @@ class VideoFragment : Fragment() {
         binding = FragmentVideoBinding.inflate(inflater, container, false)
         viewModel = VideoActivity.getVideoViewModel(activity!!)
         binding.viewModel = viewModel
-        binding.handler = this
     }
 
     private fun setupUIElements() {

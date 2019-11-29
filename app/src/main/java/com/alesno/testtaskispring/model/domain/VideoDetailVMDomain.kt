@@ -4,8 +4,8 @@ data class VideoDetailVMDomain(
     val id: Long,
     val title: String?,
     val url: String?,
-    val progressTime: Int,
-    val progress: Int,
+    var progressTime: Int,
+    var progress: Int,
     val topics: List<String>?,
     val experts: List<ExpertDetailDomain>
 ) : VideoDomain() {

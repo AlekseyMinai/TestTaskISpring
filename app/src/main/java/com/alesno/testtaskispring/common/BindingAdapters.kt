@@ -9,7 +9,7 @@ import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.alesno.testtaskispring.R
 import com.alesno.testtaskispring.model.domain.VideoCommonDomain
-import com.alesno.testtaskispring.model.objectbox.entities.ExpertObject
+import com.alesno.testtaskispring.model.domain.VideoDetailVMDomain.ExpertDetailDomain
 import com.alesno.testtaskispring.ui.listsactivity.videos.recyclerview.VideoListAdapter
 import com.alesno.testtaskispring.ui.videoactivity.recyclerview.ExpertsAdapter
 import com.alesno.testtaskispring.ui.videoactivity.recyclerview.TopicsAdapter
@@ -27,7 +27,7 @@ fun setTopics(recyclerView: RecyclerView, topics: List<String>) {
 }
 
 @BindingAdapter("setExperts")
-fun setExperts(recyclerView: RecyclerView, experts: List<ExpertObject>) {
+fun setExperts(recyclerView: RecyclerView, experts: List<ExpertDetailDomain>) {
     (recyclerView.adapter as ExpertsAdapter).replaceData(experts)
 }
 

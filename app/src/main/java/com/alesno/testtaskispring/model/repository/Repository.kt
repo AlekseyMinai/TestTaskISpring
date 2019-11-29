@@ -1,7 +1,7 @@
 package com.alesno.testtaskispring.model.repository
 
 import com.alesno.testtaskispring.model.domain.VideoCommonDomain
-import com.alesno.testtaskispring.model.objectbox.entities.VideoObject
+import com.alesno.testtaskispring.model.domain.VideoDetailVMDomain
 
 interface Repository {
 
@@ -15,7 +15,7 @@ interface Repository {
 
     suspend fun getListVideosFromDb(): List<VideoCommonDomain>
 
-    suspend fun getVideoById(videoId: Long): VideoObject //
+    suspend fun getVideoById(videoId: Long): VideoDetailVMDomain
 
-    suspend fun updateVideo(videoObj: VideoObject) //
+    suspend fun updateVideo(videoDomain: VideoDetailVMDomain)
 }
