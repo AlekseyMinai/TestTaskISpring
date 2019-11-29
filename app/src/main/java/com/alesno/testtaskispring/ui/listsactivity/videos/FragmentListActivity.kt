@@ -6,13 +6,12 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.ViewModelProviders
 import com.alesno.testtaskispring.R
 import com.alesno.testtaskispring.model.repository.RepositoryImpl
+import com.alesno.testtaskispring.ui.common.getViewModel
 import com.alesno.testtaskispring.ui.listsactivity.videos.fragments.ListAllMoviesFragment
 import com.alesno.testtaskispring.ui.listsactivity.videos.fragments.ListFavoriteMoviesFragment
 import com.alesno.testtaskispring.ui.listsactivity.videos.viewmodel.CommonViewModel
-import com.alesno.testtaskispring.ui.listsactivity.videos.viewmodel.CommonViewModelFactory
 import com.google.android.material.tabs.TabLayout
 import kotlinx.android.synthetic.main.activity_list_videos.*
 
@@ -26,17 +25,6 @@ class FragmentListActivity : AppCompatActivity() {
         setUpViewPager()
         tab_layout.setupWithViewPager(view_pager)
         setupTabs()
-    }
-
-    companion object {
-        fun getCommonViewModel(activity: FragmentActivity): CommonViewModel {
-            return ViewModelProviders
-                .of(
-                    activity,
-                    CommonViewModelFactory(RepositoryImpl.RepositoryProvider.getRepositoryIml())
-                )
-                .get(CommonViewModel::class.java)
-        }
     }
 
     private fun setUpViewPager() {
@@ -91,5 +79,14 @@ class FragmentListActivity : AppCompatActivity() {
             1 -> tab.setTextColor(ContextCompat.getColor(applicationContext, R.color.colorGrey))
         }
         tab_layout.getTabAt(position)?.customView = tab
+    }
+
+
+    companion object {
+        fun getCommonViewModel(activity: FragmentActivity): CommonViewModel {
+            return activity.getViewModel {
+                CommonViewModel(RepositoryImpl.RepositoryProvider.getRepositoryIml())
+            }
+        }
     }
 }

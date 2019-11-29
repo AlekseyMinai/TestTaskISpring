@@ -12,6 +12,7 @@ import com.alesno.testtaskispring.R
 import com.alesno.testtaskispring.common.VIDEO_ID_EXTRA
 import com.alesno.testtaskispring.common.VIDEO_URL_EXTRA
 import com.alesno.testtaskispring.model.repository.RepositoryImpl
+import com.alesno.testtaskispring.ui.common.getViewModel
 
 class VideoActivity : AppCompatActivity() {
 
@@ -31,23 +32,6 @@ class VideoActivity : AppCompatActivity() {
             val transaction = supportFragmentManager.beginTransaction()
             transaction.add(R.id.videos_container, fragment)
             transaction.commit()
-        }
-    }
-
-    companion object {
-        fun startActivity(context: Context, idVideo: Long, urlVideo: String) {
-            val intent = Intent(context, VideoActivity::class.java)
-            intent.putExtra(VIDEO_ID_EXTRA, idVideo)
-            intent.putExtra(VIDEO_URL_EXTRA, urlVideo)
-            intent.flags = Intent.FLAG_ACTIVITY_NO_ANIMATION
-            context.startActivity(intent)
-        }
-
-        fun getVideoViewModel(activity: FragmentActivity): VideoViewModel {
-            return ViewModelProviders.of(
-                activity,
-                VideoViewModelFactory(RepositoryImpl.RepositoryProvider.getRepositoryIml())
-            ).get(VideoViewModel::class.java)
         }
     }
 
@@ -71,6 +55,15 @@ class VideoActivity : AppCompatActivity() {
         } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
             showSystemUI()
         }
+
+        val decorView = window.decorView
+        decorView.setOnSystemUiVisibilityChangeListener {
+            if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                hideSystemUI()
+            } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
+                showSystemUI()
+            }
+        }
     }
 
     private fun showSystemUI() {
@@ -89,4 +82,20 @@ class VideoActivity : AppCompatActivity() {
                     or View.SYSTEM_UI_FLAG_FULLSCREEN)
     }
 
+
+    companion object {
+        fun startActivity(context: Context, idVideo: Long, urlVideo: String) {
+            val intent = Intent(context, VideoActivity::class.java)
+            intent.putExtra(VIDEO_ID_EXTRA, idVideo)
+            intent.putExtra(VIDEO_URL_EXTRA, urlVideo)
+            intent.flags = Intent.FLAG_ACTIVITY_NO_ANIMATION
+            context.startActivity(intent)
+        }
+
+        fun getVideoViewModel(activity: FragmentActivity): VideoViewModel {
+            return activity.getViewModel {
+                VideoViewModel(RepositoryImpl.RepositoryProvider.getRepositoryIml())
+            }
+        }
+    }
 }
