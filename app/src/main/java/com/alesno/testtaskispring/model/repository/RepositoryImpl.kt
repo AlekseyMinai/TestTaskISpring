@@ -1,5 +1,7 @@
 package com.alesno.testtaskispring.model.repository
 
+import android.util.Log
+import com.alesno.testtaskispring.common.LOG
 import com.alesno.testtaskispring.model.domain.VideoCommonDomain
 import com.alesno.testtaskispring.model.domain.VideoDetailVMDomain
 import com.alesno.testtaskispring.model.domain.transformer.fromDataToDomainDetail
@@ -13,6 +15,7 @@ import com.alesno.testtaskispring.model.response.ResponseJson
 import com.alesno.testtaskispring.model.service.ApiService
 import kotlinx.coroutines.*
 import java.util.concurrent.Executors
+import com.alesno.testtaskispring.model.service.Result
 
 class RepositoryImpl(
     private val mService: ApiService,
@@ -91,16 +94,22 @@ class RepositoryImpl(
     }
 
     private suspend fun updateVideosObjectFromServer(): List<VideoObject> {
-
-        //redo it with sealed class!!
-        try {
-            val response = mService.getResponseAsync()
-            insertAllVideosInDb(response)
-            updateCacheVideoObjectFromDb()
-        } catch (e: Exception) {
-
+        when(val result = getResponseOrError()){
+            is Result.Success -> {
+                insertAllVideosInDb(result.responseJson)
+                updateCacheVideoObjectFromDb()
+            }
+            is Result.Error -> Log.e(LOG, result.e.message.toString())
         }
         return mVideosObj
+    }
+
+    private suspend fun getResponseOrError(): Result{
+        return try {
+            Result.Success(mService.getResponseAsync())
+        } catch (e: Exception) {
+            Result.Error(e)
+        }
     }
 
     private suspend fun updateCacheVideoObjectFromDb() {
