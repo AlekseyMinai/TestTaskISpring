@@ -5,7 +5,7 @@
 
         <variable
                 name="video"
-                type="com.alesno.testtaskispring.model.objectbox.entities.VideoObject" />
+                type="com.alesno.testtaskispring.model.domain.VideoCommonDomain" />
 
     </data>
 

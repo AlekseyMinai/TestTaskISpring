@@ -8,8 +8,8 @@ import android.widget.VideoView
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.alesno.testtaskispring.R
+import com.alesno.testtaskispring.model.domain.VideoCommonDomain
 import com.alesno.testtaskispring.model.objectbox.entities.ExpertObject
-import com.alesno.testtaskispring.model.objectbox.entities.VideoObject
 import com.alesno.testtaskispring.ui.listsactivity.videos.recyclerview.VideoListAdapter
 import com.alesno.testtaskispring.ui.videoactivity.recyclerview.ExpertsAdapter
 import com.alesno.testtaskispring.ui.videoactivity.recyclerview.TopicsAdapter
@@ -17,7 +17,7 @@ import com.squareup.picasso.Picasso
 
 
 @BindingAdapter("setItems")
-fun setItem(recyclerView: RecyclerView, videos: List<VideoObject>) {
+fun setItem(recyclerView: RecyclerView, videos: List<VideoCommonDomain>) {
     (recyclerView.adapter as VideoListAdapter).replaceData(videos)
 }
 

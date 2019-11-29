@@ -5,7 +5,7 @@ import com.alesno.testtaskispring.model.domain.VideoDetailVMDomain
 import com.alesno.testtaskispring.model.objectbox.entities.ExpertObject
 import com.alesno.testtaskispring.model.objectbox.entities.VideoObject
 
-fun List<VideoObject>.transformFromListDataToDomainCommon(): List<VideoCommonDomain> {
+fun List<VideoObject>.transformToListVideosCommonDomain(): List<VideoCommonDomain> {
     return this.map { fromDataToDomainCommon(it) }
 }
 
@@ -15,7 +15,8 @@ fun fromDataToDomainCommon(videoObject: VideoObject): VideoCommonDomain {
         videoObject.title,
         videoObject.preview,
         videoObject.isFavorite,
-        videoObject.progress
+        videoObject.progress,
+        videoObject.url
     )
 }
 

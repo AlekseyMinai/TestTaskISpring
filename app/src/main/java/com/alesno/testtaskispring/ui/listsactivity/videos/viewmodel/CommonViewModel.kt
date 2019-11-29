@@ -6,17 +6,17 @@ import androidx.databinding.ObservableList
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.alesno.testtaskispring.model.objectbox.entities.VideoObject
+import com.alesno.testtaskispring.model.domain.VideoCommonDomain
 import com.alesno.testtaskispring.model.repository.Repository
-import com.alesno.testtaskispring.model.repository.filterByFavoriteVideos
 import kotlinx.coroutines.launch
 
 class CommonViewModel(
     private val repository: Repository
 ) : ViewModel() {
 
-    var videosObj: ObservableList<VideoObject> = ObservableArrayList<VideoObject>()
-    var favoriteVideosObj: ObservableList<VideoObject> = ObservableArrayList<VideoObject>()
+    var videosObj: ObservableList<VideoCommonDomain> = ObservableArrayList<VideoCommonDomain>()
+    var favoriteVideosObj: ObservableList<VideoCommonDomain> =
+        ObservableArrayList<VideoCommonDomain>()
     var isProgressBarVisible: ObservableBoolean = ObservableBoolean(false)
     var isRefreshedLiveData: MutableLiveData<Boolean> = MutableLiveData()
 
@@ -33,7 +33,7 @@ class CommonViewModel(
 
     fun onViewResumed() {
         viewModelScope.launch {
-            val videosObjFromDb = repository.getListVideosObjFromDb()
+            val videosObjFromDb = repository.getListVideosFromDb()
             videosObj.clear()
             videosObj.addAll(videosObjFromDb)
         }
@@ -42,7 +42,7 @@ class CommonViewModel(
     fun onRefreshedListAllVideos() {
         isProgressBarVisible.set(true)
         viewModelScope.launch {
-            val videosObject = repository.updateListFromServer()
+            val videosObject = repository.getListVideoFromServer()
             videosObj.clear()
             videosObj.addAll(videosObject)
             isRefreshedLiveData.postValue(false)
@@ -61,11 +61,11 @@ class CommonViewModel(
 
     fun setDataInFavoriteListFragment() {
         favoriteVideosObj.clear()
-        favoriteVideosObj.addAll(filterByFavoriteVideos(videosObj))
+        favoriteVideosObj.addAll(repository.getListFavoriteVideos())
     }
 
     private suspend fun setDataInListAllVideosFragment() {
-        val videosObj = repository.getListVideosObject()
+        val videosObj = repository.getListVideos()
         this.videosObj.addAll(videosObj)
     }
 

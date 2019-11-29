@@ -2,7 +2,7 @@ package com.alesno.testtaskispring.ui.listsactivity.videos.recyclerview
 
 import androidx.recyclerview.widget.RecyclerView
 import com.alesno.testtaskispring.databinding.ItemListMovieBinding
-import com.alesno.testtaskispring.model.objectbox.entities.VideoObject
+import com.alesno.testtaskispring.model.domain.VideoCommonDomain
 import com.alesno.testtaskispring.ui.videoactivity.VideoActivity
 
 class VideoListViewHolder(
@@ -20,9 +20,9 @@ class VideoListViewHolder(
         }
     }
 
-    lateinit var videoObject: VideoObject
+    lateinit var videoObject: VideoCommonDomain
 
-    fun bind(video: VideoObject) {
+    fun bind(video: VideoCommonDomain) {
         videoObject = video
         binding.video = video
         binding.checkboxFavorite.isChecked = video.isFavorite

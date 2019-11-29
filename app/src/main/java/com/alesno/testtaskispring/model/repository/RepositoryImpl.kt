@@ -1,6 +1,7 @@
 package com.alesno.testtaskispring.model.repository
 
-import com.alesno.testtaskispring.model.domain.transformer.base.fromListDataToDomain
+import com.alesno.testtaskispring.model.domain.VideoCommonDomain
+import com.alesno.testtaskispring.model.domain.transformer.transformToListVideosCommonDomain
 import com.alesno.testtaskispring.model.objectbox.dao.VideosDao
 import com.alesno.testtaskispring.model.objectbox.entities.VideoObject
 import com.alesno.testtaskispring.model.objectbox.transformer.ObjectTransformer
@@ -19,7 +20,7 @@ class RepositoryImpl(
     private val mVideosObj: MutableList<VideoObject> = mutableListOf()
 ) : Repository {
 
-    override suspend fun getListVideosObject(): List<VideoObject> =
+    override suspend fun getListVideos(): List<VideoCommonDomain> =
         withContext(mCoroutineContext) {
             if (mVideosObj.isNotEmpty()) {
                 return@withContext mVideosObj
@@ -28,28 +29,37 @@ class RepositoryImpl(
             if (mVideosObj.isNotEmpty()) {
                 return@withContext mVideosObj
             }
-            updateListFromServer()
+            getListVideoFromServer()
             return@withContext mVideosObj
-        }
+        }.transformToListVideosCommonDomain()
 
-
-    override suspend fun getListVideosObjFromDb(): List<VideoObject> =
-        withContext(mCoroutineContext) {
-            updateCacheVideoObjectFromDb()
-            return@withContext mVideosObj
-        }
-
-    override suspend fun updateListFromServer(): List<VideoObject> {
-        //redo it with sealed class!!
-        try {
-            val response = getResponseAsync().await()
-            insertAllVideosInDb(response)
-            updateCacheVideoObjectFromDb()
-        } catch (e: Exception) {
-
-        }
-        return mVideosObj
+    override fun getListFavoriteVideos(): List<VideoCommonDomain> {
+        return filterByFavoriteVideos(mVideosObj).transformToListVideosCommonDomain()
     }
+
+
+    override suspend fun getListVideosFromDb(): List<VideoCommonDomain> =
+        withContext(mCoroutineContext) {
+            updateCacheVideoObjectFromDb()
+            return@withContext mVideosObj
+        }.transformToListVideosCommonDomain()
+
+    override suspend fun getListVideoFromServer(): List<VideoCommonDomain> {
+        updateVideosObjectFromServer()
+        return mVideosObj.transformToListVideosCommonDomain()
+    }
+
+    override suspend fun changeFavoriteStatus(
+        idVideo: Long,
+        isFavorite: Boolean
+    ): List<VideoCommonDomain> = withContext(mCoroutineContext) {
+        updateCacheVideoObjectFromDb()
+        val videoObj: VideoObject? = findVideoById(mVideosObj, idVideo)
+        videoObj?.isFavorite = isFavorite
+        videoObj?.let { updateVideo(it) }
+        updateCacheVideoObjectFromDb()
+        return@withContext mVideosObj
+    }.transformToListVideosCommonDomain()
 
     override suspend fun getVideoById(videoId: Long): VideoObject =
         withContext(mCoroutineContext) {
@@ -64,22 +74,23 @@ class RepositoryImpl(
         }
     }
 
-    override suspend fun changeFavoriteStatus(
-        idVideo: Long,
-        isFavorite: Boolean
-    ): List<VideoObject> = withContext(mCoroutineContext) {
-        updateCacheVideoObjectFromDb()
-        val videoObj: VideoObject? = findVideoById(mVideosObj, idVideo)
-        videoObj?.isFavorite = isFavorite
-        videoObj?.let { updateVideo(it) }
-        updateCacheVideoObjectFromDb()
-        return@withContext mVideosObj
-    }
-
     private suspend fun insertAllVideosInDb(response: ResponseJson) {
         withContext(mCoroutineContext) {
             videosDao.insertAllVideos(objectTransformer.responseTransformer(response))
         }
+    }
+
+    private suspend fun updateVideosObjectFromServer(): List<VideoObject> {
+
+        //redo it with sealed class!!
+        try {
+            val response = getResponseAsync().await()
+            insertAllVideosInDb(response)
+            updateCacheVideoObjectFromDb()
+        } catch (e: Exception) {
+
+        }
+        return mVideosObj
     }
 
     private suspend fun updateCacheVideoObjectFromDb() {

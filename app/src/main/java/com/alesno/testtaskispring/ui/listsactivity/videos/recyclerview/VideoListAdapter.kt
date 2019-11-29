@@ -5,11 +5,11 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import com.alesno.testtaskispring.R
 import com.alesno.testtaskispring.databinding.ItemListMovieBinding
-import com.alesno.testtaskispring.model.objectbox.entities.VideoObject
+import com.alesno.testtaskispring.model.domain.VideoCommonDomain
 import com.alesno.testtaskispring.ui.base.BaseRWAdapter
 
 class VideoListAdapter(private val mCheckedCallBack: (idVideo: Long, isFavorite: Boolean) -> Unit) :
-    BaseRWAdapter<VideoListViewHolder, VideoObject>() {
+    BaseRWAdapter<VideoListViewHolder, VideoCommonDomain>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VideoListViewHolder {
         val inflater: LayoutInflater = LayoutInflater.from(parent.context)
