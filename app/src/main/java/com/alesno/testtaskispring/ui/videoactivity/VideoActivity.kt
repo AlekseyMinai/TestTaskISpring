@@ -7,7 +7,6 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.ViewModelProviders
 import com.alesno.testtaskispring.R
 import com.alesno.testtaskispring.common.VIDEO_ID_EXTRA
 import com.alesno.testtaskispring.common.VIDEO_URL_EXTRA
@@ -55,7 +54,10 @@ class VideoActivity : AppCompatActivity() {
         } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
             showSystemUI()
         }
+        setupSystemUiVisibilityChangeListener(newConfig)
+    }
 
+    private fun setupSystemUiVisibilityChangeListener(newConfig: Configuration) {
         val decorView = window.decorView
         decorView.setOnSystemUiVisibilityChangeListener {
             if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
@@ -67,9 +69,7 @@ class VideoActivity : AppCompatActivity() {
     }
 
     private fun showSystemUI() {
-        window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN)
+        window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_LAYOUT_STABLE)
     }
 
     private fun hideSystemUI() {

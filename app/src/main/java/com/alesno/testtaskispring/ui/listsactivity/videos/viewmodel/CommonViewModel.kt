@@ -65,7 +65,12 @@ class CommonViewModel(
 
     private fun setDataInVideosOrShowError(result: ListResult) {
         when (result) {
-            is ListResult.Success -> {
+            is ListResult.OldData -> {
+                videosObj.clear()
+                videosObj.addAll(result.videoCommonDomain)
+                snackBarEventListener.setValue("Server doesn't have new data")
+            }
+            is ListResult.NewData -> {
                 videosObj.clear()
                 videosObj.addAll(result.videoCommonDomain)
             }
@@ -76,7 +81,11 @@ class CommonViewModel(
 
     private fun setDataInFavoriteVideos(result: ListResult) {
         when (result) {
-            is ListResult.Success -> {
+            is ListResult.OldData -> {
+                favoriteVideosObj.clear()
+                favoriteVideosObj.addAll(result.videoCommonDomain)
+            }
+            is ListResult.NewData -> {
                 favoriteVideosObj.clear()
                 favoriteVideosObj.addAll(result.videoCommonDomain)
             }

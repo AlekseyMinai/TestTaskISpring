@@ -6,10 +6,14 @@ import com.alesno.testtaskispring.model.objectbox.entities.ExpertObject
 import com.alesno.testtaskispring.model.objectbox.entities.VideoObject
 import com.alesno.testtaskispring.model.repository.ListResult
 
-fun List<VideoObject>.toListResult(isFailConnection: Boolean = false): ListResult = when {
+fun List<VideoObject>.toListResult(
+    isFailConnection: Boolean = false,
+    isOldData: Boolean = false
+): ListResult = when {
     isFailConnection -> ListResult.ConnectError
-    this.isNullOrEmpty() -> ListResult.DataIsMiss
-    else -> ListResult.Success(this.map { fromDataToDomainCommon(it) })
+    isNullOrEmpty() -> ListResult.DataIsMiss
+    !isNullOrEmpty() and isOldData -> ListResult.OldData(this.map { fromDataToDomainCommon(it) })
+    else -> ListResult.NewData(this.map { fromDataToDomainCommon(it) })
 }
 
 fun fromDataToDomainCommon(videoObject: VideoObject): VideoCommonDomain {

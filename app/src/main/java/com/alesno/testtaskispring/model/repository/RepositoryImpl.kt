@@ -26,7 +26,8 @@ class RepositoryImpl(
     private val mVideosObj: MutableList<VideoObject> = mutableListOf()
 ) : Repository {
 
-    var isFailConnection = false
+    private var isFailConnection = false
+    private var isOldFromServer = false
 
     override suspend fun getListVideos(): ListResult =
         withContext(mCoroutineContext) {
@@ -37,7 +38,7 @@ class RepositoryImpl(
             if (mVideosObj.isNotEmpty()) {
                 return@withContext mVideosObj
             }
-            getListVideoFromServer()
+            updateVideosObjectFromServer()
             return@withContext mVideosObj
         }.toListResult(isFailConnection)
 
@@ -53,7 +54,7 @@ class RepositoryImpl(
 
     override suspend fun getListVideoFromServer(): ListResult {
         updateVideosObjectFromServer()
-        return mVideosObj.toListResult(isFailConnection)
+        return mVideosObj.toListResult(isFailConnection, isOldFromServer)
     }
 
     override suspend fun changeFavoriteStatus(
@@ -90,7 +91,8 @@ class RepositoryImpl(
 
     private suspend fun insertAllVideosInDb(response: ResponseJson) {
         withContext(mCoroutineContext) {
-            videosDao.insertAllVideos(objectTransformer.responseTransformer(response))
+            isOldFromServer =
+                videosDao.insertAllVideos(objectTransformer.responseTransformer(response))
         }
     }
 

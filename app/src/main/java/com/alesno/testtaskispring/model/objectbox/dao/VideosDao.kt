@@ -6,7 +6,7 @@ interface VideosDao {
 
     fun getAllVideos(): List<VideoObject>
 
-    fun insertAllVideos(videos: List<VideoObject>)
+    fun insertAllVideos(videos: List<VideoObject>): Boolean
 
     fun getVideoById(idVideo: Long): VideoObject
 

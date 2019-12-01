@@ -13,6 +13,7 @@
     </data>
 
     <FrameLayout
+            android:id="@+id/frame_fragment_video_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -94,6 +95,14 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:visibility="@{viewModel.isShowingProgressBar ? View.VISIBLE : View.GONE}" />
+
+            <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:background="@drawable/ic_play_arrow_white_24dp"
+                    android:onClick="@{() -> viewModel.playVideo()}"
+                    android:visibility="@{viewModel.isShowingPlayButton() ? View.VISIBLE : View.GONE}" />
 
         </FrameLayout>
 

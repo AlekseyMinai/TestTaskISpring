@@ -2,6 +2,7 @@ package com.alesno.testtaskispring.ui.videoactivity
 
 import android.content.res.Configuration
 import android.graphics.Point
+import android.media.MediaPlayer
 import android.os.Bundle
 import android.view.Display
 import android.view.LayoutInflater
@@ -44,6 +45,11 @@ class VideoFragment : Fragment() {
         super.onPause()
         if (videoView.currentPosition != 0)
             viewModel.onStopPlaybackVideo(videoView.currentPosition, videoView.duration)
+        videoView.pause()
+    }
+
+    override fun onStop() {
+        super.onStop()
         videoView.stopPlayback()
     }
 
@@ -63,6 +69,11 @@ class VideoFragment : Fragment() {
                 videoView.start()
                 viewModel.setVideoStat(false)
             }
+            videoView.setOnErrorListener(MediaPlayer.OnErrorListener { _, _, _ ->
+                viewModel.onErrorLoadVideo()
+                videoView.stopPlayback()
+                return@OnErrorListener false
+            })
         })
     }
 

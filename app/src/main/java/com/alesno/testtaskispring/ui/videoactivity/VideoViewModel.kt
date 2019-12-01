@@ -15,6 +15,7 @@ import kotlinx.coroutines.launch
 class VideoViewModel(private val mRepository: Repository) : ViewModel() {
 
     var isShowingProgressBar: ObservableBoolean = ObservableBoolean(true)
+    var isShowingPlayButton: ObservableBoolean = ObservableBoolean(false)
     var topics: ObservableList<String> = ObservableArrayList<String>()
     var experts: ObservableList<ExpertDetailDomain> = ObservableArrayList<ExpertDetailDomain>()
     var videoUrl: ObservableField<String> = ObservableField("")
@@ -24,6 +25,11 @@ class VideoViewModel(private val mRepository: Repository) : ViewModel() {
 
     fun onViewCreated() {
         getVideo()
+    }
+
+    fun onErrorLoadVideo() {
+        isShowingPlayButton.set(true)
+        isShowingProgressBar.set(false)
     }
 
     fun setVideoUrl(videoUrl: String) {
@@ -49,11 +55,17 @@ class VideoViewModel(private val mRepository: Repository) : ViewModel() {
 
     private fun getVideo() {
         viewModelScope.launch {
-            val videoObject = mRepository.getVideoById(videoId)
-            setDataInField(videoObject)
-            videoUrl.set(videoObject.url)
-            mPlayVideoLiveData.value = videoObject.progressTime
+            val video = mRepository.getVideoById(videoId)
+            setDataInField(video)
+            videoUrl.set(video.url)
+            playVideo()
         }
+    }
+
+    fun playVideo() {
+        mPlayVideoLiveData.value = observableVideos.get()!!.progressTime
+        isShowingPlayButton.set(false)
+        isShowingProgressBar.set(true)
     }
 
     private fun setDataInField(video: VideoDetailVMDomain) {

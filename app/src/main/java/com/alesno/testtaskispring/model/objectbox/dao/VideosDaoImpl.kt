@@ -16,12 +16,15 @@ class VideosDaoImpl(private val videosBox: Box<VideoObject>) : VideosDao {
         return videosBox.all
     }
 
-    override fun insertAllVideos(videos: List<VideoObject>) {
+    override fun insertAllVideos(videos: List<VideoObject>): Boolean {
         val set: MutableSet<VideoObject> = videosBox.all.toHashSet()
+        var countOfInsert = 0
         for (video in videos) {
             if (set.add(video)) {
                 videosBox.put(video)
+                countOfInsert++
             }
         }
+        return countOfInsert == 0
     }
 }
