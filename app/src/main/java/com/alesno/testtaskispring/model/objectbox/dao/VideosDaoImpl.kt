@@ -4,6 +4,7 @@ import com.alesno.testtaskispring.model.objectbox.entities.VideoObject
 import io.objectbox.Box
 
 class VideosDaoImpl(private val videosBox: Box<VideoObject>) : VideosDao {
+
     override fun updateVideo(videoObject: VideoObject) {
         videosBox.put(videoObject)
     }
@@ -16,15 +17,33 @@ class VideosDaoImpl(private val videosBox: Box<VideoObject>) : VideosDao {
         return videosBox.all
     }
 
-    override fun insertAllVideos(videos: List<VideoObject>): Boolean {
-        val set: MutableSet<VideoObject> = videosBox.all.toHashSet()
+    override fun insertAllVideos(videosFromServer: List<VideoObject>): Boolean {
+        val videosFromDb = videosBox.all
+        val setVideosFromDb: MutableSet<VideoObject> = videosFromDb.toHashSet()
         var countOfInsert = 0
-        for (video in videos) {
-            if (set.add(video)) {
+        for (video in videosFromServer) {
+            if (setVideosFromDb.add(video)) {
                 videosBox.put(video)
                 countOfInsert++
             }
         }
+        deleteOldNotFavoriteVideos(videosFromServer, setVideosFromDb)
         return countOfInsert == 0
+    }
+
+    private fun deleteOldNotFavoriteVideos(
+        videosFromServer: List<VideoObject>,
+        setVideosFromDb: MutableSet<VideoObject>
+    ) {
+        for (video in videosFromServer) {
+            if (!setVideosFromDb.add(video)) {
+                setVideosFromDb.remove(video)
+            }
+        }
+        for (video in setVideosFromDb) {
+            if (!video.isFavorite) {
+                videosBox.remove(video)
+            }
+        }
     }
 }
