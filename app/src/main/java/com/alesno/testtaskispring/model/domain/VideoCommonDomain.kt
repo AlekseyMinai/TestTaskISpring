@@ -7,4 +7,4 @@ data class VideoCommonDomain(
     val isFavorite: Boolean,
     val progress: Int,
     var url: String?
-) : VideoDomain()
+)

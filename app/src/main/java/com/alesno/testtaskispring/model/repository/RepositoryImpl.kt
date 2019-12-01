@@ -2,31 +2,33 @@ package com.alesno.testtaskispring.model.repository
 
 import android.util.Log
 import com.alesno.testtaskispring.common.LOG
-import com.alesno.testtaskispring.model.domain.VideoCommonDomain
 import com.alesno.testtaskispring.model.domain.VideoDetailVMDomain
 import com.alesno.testtaskispring.model.domain.transformer.fromDataToDomainDetail
 import com.alesno.testtaskispring.model.domain.transformer.fromDomainToDataDetail
-import com.alesno.testtaskispring.model.domain.transformer.transformToListVideosCommonDomain
+import com.alesno.testtaskispring.model.domain.transformer.toListResult
 import com.alesno.testtaskispring.model.objectbox.dao.VideosDao
 import com.alesno.testtaskispring.model.objectbox.entities.VideoObject
 import com.alesno.testtaskispring.model.objectbox.transformer.ObjectTransformer
 import com.alesno.testtaskispring.model.objectbox.transformer.ObjectTransformerImpl
 import com.alesno.testtaskispring.model.response.ResponseJson
 import com.alesno.testtaskispring.model.service.ApiService
-import kotlinx.coroutines.*
+import com.alesno.testtaskispring.model.service.Results
+import kotlinx.coroutines.ExecutorCoroutineDispatcher
+import kotlinx.coroutines.asCoroutineDispatcher
+import kotlinx.coroutines.withContext
 import java.util.concurrent.Executors
-import com.alesno.testtaskispring.model.service.Result
 
 class RepositoryImpl(
     private val mService: ApiService,
     private val videosDao: VideosDao,
     private val objectTransformer: ObjectTransformer,
-    private val mScope: CoroutineScope = CoroutineScope(Dispatchers.Default + SupervisorJob()),
     private val mCoroutineContext: ExecutorCoroutineDispatcher = Executors.newSingleThreadExecutor().asCoroutineDispatcher(),
     private val mVideosObj: MutableList<VideoObject> = mutableListOf()
 ) : Repository {
 
-    override suspend fun getListVideos(): List<VideoCommonDomain> =
+    var isFailConnection = false
+
+    override suspend fun getListVideos(): ListResult =
         withContext(mCoroutineContext) {
             if (mVideosObj.isNotEmpty()) {
                 return@withContext mVideosObj
@@ -37,35 +39,34 @@ class RepositoryImpl(
             }
             getListVideoFromServer()
             return@withContext mVideosObj
-        }.transformToListVideosCommonDomain()
+        }.toListResult(isFailConnection)
 
-    override fun getListFavoriteVideos(): List<VideoCommonDomain> {
-        return filterByFavoriteVideos(mVideosObj).transformToListVideosCommonDomain()
+    override fun getListFavoriteVideos(): ListResult {
+        return filterByFavoriteVideos(mVideosObj).toListResult()
     }
 
-
-    override suspend fun getListVideosFromDb(): List<VideoCommonDomain> =
+    override suspend fun getListVideosFromDb(): ListResult =
         withContext(mCoroutineContext) {
             updateCacheVideoObjectFromDb()
             return@withContext mVideosObj
-        }.transformToListVideosCommonDomain()
+        }.toListResult()
 
-    override suspend fun getListVideoFromServer(): List<VideoCommonDomain> {
+    override suspend fun getListVideoFromServer(): ListResult {
         updateVideosObjectFromServer()
-        return mVideosObj.transformToListVideosCommonDomain()
+        return mVideosObj.toListResult(isFailConnection)
     }
 
     override suspend fun changeFavoriteStatus(
         idVideo: Long,
         isFavorite: Boolean
-    ): List<VideoCommonDomain> = withContext(mCoroutineContext) {
+    ): ListResult = withContext(mCoroutineContext) {
         updateCacheVideoObjectFromDb()
         val videoObj: VideoObject? = findVideoById(mVideosObj, idVideo)
         videoObj?.isFavorite = isFavorite
         videoObj?.let { updateVideo(it) }
         updateCacheVideoObjectFromDb()
         return@withContext mVideosObj
-    }.transformToListVideosCommonDomain()
+    }.toListResult()
 
     override suspend fun getVideoById(videoId: Long): VideoDetailVMDomain =
         withContext(mCoroutineContext) {
@@ -94,21 +95,25 @@ class RepositoryImpl(
     }
 
     private suspend fun updateVideosObjectFromServer(): List<VideoObject> {
-        when(val result = getResponseOrError()){
-            is Result.Success -> {
-                insertAllVideosInDb(result.responseJson)
+        when (val result = getResponseOrError()) {
+            is Results.Success<ResponseJson> -> {
+                insertAllVideosInDb(result.successResult)
                 updateCacheVideoObjectFromDb()
+                isFailConnection = false
             }
-            is Result.Error -> Log.e(LOG, result.e.message.toString())
+            is Results.Error -> {
+                Log.e(LOG, result.message)
+                isFailConnection = true
+            }
         }
         return mVideosObj
     }
 
-    private suspend fun getResponseOrError(): Result{
+    private suspend fun getResponseOrError(): Results<ResponseJson> {
         return try {
-            Result.Success(mService.getResponseAsync())
+            Results.Success(mService.getResponseAsync())
         } catch (e: Exception) {
-            Result.Error(e)
+            Results.Error(e.message.toString())
         }
     }
 

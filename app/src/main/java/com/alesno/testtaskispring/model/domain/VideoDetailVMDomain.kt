@@ -8,7 +8,7 @@ data class VideoDetailVMDomain(
     var progress: Int,
     val topics: List<String>?,
     val experts: List<ExpertDetailDomain>
-) : VideoDomain() {
+) {
     data class ExpertDetailDomain(
         val avatar: String?,
         val firstName: String?,

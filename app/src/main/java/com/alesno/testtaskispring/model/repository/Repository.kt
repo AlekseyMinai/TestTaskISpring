@@ -1,19 +1,18 @@
 package com.alesno.testtaskispring.model.repository
 
-import com.alesno.testtaskispring.model.domain.VideoCommonDomain
 import com.alesno.testtaskispring.model.domain.VideoDetailVMDomain
 
 interface Repository {
 
-    suspend fun getListVideos(): List<VideoCommonDomain>
+    suspend fun getListVideos(): ListResult
 
-    fun getListFavoriteVideos(): List<VideoCommonDomain>
+    fun getListFavoriteVideos(): ListResult
 
-    suspend fun getListVideoFromServer(): List<VideoCommonDomain>
+    suspend fun getListVideoFromServer(): ListResult
 
-    suspend fun changeFavoriteStatus(idVideo: Long, isFavorite: Boolean): List<VideoCommonDomain>
+    suspend fun changeFavoriteStatus(idVideo: Long, isFavorite: Boolean): ListResult
 
-    suspend fun getListVideosFromDb(): List<VideoCommonDomain>
+    suspend fun getListVideosFromDb(): ListResult
 
     suspend fun getVideoById(videoId: Long): VideoDetailVMDomain
 

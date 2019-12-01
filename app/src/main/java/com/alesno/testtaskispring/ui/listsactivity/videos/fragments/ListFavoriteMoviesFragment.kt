@@ -7,7 +7,6 @@ class ListFavoriteMoviesFragment : BaseListVideosFragment() {
 
     override fun refreshData() {
         viewModel.onRefreshedListAllVideos()
-        viewModel.setDataInFavoriteListFragment()
     }
 
     override fun isListFavorite(): Boolean {

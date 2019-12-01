@@ -42,7 +42,8 @@ class VideoFragment : Fragment() {
 
     override fun onPause() {
         super.onPause()
-        viewModel.onStopPlaybackVideo(videoView.currentPosition, videoView.duration)
+        if (videoView.currentPosition != 0)
+            viewModel.onStopPlaybackVideo(videoView.currentPosition, videoView.duration)
         videoView.stopPlayback()
     }
 

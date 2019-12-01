@@ -7,7 +7,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.alesno.testtaskispring.model.domain.VideoCommonDomain
+import com.alesno.testtaskispring.model.repository.ListResult
 import com.alesno.testtaskispring.model.repository.Repository
+import com.alesno.testtaskispring.ui.common.SingleLiveEvent
 import kotlinx.coroutines.launch
 
 class CommonViewModel(
@@ -19,23 +21,25 @@ class CommonViewModel(
         ObservableArrayList<VideoCommonDomain>()
     var isProgressBarVisible: ObservableBoolean = ObservableBoolean(false)
     var isRefreshedLiveData: MutableLiveData<Boolean> = MutableLiveData()
+    var snackBarEventListener = SingleLiveEvent<String>()
+    private var isFirstStart: Boolean = true
 
-    fun onViewListAllMoviesCreated() {
-        if (videosObj.isEmpty()) {
-            viewModelScope.launch {
+    fun onViewResumed() {
+        viewModelScope.launch {
+            if (isFirstStart) {
                 isProgressBarVisible.set(true)
-                setDataInListAllVideosFragment()
-                setDataInFavoriteListFragment()
+                setDataInVideosOrShowError(repository.getListVideos())
+                setDataInFavoriteVideos(repository.getListFavoriteVideos())
                 isProgressBarVisible.set(false)
+                isFirstStart = false
             }
         }
     }
 
-    fun onViewResumed() {
+    fun onActivityRestart() {
         viewModelScope.launch {
-            val videosObjFromDb = repository.getListVideosFromDb()
-            videosObj.clear()
-            videosObj.addAll(videosObjFromDb)
+            setDataInVideosOrShowError(repository.getListVideosFromDb())
+            setDataInFavoriteVideos(repository.getListFavoriteVideos())
         }
     }
 
@@ -43,8 +47,8 @@ class CommonViewModel(
         isProgressBarVisible.set(true)
         viewModelScope.launch {
             val videosObject = repository.getListVideoFromServer()
-            videosObj.clear()
-            videosObj.addAll(videosObject)
+            setDataInVideosOrShowError(videosObject)
+            setDataInFavoriteVideos(repository.getListFavoriteVideos())
             isRefreshedLiveData.postValue(false)
             isProgressBarVisible.set(false)
         }
@@ -53,20 +57,30 @@ class CommonViewModel(
     fun onCheckboxClicked(idVideo: Long, isFavorite: Boolean) {
         viewModelScope.launch {
             val updatedVideosObj = repository.changeFavoriteStatus(idVideo, isFavorite)
-            videosObj.clear()
-            videosObj.addAll(updatedVideosObj)
-            setDataInFavoriteListFragment()
+            favoriteVideosObj.clear()
+            setDataInVideosOrShowError(updatedVideosObj)
+            setDataInFavoriteVideos(repository.getListFavoriteVideos())
         }
     }
 
-    fun setDataInFavoriteListFragment() {
-        favoriteVideosObj.clear()
-        favoriteVideosObj.addAll(repository.getListFavoriteVideos())
+    private fun setDataInVideosOrShowError(result: ListResult) {
+        when (result) {
+            is ListResult.Success -> {
+                videosObj.clear()
+                videosObj.addAll(result.videoCommonDomain)
+            }
+            is ListResult.ConnectError -> snackBarEventListener.setValue("Connection error")
+            is ListResult.DataIsMiss -> snackBarEventListener.setValue("Data is miss")
+        }
     }
 
-    private suspend fun setDataInListAllVideosFragment() {
-        val videosObj = repository.getListVideos()
-        this.videosObj.addAll(videosObj)
+    private fun setDataInFavoriteVideos(result: ListResult) {
+        when (result) {
+            is ListResult.Success -> {
+                favoriteVideosObj.clear()
+                favoriteVideosObj.addAll(result.videoCommonDomain)
+            }
+        }
     }
 
 }

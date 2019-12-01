@@ -17,7 +17,6 @@ import kotlinx.android.synthetic.main.activity_list_videos.*
 
 class FragmentListActivity : AppCompatActivity() {
 
-    private lateinit var viewModel: CommonViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -79,6 +78,12 @@ class FragmentListActivity : AppCompatActivity() {
             1 -> tab.setTextColor(ContextCompat.getColor(applicationContext, R.color.colorGrey))
         }
         tab_layout.getTabAt(position)?.customView = tab
+    }
+
+    override fun onRestart() {
+        super.onRestart()
+        val viewModel: CommonViewModel = getCommonViewModel(this)
+        viewModel.onActivityRestart()
     }
 
 

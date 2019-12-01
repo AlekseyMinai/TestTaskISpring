@@ -13,6 +13,7 @@ import com.alesno.testtaskispring.databinding.FragmentListMoviesBinding
 import com.alesno.testtaskispring.ui.listsactivity.videos.FragmentListActivity
 import com.alesno.testtaskispring.ui.listsactivity.videos.recyclerview.VideoListAdapter
 import com.alesno.testtaskispring.ui.listsactivity.videos.viewmodel.CommonViewModel
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_list_movies.*
 
 abstract class BaseListVideosFragment : Fragment() {

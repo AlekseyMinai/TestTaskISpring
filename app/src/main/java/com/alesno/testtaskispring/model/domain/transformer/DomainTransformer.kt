@@ -4,9 +4,12 @@ import com.alesno.testtaskispring.model.domain.VideoCommonDomain
 import com.alesno.testtaskispring.model.domain.VideoDetailVMDomain
 import com.alesno.testtaskispring.model.objectbox.entities.ExpertObject
 import com.alesno.testtaskispring.model.objectbox.entities.VideoObject
+import com.alesno.testtaskispring.model.repository.ListResult
 
-fun List<VideoObject>.transformToListVideosCommonDomain(): List<VideoCommonDomain> {
-    return this.map { fromDataToDomainCommon(it) }
+fun List<VideoObject>.toListResult(isFailConnection: Boolean = false): ListResult = when {
+    isFailConnection -> ListResult.ConnectError
+    this.isNullOrEmpty() -> ListResult.DataIsMiss
+    else -> ListResult.Success(this.map { fromDataToDomainCommon(it) })
 }
 
 fun fromDataToDomainCommon(videoObject: VideoObject): VideoCommonDomain {
@@ -18,14 +21,6 @@ fun fromDataToDomainCommon(videoObject: VideoObject): VideoCommonDomain {
         videoObject.progress,
         videoObject.url
     )
-}
-
-fun fromDomainToDataCommon(
-    videoDomain: VideoCommonDomain,
-    videoObject: VideoObject
-): VideoObject {
-    videoObject.isFavorite = videoDomain.isFavorite
-    return VideoObject()
 }
 
 fun fromDataToDomainDetail(videoObject: VideoObject): VideoDetailVMDomain {
