@@ -12,7 +12,7 @@ interface Repository {
 
     suspend fun changeFavoriteStatus(idVideo: Long, isFavorite: Boolean): ListResult
 
-    suspend fun getListVideosFromDb(): ListResult
+    suspend fun getListResultFromDb(): ListResult
 
     suspend fun getVideoById(videoId: Long): VideoDetailVMDomain
 

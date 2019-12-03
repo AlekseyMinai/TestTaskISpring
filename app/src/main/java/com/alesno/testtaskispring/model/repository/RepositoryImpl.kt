@@ -1,11 +1,9 @@
 package com.alesno.testtaskispring.model.repository
 
-import android.util.Log
-import com.alesno.testtaskispring.common.LOG
 import com.alesno.testtaskispring.model.domain.VideoDetailVMDomain
 import com.alesno.testtaskispring.model.domain.transformer.fromDataToDomainDetail
 import com.alesno.testtaskispring.model.domain.transformer.fromDomainToDataDetail
-import com.alesno.testtaskispring.model.domain.transformer.toListResult
+import com.alesno.testtaskispring.model.domain.transformer.toCommonDomainList
 import com.alesno.testtaskispring.model.objectbox.dao.VideosDao
 import com.alesno.testtaskispring.model.objectbox.entities.VideoObject
 import com.alesno.testtaskispring.model.objectbox.transformer.ObjectTransformer
@@ -19,114 +17,102 @@ import kotlinx.coroutines.withContext
 import java.util.concurrent.Executors
 
 class RepositoryImpl(
-    private val mService: ApiService,
+    private val service: ApiService,
     private val videosDao: VideosDao,
     private val objectTransformer: ObjectTransformer,
-    private val mCoroutineContext: ExecutorCoroutineDispatcher = Executors.newSingleThreadExecutor().asCoroutineDispatcher(),
-    private val mVideosObj: MutableList<VideoObject> = mutableListOf()
+    private val videosObj: MutableList<VideoObject> = mutableListOf(),
+    private val coroutineContext: ExecutorCoroutineDispatcher = Executors.newSingleThreadExecutor().asCoroutineDispatcher()
 ) : Repository {
 
-    private var isFailConnection = false
-    private var isOldFromServer = false
-
-    override suspend fun getListVideos(): ListResult =
-        withContext(mCoroutineContext) {
-            if (mVideosObj.isNotEmpty()) {
-                return@withContext mVideosObj
-            }
-            updateCacheVideoObjectFromDb()
-            if (mVideosObj.isNotEmpty()) {
-                return@withContext mVideosObj
-            }
-            updateVideosObjectFromServer()
-            return@withContext mVideosObj
-        }.toListResult(isFailConnection)
+    override suspend fun getListVideos(): ListResult {
+        if (!videosObj.isNullOrEmpty()) {
+            return ListResult.NewData(videosObj.toCommonDomainList())
+        }
+        val listVideoFromDb = getListVideosFromDb()
+        if (!listVideoFromDb.isNullOrEmpty()) {
+            return ListResult.NewData(listVideoFromDb.toCommonDomainList())
+        }
+        return updateVideosObjectFromServer()
+    }
 
     override fun getListFavoriteVideos(): ListResult {
-        return filterByFavoriteVideos(mVideosObj).toListResult()
+        return ListResult.Favorite(videosObj.filterByFavoriteVideos().toCommonDomainList())
     }
-
-    override suspend fun getListVideosFromDb(): ListResult =
-        withContext(mCoroutineContext) {
-            updateCacheVideoObjectFromDb()
-            return@withContext mVideosObj
-        }.toListResult()
 
     override suspend fun getListVideoFromServer(): ListResult {
-        updateVideosObjectFromServer()
-        return mVideosObj.toListResult(isFailConnection, isOldFromServer)
+        return updateVideosObjectFromServer()
     }
 
-    override suspend fun changeFavoriteStatus(
-        idVideo: Long,
-        isFavorite: Boolean
-    ): ListResult = withContext(mCoroutineContext) {
-        updateCacheVideoObjectFromDb()
-        val videoObj: VideoObject? = findVideoById(mVideosObj, idVideo)
-        videoObj?.isFavorite = isFavorite
-        videoObj?.let { updateVideo(it) }
-        updateCacheVideoObjectFromDb()
-        return@withContext mVideosObj
-    }.toListResult()
+    override suspend fun changeFavoriteStatus(idVideo: Long, isFavorite: Boolean): ListResult =
+        withContext(coroutineContext) {
+            val videoObj: VideoObject? = findVideoById(getListVideosFromDb(), idVideo)
+            videoObj?.isFavorite = isFavorite
+            videoObj?.let { updateVideoInDb(it) }
+            ListResult.NewData(getListVideosFromDb().toCommonDomainList())
+        }
+
+    override suspend fun getListResultFromDb(): ListResult {
+        return ListResult.NewData(getListVideosFromDb().toCommonDomainList())
+    }
 
     override suspend fun getVideoById(videoId: Long): VideoDetailVMDomain =
-        withContext(mCoroutineContext) {
+        withContext(coroutineContext) {
             val videoObj = videosDao.getVideoById(videoId)
             fromDataToDomainDetail(videoObj)
         }
 
-
     override suspend fun updateVideo(videoDomain: VideoDetailVMDomain) {
-        val changingVideoObj = findVideoById(mVideosObj, videoDomain.id)
+        val changingVideoObj = findVideoById(videosObj, videoDomain.id)
         changingVideoObj?.let {
-            updateVideo(fromDomainToDataDetail(videoDomain, changingVideoObj))
+            updateVideoInDb(fromDomainToDataDetail(videoDomain, changingVideoObj))
         }
-    }
-
-    private suspend fun updateVideo(videoObject: VideoObject) {
-        withContext(mCoroutineContext) {
-            videosDao.updateVideo(videoObject)
-        }
-    }
-
-    private suspend fun insertAllVideosInDb(response: ResponseJson) {
-        withContext(mCoroutineContext) {
-            isOldFromServer =
-                videosDao.insertAllVideos(objectTransformer.responseTransformer(response))
-        }
-    }
-
-    private suspend fun updateVideosObjectFromServer(): List<VideoObject> {
-        when (val result = getResponseOrError()) {
-            is Results.Success<ResponseJson> -> {
-                insertAllVideosInDb(result.successResult)
-                updateCacheVideoObjectFromDb()
-                isFailConnection = false
-            }
-            is Results.Error -> {
-                Log.e(LOG, result.message)
-                isFailConnection = true
-            }
-        }
-        return mVideosObj
     }
 
     private suspend fun getResponseOrError(): Results<ResponseJson> {
         return try {
-            Results.Success(mService.getResponseAsync())
+            Results.Success(service.getResponseAsync())
         } catch (e: Exception) {
             Results.Error(e.message.toString())
         }
     }
 
-    private suspend fun updateCacheVideoObjectFromDb() {
-        withContext(mCoroutineContext) {
-            val listVideosObj = videosDao.getAllVideos()
-            mVideosObj.clear()
-            mVideosObj.addAll(sortByTitle(listVideosObj))
+    private suspend fun updateVideosObjectFromServer(): ListResult =
+        when (val result = getResponseOrError()) {
+            is Results.Success<ResponseJson> -> {
+                val hasNewData = insertAllVideosInDbIfHasNew(result.successResult)
+                if (hasNewData) {
+                    ListResult.NewData(getListVideosFromDb().toCommonDomainList())
+                } else {
+                    ListResult.OldData(videosObj.toCommonDomainList())
+                }
+            }
+            is Results.Error -> {
+                ListResult.ConnectError
+            }
         }
+
+    private suspend fun getListVideosFromDb(): List<VideoObject> =
+        withContext(coroutineContext) {
+            val videosObj = videosDao.getAllVideos().sortByTitle()
+            updateVideosObj(videosObj)
+            videosObj
+        }
+
+    private suspend fun insertAllVideosInDbIfHasNew(response: ResponseJson): Boolean =
+        withContext(coroutineContext) {
+            videosDao.insertAllVideos(objectTransformer.responseTransformer(response))
+        }
+
+    private fun updateVideosObj(newListVideoObj: List<VideoObject>) {
+        videosObj.clear()
+        videosObj.addAll(newListVideoObj)
     }
 
+    private suspend fun updateVideoInDb(videoObject: VideoObject) {
+        withContext(coroutineContext) {
+            videosDao.updateVideo(videoObject)
+        }
+    }
 
     object RepositoryProvider {
 
@@ -136,8 +122,9 @@ class RepositoryImpl(
             repository = RepositoryImpl(apiService, videosDao, ObjectTransformerImpl)
         }
 
-        fun getRepositoryIml(): Repository {
+        fun getRepositoryImpl(): Repository {
             return repository
         }
     }
+
 }

@@ -90,7 +90,7 @@ class FragmentListActivity : AppCompatActivity() {
     companion object {
         fun getCommonViewModel(activity: FragmentActivity): CommonViewModel {
             return activity.getViewModel {
-                CommonViewModel(RepositoryImpl.RepositoryProvider.getRepositoryIml())
+                CommonViewModel(RepositoryImpl.RepositoryProvider.getRepositoryImpl())
             }
         }
     }

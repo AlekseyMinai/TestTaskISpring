@@ -94,7 +94,7 @@ class VideoActivity : AppCompatActivity() {
 
         fun getVideoViewModel(activity: FragmentActivity): VideoViewModel {
             return activity.getViewModel {
-                VideoViewModel(RepositoryImpl.RepositoryProvider.getRepositoryIml())
+                VideoViewModel(RepositoryImpl.RepositoryProvider.getRepositoryImpl())
             }
         }
     }

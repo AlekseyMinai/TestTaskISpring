@@ -27,23 +27,26 @@ class VideosDaoImpl(private val videosBox: Box<VideoObject>) : VideosDao {
                 countOfInsert++
             }
         }
-        deleteOldNotFavoriteVideos(videosFromServer, setVideosFromDb)
-        return countOfInsert == 0
+        val hasDeletedData = deleteOldNotFavoriteVideos(videosFromServer, setVideosFromDb)
+        return countOfInsert != 0 || hasDeletedData
     }
 
     private fun deleteOldNotFavoriteVideos(
         videosFromServer: List<VideoObject>,
         setVideosFromDb: MutableSet<VideoObject>
-    ) {
+    ): Boolean {
         for (video in videosFromServer) {
             if (!setVideosFromDb.add(video)) {
                 setVideosFromDb.remove(video)
             }
         }
+        var countOfDelete = 0
         for (video in setVideosFromDb) {
             if (!video.isFavorite) {
                 videosBox.remove(video)
+                countOfDelete++
             }
         }
+        return countOfDelete != 0
     }
 }

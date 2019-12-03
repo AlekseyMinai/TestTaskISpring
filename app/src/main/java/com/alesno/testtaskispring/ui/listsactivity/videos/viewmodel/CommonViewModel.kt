@@ -38,7 +38,7 @@ class CommonViewModel(
 
     fun onActivityRestart() {
         viewModelScope.launch {
-            setDataInVideosOrShowError(repository.getListVideosFromDb())
+            setDataInVideosOrShowError(repository.getListResultFromDb())
             setDataInFavoriteVideos(repository.getListFavoriteVideos())
         }
     }
@@ -81,11 +81,7 @@ class CommonViewModel(
 
     private fun setDataInFavoriteVideos(result: ListResult) {
         when (result) {
-            is ListResult.OldData -> {
-                favoriteVideosObj.clear()
-                favoriteVideosObj.addAll(result.videoCommonDomain)
-            }
-            is ListResult.NewData -> {
+            is ListResult.Favorite -> {
                 favoriteVideosObj.clear()
                 favoriteVideosObj.addAll(result.videoCommonDomain)
             }
